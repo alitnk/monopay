@@ -1,9 +1,13 @@
 import { IReceipt } from '../../receipt';
 import { Driver, DriverWithStrategy } from '../../driver';
 import { ZarinpalNormalStrategy } from './strategies/normal.strategy';
-import { Type } from '../..';
+import { Type } from '../../utils';
+import { ZarinpalInvoice } from './invoice';
+console.log('hey!');
 
 export abstract class ZarinpalStrategy {
+  constructor(protected readonly invoice: ZarinpalInvoice) {}
+
   abstract links: {
     PURCHASE: string;
     PAYMENT: string;
@@ -27,30 +31,30 @@ type StrategyType = 'normal' | 'sandbox' | 'zaringate';
 
 export class Zarinpal extends Driver implements DriverWithStrategy<StrategyType> {
   selectedStrategy: StrategyType = 'normal';
-  strategyInstance: ZarinpalStrategy;
+  strategyInstance!: ZarinpalStrategy;
 
-  constructor() {
-    super();
-    this.strategyInstance = new strategies[this.selectedStrategy]();
+  constructor(invoice: ZarinpalInvoice) {
+    super(invoice);
+    this.createStrategyInstance();
   }
 
-  createStrategyInstance() {
-    this.strategyInstance = new strategies[this.selectedStrategy]();
+  private createStrategyInstance() {
+    this.strategyInstance = new strategies[this.selectedStrategy](this.invoice);
   }
 
-  strategy(strategy: StrategyType) {
+  public strategy(strategy: StrategyType) {
     this.selectedStrategy = strategy;
   }
 
-  purchase(): Promise<string> {
-    throw new Error('Method not implemented.');
+  public async purchase(): Promise<string> {
+    return await this.strategyInstance.purchase();
   }
 
-  pay(): Promise<string> {
-    throw new Error('Method not implemented.');
+  public async pay(): Promise<string> {
+    return await this.strategyInstance.pay();
   }
 
-  verify(): Promise<IReceipt> {
-    throw new Error('Method not implemented.');
+  public async verify(): Promise<IReceipt> {
+    return await this.strategyInstance.verify();
   }
 }

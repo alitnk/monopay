@@ -1,11 +1,11 @@
-import { IDriver } from './driver';
+import { Driver } from './driver';
 
 export interface IReceipt {
   getDate(): Date;
 
   getReferenceId(): string;
 
-  getDriver(): IDriver;
+  getDriver(): Driver;
 
   getDriverName: string;
 }
