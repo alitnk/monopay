@@ -1,9 +1,7 @@
 import { IReceipt } from '../../receipt';
 import { Driver, DriverWithStrategy } from '../../driver';
 import { ZarinpalNormalStrategy } from './strategies/normal.strategy';
-import { Type } from '../../utils';
 import { ZarinpalInvoice } from './invoice';
-console.log('hey!');
 
 export abstract class ZarinpalStrategy {
   constructor(protected readonly invoice: ZarinpalInvoice) {}
@@ -21,7 +19,7 @@ export abstract class ZarinpalStrategy {
   abstract verify(): Promise<IReceipt>;
 }
 
-const strategies: Record<StrategyType, Type<ZarinpalStrategy>> = {
+const strategies: Record<StrategyType, any> = {
   normal: ZarinpalNormalStrategy,
   sandbox: ZarinpalNormalStrategy,
   zaringate: ZarinpalNormalStrategy,
