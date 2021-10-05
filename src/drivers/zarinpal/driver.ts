@@ -1,8 +1,15 @@
 import { Receipt } from '../../receipt';
-import { Driver, DriverWithStrategy } from '../../driver';
+import { Driver, WithStrategy } from '../../driver';
 import { ZarinpalInvoice } from './invoice';
-import { PaymentException } from '../../exception';
+import { PaymentException, VerificationException } from '../../exception';
 import axios from 'axios';
+import { ExpressLikeRequest } from '../../utils';
+
+export interface ZarinpalVerificationObject {
+  merchantId: string;
+  amount: number;
+  authority: string;
+}
 
 type ZarinpalStrategyType = 'normal' | 'sandbox';
 const defaultStrategy = 'normal';
@@ -39,10 +46,9 @@ export interface PurchaseResponse {
     | [];
 }
 
-export class Zarinpal implements Driver, DriverWithStrategy<ZarinpalStrategyType> {
+export class Zarinpal implements Driver, WithStrategy<ZarinpalStrategyType> {
   selectedStrategy: ZarinpalStrategyType = defaultStrategy;
-
-  constructor(public invoice: ZarinpalInvoice) {}
+  authority?: string;
 
   public strategy(strategy: ZarinpalStrategyType) {
     this.selectedStrategy = strategy;
@@ -53,9 +59,7 @@ export class Zarinpal implements Driver, DriverWithStrategy<ZarinpalStrategyType
     return links[this.selectedStrategy];
   }
 
-  async purchase(): Promise<string> {
-    const { merchantId, amount, callbackUrl, description, email, mobile } = this.invoice;
-
+  async purchase({ merchantId, amount, callbackUrl, description, mobile, email }: ZarinpalInvoice): Promise<string> {
     const payload = {
       merchant_id: merchantId,
       amount: amount * 10, // convert toman to rial
@@ -93,17 +97,46 @@ export class Zarinpal implements Driver, DriverWithStrategy<ZarinpalStrategyType
             throw new PaymentException(message);
         }
       }
-      return (data as any).authority;
+
+      return (this.links().PAYMENT + (data as any).authority) as string;
     } catch (e) {
       throw new PaymentException(e.message);
     }
   }
 
-  public async pay(): Promise<string> {
-    throw Error();
+  public async verify(options: Omit<ZarinpalVerificationObject, 'authority'>, request: ExpressLikeRequest): Promise<Receipt> {
+    if (status !== 'OK') {
+      throw new PaymentException('Payment canceled by the user.', 'پرداخت توسط کاربر لغو شد.');
+    }
+    const { authority } = request.params;
+    return this.verifyManually({ ...options, authority: authority });
   }
 
-  public async verify(): Promise<Receipt> {
-    throw Error();
+  public async verifyManually({ authority, amount, merchantId }: ZarinpalVerificationObject): Promise<Receipt> {
+    const response = await axios.post(
+      this.links().VERIFICATION,
+      {
+        authority,
+        amount,
+        merchant_id: merchantId,
+      },
+      {}
+    );
+    console.log(response);
+    throw new VerificationException('hi');
+
+    const responseData = (response.data as unknown) as {
+      code: number;
+      reference_id: number;
+      card_pan: String;
+      card_hash: String;
+      fee_type: String;
+      fee: number;
+    };
+
+    return {
+      referenceId: responseData.reference_id,
+      fee: responseData.fee,
+    };
   }
 }

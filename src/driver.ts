@@ -2,13 +2,12 @@ import { Invoice } from './invoice';
 import { Receipt } from './receipt';
 
 export interface Driver {
-  invoice: Invoice;
-  purchase(): Promise<string>;
-  pay(): Promise<string>;
-  verify(): Promise<Receipt>;
+  purchase(invoice: Invoice): Promise<string>;
+  verify(object: any, req: Request): Promise<Receipt>;
+  verifyManually(object: any): Promise<Receipt>;
 }
 
-export abstract class DriverWithStrategy<StrategyType> {
+export abstract class WithStrategy<StrategyType> {
   /**
    * The selected strategy
    */
@@ -18,5 +17,5 @@ export abstract class DriverWithStrategy<StrategyType> {
    * Selects the strategy
    * @param strategy chosen strategy
    */
-  abstract strategy(strategy: StrategyType): DriverWithStrategy<StrategyType>;
+  abstract strategy(strategy: StrategyType): WithStrategy<StrategyType>;
 }

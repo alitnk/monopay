@@ -1,8 +1,8 @@
-import { Driver } from './driver';
-
 export interface Receipt {
-  getDate(): Date;
-  getReferenceId(): string;
-  getDriver(): Driver;
-  getDriverName: string;
+  // code: number,
+  referenceId: number;
+  // cardPan: String,
+  // cardHash: String,
+  // feeType: String,
+  fee: number;
 }
