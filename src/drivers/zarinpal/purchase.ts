@@ -11,14 +11,14 @@ export interface ZarinpalPurchaseResponse {
         fee_type: 'Merchant';
         fee: number;
       }
-    | []; // Note: Zarinpal returns empty arrays instead of null. (probably because it uses PHP)
+    | any[]; // Note: Zarinpal returns empty arrays instead of null. (probably because it uses PHP)
   errors:
     | {
         code: number;
         message: string;
-        validations: Record<string, string> | [];
+        validations: Record<string, string> | any[];
       }
-    | [];
+    | any[];
 }
 
 export const purchase = async ({

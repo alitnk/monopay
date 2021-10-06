@@ -15,14 +15,14 @@ export interface ZarinpalVerifyResponse {
         fee_type: String;
         fee: number;
       }
-    | [];
+    | any[];
   errors:
     | {
         code: number;
         message: string;
-        validations: Record<string, string> | [];
+        validations: Record<string, string> | any[];
       }
-    | [];
+    | any[];
 }
 
 export const verify = async (
