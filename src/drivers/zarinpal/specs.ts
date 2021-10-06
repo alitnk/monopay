@@ -23,25 +23,6 @@ export const zarinpalLinks = {
   },
 };
 
-export interface ZarinpalPurchaseResponse {
-  data:
-    | {
-        code: 100;
-        message: string;
-        authority: string;
-        fee_type: 'Merchant';
-        fee: number;
-      }
-    | []; // Note: Zarinpal returns empty arrays instead of null. (probably because it uses PHP)
-  errors:
-    | {
-        code: number;
-        message: string;
-        validations: Record<string, string> | [];
-      }
-    | [];
-}
-
 export interface ZarinpalInvoice extends Invoice {
   mobile?: string;
   email?: string;
