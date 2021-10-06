@@ -77,7 +77,7 @@ export const verifyManually = async ({
     }
 
     return {
-      referenceId: (data as any).reference_id,
+      referenceId: (data as any).ref_id,
       fee: (data as any).fee,
     };
   } catch (e) {

@@ -36,7 +36,7 @@ describe('Zarinpal Driver', () => {
   });
 
   it('verifies the purchase correctly', async () => {
-    const expectedResult: Receipt = { fee: 2000, referenceId: 123123123123 };
+    const expectedResult: Receipt = { fee: 2000, referenceId: 201 };
     const serverResponse: ZarinpalVerifyResponse = {
       data: {
         code: 100,
@@ -45,7 +45,7 @@ describe('Zarinpal Driver', () => {
         card_pan: '502229******5995',
         ref_id: 201,
         fee_type: 'Merchant',
-        fee: 0,
+        fee: 2000,
       },
       errors: [],
     };
