@@ -54,7 +54,7 @@ describe('Zarinpal Driver', () => {
 
     expect(
       await verify({ amount: 2000, merchantId: '123123123' }, { params: { authority: '2000', status: 'OK' } })
-    ).toBe(expectedResult);
+    ).toEqual(expectedResult);
 
     // verifyManually: await verifyManually({ amount: 2000, merchantId: '123123123', authority: '2000' }),
     // expect(sum(1, 1)).toEqual(2);
