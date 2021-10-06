@@ -1,50 +1,25 @@
 import axios from 'axios';
-import { ZarinpalInvoice, zarinpalLinks } from './specs';
+import { zarinpalLinks, ZarinpalPurchaseRequest, ZarinpalPurchaseResponse } from './api';
+import { zarinpalDefaultStrategy, ZarinpalOptions } from './options';
+import { ZarinpalInvoice } from './invoice';
 import { PaymentException } from '../../exception';
 
-export interface ZarinpalPurchaseResponse {
-  data:
-    | {
-        code: 100;
-        message: string;
-        authority: string;
-        fee_type: 'Merchant';
-        fee: number;
-      }
-    | any[]; // Note: Zarinpal returns empty arrays instead of null. (probably because it uses PHP)
-  errors:
-    | {
-        code: number;
-        message: string;
-        validations: Record<string, string> | any[];
-      }
-    | any[];
-}
-
-export const purchase = async ({
-  merchantId,
-  amount,
-  callbackUrl,
-  description,
-  mobile,
-  email,
-}: ZarinpalInvoice): Promise<string> => {
-  const payload = {
-    merchant_id: merchantId,
-    amount: amount * 10, // convert toman to rial
-    callback_url: callbackUrl,
-    description: description,
-    metadata: {
-      email: email,
-      mobile: mobile,
-    },
-  };
+export const purchase = async (
+  { merchant, amount, callbackUrl, mobile, email, ...fields }: ZarinpalInvoice,
+  { strategy }: ZarinpalOptions = { strategy: zarinpalDefaultStrategy }
+): Promise<string> => {
+  let response;
 
   try {
-    const response = await axios.post<any, { data: ZarinpalPurchaseResponse }>(
-      zarinpalLinks.normal.PURCHASE,
-      payload,
-      {}
+    response = await axios.post<ZarinpalPurchaseRequest, { data: ZarinpalPurchaseResponse }>(
+      zarinpalLinks[strategy].REQUEST,
+      {
+        merchant_id: merchant,
+        amount: amount * 10, // convert toman to rial
+        callback_url: callbackUrl,
+        metadata: { email, mobile },
+        ...fields,
+      }
     );
     const { data, errors } = response.data;
 
@@ -71,8 +46,10 @@ export const purchase = async ({
       }
     }
 
-    return (zarinpalLinks.normal.PAYMENT + (data as any).authority) as string;
+    return (zarinpalLinks[strategy].PAYMENT + (data as any).authority) as string;
   } catch (e) {
-    throw new PaymentException((e as any).message || 't');
+    if (e instanceof PaymentException) throw e;
+    else if (e instanceof Error) throw new PaymentException(e.message);
+    else throw new Error('Unknown error happened');
   }
 };

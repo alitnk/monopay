@@ -1,6 +1,6 @@
 export interface Invoice {
   amount: number;
   callbackUrl: string;
-  merchantId: string;
+  merchant: string;
   description?: string;
 }

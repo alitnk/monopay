@@ -2,52 +2,34 @@ import axios from 'axios';
 import { PaymentException, VerificationException } from '../../exception';
 import { Receipt } from '../../receipt';
 import { ExpressLikeRequest } from '../../utils';
-import { zarinpalLinks, ZarinpalVerificationObject } from './specs';
-
-export interface ZarinpalVerifyResponse {
-  data:
-    | {
-        code: number;
-        message: string;
-        ref_id: number;
-        card_pan: String;
-        card_hash: String;
-        fee_type: String;
-        fee: number;
-      }
-    | any[];
-  errors:
-    | {
-        code: number;
-        message: string;
-        validations: Record<string, string> | any[];
-      }
-    | any[];
-}
+import { zarinpalLinks, ZarinpalVerifyRequest, ZarinpalVerifyResponse } from './api';
+import { zarinpalDefaultStrategy, ZarinpalOptions } from './options';
+import { ZarinpalVerifier } from './verifier';
 
 export const verify = async (
-  options: Omit<ZarinpalVerificationObject, 'authority'>,
-  request: ExpressLikeRequest
+  fields: Omit<ZarinpalVerifier, 'code'>,
+  request: ExpressLikeRequest,
+  options?: ZarinpalOptions
 ): Promise<Receipt> => {
   const { authority, status } = request.params;
   if (status !== 'OK') {
     throw new PaymentException('Payment canceled by the user.', 'پرداخت توسط کاربر لغو شد.');
   }
-  return verifyManually({ ...options, authority: authority });
+
+  return await verifyManually({ ...fields, code: authority }, options);
 };
 
-export const verifyManually = async ({
-  authority,
-  amount,
-  merchantId,
-}: ZarinpalVerificationObject): Promise<Receipt> => {
+export const verifyManually = async (
+  { code, merchant, ...verifiers }: ZarinpalVerifier,
+  { strategy }: ZarinpalOptions = { strategy: zarinpalDefaultStrategy }
+): Promise<Receipt> => {
   try {
-    const response = await axios.post<any, { data: ZarinpalVerifyResponse }>(
-      zarinpalLinks.normal.VERIFICATION,
+    const response = await axios.post<ZarinpalVerifyRequest, { data: ZarinpalVerifyResponse }>(
+      zarinpalLinks[strategy].VERIFICATION,
       {
-        authority,
-        amount,
-        merchant_id: merchantId,
+        authority: code,
+        merchant_id: merchant,
+        ...verifiers,
       },
       {}
     );
@@ -78,9 +60,11 @@ export const verifyManually = async ({
 
     return {
       referenceId: (data as any).ref_id,
-      fee: (data as any).fee,
+      raw: data,
     };
   } catch (e) {
-    throw new VerificationException((e as Error).message);
+    if (e instanceof VerificationException) throw e;
+    else if (e instanceof Error) throw new VerificationException(e.message);
+    else throw new Error('Unknown error happened');
   }
 };
