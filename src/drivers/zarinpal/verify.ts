@@ -58,7 +58,7 @@ export const verifyManually = async ({
       const { message, code } = errors;
 
       // Error eference: https://docs.zarinpal.com/paymentGateway/error.html
-      switch (errors.code) {
+      switch (code) {
         case -50:
           throw new VerificationException(message, 'مبلغ پرداخت شده با مقدار مبلغ در تایید شده متفاوت است.');
         case -51:
