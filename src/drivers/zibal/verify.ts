@@ -1,16 +1,16 @@
 import axios from 'axios';
 import { PaymentException, VerificationException } from '../../exception';
 import { Requestish } from '../../utils';
-import { zibalLinks, ZibalVerifyRequest, ZibalVerifyResponse } from './api';
+import { ZibalCallbackParams, zibalLinks, ZibalVerifyRequest, ZibalVerifyResponse } from './api';
 import { ZibalOptions, ZibalReceipt, ZibalVerifier } from './types';
 
 export const verify = async (
   fields: Omit<ZibalVerifier, 'code'>,
-  request: Requestish,
+  request: Requestish<ZibalCallbackParams>,
   options?: ZibalOptions
 ): Promise<ZibalReceipt> => {
-  if (request.params.success === 0) {
-    switch (request.params.status) {
+  if (request.query.success === '0') {
+    switch (+request.query.status) {
       case -1:
         throw new PaymentException('Payment exception', 'در انتظار پردخت');
       case -2:
@@ -42,7 +42,7 @@ export const verify = async (
     }
   }
 
-  return await verifyManually({ ...fields, code: request.params.trackId.toString() }, options);
+  return await verifyManually({ ...fields, code: request.query.trackId.toString() }, options);
 };
 
 export const verifyManually = async (verifier: ZibalVerifier, options?: ZibalOptions): Promise<ZibalReceipt> => {

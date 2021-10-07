@@ -10,7 +10,7 @@ export const verify = async (
   request: Requestish,
   options?: ZarinpalOptions
 ): Promise<Receipt> => {
-  const { authority, status } = request.params;
+  const { authority, status } = request.query;
   if (status !== 'OK') {
     throw new PaymentException('Payment canceled by the user.', 'پرداخت توسط کاربر لغو شد.');
   }

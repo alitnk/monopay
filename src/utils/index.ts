@@ -1,6 +1,6 @@
 /**
- * Resembles a request object that has the params on it (most likely a `express` request object)
+ * Resembles a request object that has the query params on it (most likely a `express` request object)
  */
-export interface Requestish<ParamsType = any> {
-  params: ParamsType;
+export interface Requestish<ExpectedQuery = any> {
+  query: ExpectedQuery;
 }

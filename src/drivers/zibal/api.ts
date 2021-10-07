@@ -118,23 +118,23 @@ export interface ZibalCallbackParams {
   /**
    * 	در صورت موفقیت‌آمیز بودن تراکنش 1، در غیر این‌صورت 0 می‌باشد.
    */
-  success: 0 | 1;
+  success: '0' | '1';
 
   /**
    * 	شناسه پیگیری جلسه‌ی پرداخت
    */
-  trackId: number;
+  trackId: string;
 
   /**
    * 	شناسه سفارش ارسال شده در هنگام درخواست پرداخت (در صورت ارسال)
    * @link https://docs.zibal.ir/IPG/API#status-codes
    */
-  orderId?: number;
+  orderId?: string;
 
   /**
    * 	وضعیت پرداخت (از طریق جدول وضعیت‌ها می‌توانید مقادیر status را مشاهده نمایید)
    */
-  status: -1 | -2 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;
+  status: '-1' | '-2' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' | '10' | '11' | '12';
 }
 
 export interface ZibalVerifyRequest {

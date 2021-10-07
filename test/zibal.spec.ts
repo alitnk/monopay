@@ -54,7 +54,7 @@ describe('Zibal Driver', () => {
     mockedAxios.post.mockResolvedValueOnce({ data: serverResponse });
 
     expect(
-      await verify({ amount: 2000, merchant: '123123123' }, { params: { trackId: 12345, status: 1, success: 1 } })
+      await verify({ amount: 2000, merchant: '123123123' }, { query: { trackId: '12345', status: '1', success: '1' } })
     ).toEqual(expectedResult);
 
     mockedAxios.post.mockResolvedValueOnce({ data: serverResponse });
