@@ -1,5 +1,5 @@
 export interface Verifier {
-  merchant: string;
+  merchantId: string;
   amount: number;
   code: string;
 }

@@ -16,7 +16,7 @@ describe('Zarinpal Driver', () => {
 
     mockedAxios.post.mockResolvedValueOnce({ data: serverResponse });
 
-    expect(await purchase({ amount: 2000, callbackUrl: 'asd', merchant: '123123123' })).toBe(
+    expect(await purchase({ amount: 2000, callbackUrl: 'asd', merchantId: '123123123' })).toBe(
       'https://www.zarinpal.com/pg/StartPay/10'
     );
   });
@@ -30,7 +30,7 @@ describe('Zarinpal Driver', () => {
     mockedAxios.post.mockResolvedValueOnce({ data: serverResponse });
 
     await expect(
-      async () => await purchase({ amount: 2000, callbackUrl: 'asd', merchant: '123123123' })
+      async () => await purchase({ amount: 2000, callbackUrl: 'asd', merchantId: '123123123' })
     ).rejects.toThrow(PaymentException);
   });
 
@@ -52,11 +52,11 @@ describe('Zarinpal Driver', () => {
     mockedAxios.post.mockResolvedValueOnce({ data: serverResponse });
 
     expect(
-      await verify({ amount: 2000, merchant: '123123123' }, { query: { authority: '2000', status: 'OK' } })
+      await verify({ amount: 2000, merchantId: '123123123' }, { query: { authority: '2000', status: 'OK' } })
     ).toEqual(expectedResult);
 
     mockedAxios.post.mockResolvedValueOnce({ data: serverResponse });
 
-    expect(await verifyManually({ amount: 2000, merchant: '123123123', code: '2000' })).toEqual(expectedResult);
+    expect(await verifyManually({ amount: 2000, merchantId: '123123123', code: '2000' })).toEqual(expectedResult);
   });
 });

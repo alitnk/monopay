@@ -18,7 +18,7 @@ describe('Zibal Driver', () => {
 
     mockedAxios.post.mockResolvedValueOnce({ data: serverResponse });
 
-    expect(await purchase({ merchant: '2134', callbackUrl: 'https://google.com', amount: 20000 })).toBe(
+    expect(await purchase({ merchantId: '2134', callbackUrl: 'https://google.com', amount: 20000 })).toBe(
       serverResponse.payLink
     );
   });
@@ -33,7 +33,7 @@ describe('Zibal Driver', () => {
     mockedAxios.post.mockResolvedValueOnce({ data: serverResponse });
 
     await expect(
-      async () => await purchase({ amount: 2000, callbackUrl: 'asd', merchant: '123123123' })
+      async () => await purchase({ amount: 2000, callbackUrl: 'asd', merchantId: '123123123' })
     ).rejects.toThrow(PaymentException);
   });
 
@@ -54,11 +54,14 @@ describe('Zibal Driver', () => {
     mockedAxios.post.mockResolvedValueOnce({ data: serverResponse });
 
     expect(
-      await verify({ amount: 2000, merchant: '123123123' }, { query: { trackId: '12345', status: '1', success: '1' } })
+      await verify(
+        { amount: 2000, merchantId: '123123123' },
+        { query: { trackId: '12345', status: '1', success: '1' } }
+      )
     ).toEqual(expectedResult);
 
     mockedAxios.post.mockResolvedValueOnce({ data: serverResponse });
 
-    expect(await verifyManually({ amount: 2000, merchant: '123123123', code: '2000' })).toEqual(expectedResult);
+    expect(await verifyManually({ amount: 2000, merchantId: '123123123', code: '2000' })).toEqual(expectedResult);
   });
 });
