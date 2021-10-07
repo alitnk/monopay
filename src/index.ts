@@ -1,4 +1,4 @@
-import * as drivers from './drivers/';
+import * as drivers from './drivers';
 
 type DriverName = 'zarinpal' | 'zibal';
 

@@ -45,10 +45,9 @@ export const verify = async (
   return await verifyManually({ ...fields, code: request.params.trackId.toString() }, options);
 };
 
-export const verifyManually = async (
-  { merchant, code }: ZibalVerifier,
-  options?: ZibalOptions
-): Promise<ZibalReceipt> => {
+export const verifyManually = async (verifier: ZibalVerifier, options?: ZibalOptions): Promise<ZibalReceipt> => {
+  let { merchant, code } = verifier;
+
   if (options?.strategy === 'sandbox') merchant = 'zibal';
 
   try {

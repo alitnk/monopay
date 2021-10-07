@@ -4,9 +4,11 @@ import { zarinpalDefaultStrategy, ZarinpalInvoice, ZarinpalOptions } from './typ
 import { PaymentException } from '../../exception';
 
 export const purchase = async (
-  { merchant, amount, callbackUrl, mobile, email, ...fields }: ZarinpalInvoice,
-  { strategy }: ZarinpalOptions = { strategy: zarinpalDefaultStrategy }
+  invoice: ZarinpalInvoice,
+  options: ZarinpalOptions = { strategy: zarinpalDefaultStrategy }
 ): Promise<string> => {
+  const { merchant, amount, callbackUrl, mobile, email, ...fields } = invoice;
+  const { strategy } = options;
   let response;
 
   try {

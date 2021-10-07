@@ -3,7 +3,9 @@ import { PaymentException } from '../../exception';
 import { zibalLinks, ZibalPurchaseRequest, ZibalPurchaseResponse } from './api';
 import { ZibalInvoice, ZibalOptions } from './types';
 
-export const purchase = async ({ amount, merchant, ...fields }: ZibalInvoice, options?: ZibalOptions) => {
+export const purchase = async (invoice: ZibalInvoice, options?: ZibalOptions) => {
+  let { amount, merchant, ...fields } = invoice;
+
   if (options?.strategy === 'sandbox') merchant = 'zibal';
 
   try {

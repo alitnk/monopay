@@ -19,9 +19,12 @@ export const verify = async (
 };
 
 export const verifyManually = async (
-  { code, merchant, ...verifiers }: ZarinpalVerifier,
-  { strategy }: ZarinpalOptions = { strategy: zarinpalDefaultStrategy }
+  verifier: ZarinpalVerifier,
+  options: ZarinpalOptions = { strategy: zarinpalDefaultStrategy }
 ): Promise<Receipt> => {
+  const { code, merchant, ...verifiers } = verifier;
+  const { strategy } = options;
+
   try {
     const response = await axios.post<ZarinpalVerifyRequest, { data: ZarinpalVerifyResponse }>(
       zarinpalLinks[strategy].VERIFICATION,
