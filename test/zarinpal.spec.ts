@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { purchase, verify, verifyManually } from '../src/drivers/zarinpal';
 import { ZarinpalPurchaseResponse, ZarinpalVerifyResponse } from '../src/drivers/zarinpal/api';
-import { ZarinpalReceipt } from '../src/drivers/zarinpal/receipt';
+import { ZarinpalReceipt } from '../src/drivers/zarinpal/types';
 import { PaymentException } from '../src/exception';
 
 jest.mock('axios');

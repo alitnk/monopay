@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { purchase, verify, verifyManually } from '../src/drivers/zibal';
 import { ZibalPurchaseResponse, ZibalVerifyResponse } from '../src/drivers/zibal/api';
-import { ZibalReceipt } from '../src/drivers/zibal/receipt';
+import { ZibalReceipt } from '../src/drivers/zibal/types';
 import { PaymentException } from '../src/exception';
 
 jest.mock('axios');

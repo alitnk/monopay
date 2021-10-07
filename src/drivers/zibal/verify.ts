@@ -1,16 +1,15 @@
 import axios from 'axios';
 import { PaymentException, VerificationException } from '../../exception';
-import { ExpressLikeRequest } from '../../utils';
+import { Requestish } from '../../utils';
 import { zibalLinks, ZibalVerifyRequest, ZibalVerifyResponse } from './api';
-import { ZibalOptions } from './options';
-import { ZibalVerifier } from './verifier';
-import { Receipt } from '../../receipt';
+import { VerifyFunction, VerifyManuallyFunction } from '../..';
+import { ZibalOptions, ZibalReceipt, ZibalVerifier } from './types';
 
-export const verify = async (
+export const verify: VerifyFunction = async (
   fields: Omit<ZibalVerifier, 'code'>,
-  request: ExpressLikeRequest,
+  request: Requestish,
   options?: ZibalOptions
-): Promise<Receipt> => {
+): Promise<ZibalReceipt> => {
   if (request.params.success === 0) {
     switch (request.params.status) {
       case -1:
@@ -47,7 +46,10 @@ export const verify = async (
   return await verifyManually({ ...fields, code: request.params.trackId.toString() }, options);
 };
 
-export const verifyManually = async ({ merchant, code }: ZibalVerifier, options?: ZibalOptions): Promise<Receipt> => {
+export const verifyManually: VerifyManuallyFunction = async (
+  { merchant, code }: ZibalVerifier,
+  options?: ZibalOptions
+): Promise<ZibalReceipt> => {
   if (options?.strategy === 'sandbox') merchant = 'zibal';
 
   try {

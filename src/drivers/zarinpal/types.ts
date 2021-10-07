@@ -1,4 +1,7 @@
+import { Verifier } from '../../verifier';
 import { Receipt } from '../../receipt';
+
+export interface ZarinpalVerifier extends Verifier {}
 
 /**
  * @link https://docs.zarinpal.com/paymentGateway/guide/#بازگشت-به-سایت-پذیرنده
@@ -35,4 +38,19 @@ export interface ZarinpalReceipt extends Receipt {
      */
     fee: number;
   };
+}
+
+export type ZarinpalStrategyType = 'default' | 'sandbox';
+
+export const zarinpalDefaultStrategy: ZarinpalStrategyType = 'default';
+
+export class ZarinpalOptions {
+  strategy: ZarinpalStrategyType = 'default';
+}
+
+import { Invoice } from '../../invoice';
+
+export interface ZarinpalInvoice extends Invoice {
+  mobile?: string;
+  email?: string;
 }

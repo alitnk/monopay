@@ -1,14 +1,14 @@
 import axios from 'axios';
+import { VerifyFunction, VerifyManuallyFunction } from '../..';
 import { PaymentException, VerificationException } from '../../exception';
 import { Receipt } from '../../receipt';
-import { ExpressLikeRequest } from '../../utils';
+import { Requestish } from '../../utils';
 import { zarinpalLinks, ZarinpalVerifyRequest, ZarinpalVerifyResponse } from './api';
-import { zarinpalDefaultStrategy, ZarinpalOptions } from './options';
-import { ZarinpalVerifier } from './verifier';
+import { ZarinpalVerifier, ZarinpalOptions, zarinpalDefaultStrategy } from './types';
 
-export const verify = async (
+export const verify: VerifyFunction = async (
   fields: Omit<ZarinpalVerifier, 'code'>,
-  request: ExpressLikeRequest,
+  request: Requestish,
   options?: ZarinpalOptions
 ): Promise<Receipt> => {
   const { authority, status } = request.params;
@@ -19,7 +19,7 @@ export const verify = async (
   return await verifyManually({ ...fields, code: authority }, options);
 };
 
-export const verifyManually = async (
+export const verifyManually: VerifyManuallyFunction = async (
   { code, merchant, ...verifiers }: ZarinpalVerifier,
   { strategy }: ZarinpalOptions = { strategy: zarinpalDefaultStrategy }
 ): Promise<Receipt> => {

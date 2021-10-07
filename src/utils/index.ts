@@ -1,7 +1,6 @@
-export interface Type<T> extends Function {
-  new (...args: any[]): T;
-}
-
-export interface ExpressLikeRequest {
-  params: any;
+/**
+ * Resembles a request object that has the params on it (most likely a `express` request object)
+ */
+export interface Requestish<ParamsType = any> {
+  params: ParamsType;
 }
