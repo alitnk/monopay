@@ -2,10 +2,9 @@ import axios from 'axios';
 import { PaymentException, VerificationException } from '../../exception';
 import { Requestish } from '../../utils';
 import { zibalLinks, ZibalVerifyRequest, ZibalVerifyResponse } from './api';
-import { VerifyFunction, VerifyManuallyFunction } from '../..';
 import { ZibalOptions, ZibalReceipt, ZibalVerifier } from './types';
 
-export const verify: VerifyFunction = async (
+export const verify = async (
   fields: Omit<ZibalVerifier, 'code'>,
   request: Requestish,
   options?: ZibalOptions
@@ -46,7 +45,7 @@ export const verify: VerifyFunction = async (
   return await verifyManually({ ...fields, code: request.params.trackId.toString() }, options);
 };
 
-export const verifyManually: VerifyManuallyFunction = async (
+export const verifyManually = async (
   { merchant, code }: ZibalVerifier,
   options?: ZibalOptions
 ): Promise<ZibalReceipt> => {

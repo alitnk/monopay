@@ -2,9 +2,8 @@ import axios from 'axios';
 import { zarinpalLinks, ZarinpalPurchaseRequest, ZarinpalPurchaseResponse } from './api';
 import { zarinpalDefaultStrategy, ZarinpalInvoice, ZarinpalOptions } from './types';
 import { PaymentException } from '../../exception';
-import { PurchaseFunction } from '../..';
 
-export const purchase: PurchaseFunction = async (
+export const purchase = async (
   { merchant, amount, callbackUrl, mobile, email, ...fields }: ZarinpalInvoice,
   { strategy }: ZarinpalOptions = { strategy: zarinpalDefaultStrategy }
 ): Promise<string> => {

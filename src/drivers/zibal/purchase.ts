@@ -1,13 +1,9 @@
 import axios from 'axios';
-import { PurchaseFunction } from '../..';
 import { PaymentException } from '../../exception';
 import { zibalLinks, ZibalPurchaseRequest, ZibalPurchaseResponse } from './api';
 import { ZibalInvoice, ZibalOptions } from './types';
 
-export const purchase: PurchaseFunction = async (
-  { amount, merchant, ...fields }: ZibalInvoice,
-  options?: ZibalOptions
-) => {
+export const purchase = async ({ amount, merchant, ...fields }: ZibalInvoice, options?: ZibalOptions) => {
   if (options?.strategy === 'sandbox') merchant = 'zibal';
 
   try {
