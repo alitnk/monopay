@@ -12,7 +12,7 @@ app.get('/purchase', async (req, res) => {
     try {
         const payLink = await zibal.purchase({
             amount: 20000,
-            merchant: '1234',
+            merchantId: '1234',
             callbackUrl: process.env.APP_URL + '/callback',
         }, { sandbox: true })
 
@@ -32,7 +32,7 @@ app.get('/purchase', async (req, res) => {
  */
 app.get('/callback', async (req, res) => {
     try {
-        const receipt = (await zibal.verify({ amount: 2000, merchant: '1234' }, req, { sandbox: true }))
+        const receipt = (await zibal.verify({ amount: 2000, merchantId: '1234' }, req, { sandbox: true }))
         console.log(receipt)
         res.json({
             referenceId: receipt.referenceId, // Will be null since it's sandbox
