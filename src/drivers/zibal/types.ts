@@ -1,5 +1,7 @@
 import { Invoice } from '../../invoice';
-import { ZibalMultiplexingObject } from './api';
+import { Receipt } from '../../receipt';
+import { Verifier } from '../../verifier';
+import { ZibalMultiplexingObject, ZibalVerifyResponse } from './api';
 
 export interface ZibalInvoice extends Invoice {
   mobile?: string;
@@ -12,12 +14,7 @@ export interface ZibalInvoice extends Invoice {
   multiplexingInfos?: ZibalMultiplexingObject[];
 }
 
-import { Verifier } from '../../verifier';
-
 export interface ZibalVerifier extends Verifier {}
-
-import { Receipt } from '../../receipt';
-import { ZibalVerifyResponse } from './api';
 
 /**
  * @link https://docs.zibal.ir/IPG/API#verify

@@ -1,5 +1,6 @@
-import { Verifier } from '../../verifier';
+import { Invoice } from '../../invoice';
 import { Receipt } from '../../receipt';
+import { Verifier } from '../../verifier';
 
 export interface ZarinpalVerifier extends Verifier {}
 
@@ -47,8 +48,6 @@ export const zarinpalDefaultStrategy: ZarinpalStrategyType = 'default';
 export class ZarinpalOptions {
   strategy: ZarinpalStrategyType = 'default';
 }
-
-import { Invoice } from '../../invoice';
 
 export interface ZarinpalInvoice extends Invoice {
   mobile?: string;
