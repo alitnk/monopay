@@ -23,10 +23,6 @@ export interface ZibalReceipt extends Receipt {
   raw: ZibalVerifyResponse;
 }
 
-export type ZibalStrategyType = 'default' | 'sandbox';
-
-export const ZibalDefaultStrategy: ZibalStrategyType = 'default';
-
-export class ZibalOptions {
-  strategy: ZibalStrategyType = 'default';
+export interface ZibalOptions {
+  sandbox: boolean;
 }

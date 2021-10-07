@@ -1,19 +1,16 @@
 import axios from 'axios';
-import { zarinpalLinks, ZarinpalPurchaseRequest, ZarinpalPurchaseResponse } from './api';
-import { zarinpalDefaultStrategy, ZarinpalInvoice, ZarinpalOptions } from './types';
+import { ZarinpalPurchaseRequest, ZarinpalPurchaseResponse } from './api';
+import { getZarinpalLinks } from './utils';
+import { ZarinpalInvoice, ZarinpalOptions } from './types';
 import { PaymentException } from '../../exception';
 
-export const purchase = async (
-  invoice: ZarinpalInvoice,
-  options: ZarinpalOptions = { strategy: zarinpalDefaultStrategy }
-): Promise<string> => {
+export const purchase = async (invoice: ZarinpalInvoice, options?: ZarinpalOptions): Promise<string> => {
   const { merchant, amount, callbackUrl, mobile, email, ...fields } = invoice;
-  const { strategy } = options;
   let response;
 
   try {
     response = await axios.post<ZarinpalPurchaseRequest, { data: ZarinpalPurchaseResponse }>(
-      zarinpalLinks[strategy].REQUEST,
+      getZarinpalLinks(options?.sandbox).REQUEST,
       {
         merchant_id: merchant,
         amount: amount * 10, // convert toman to rial
@@ -47,7 +44,7 @@ export const purchase = async (
       }
     }
 
-    return (zarinpalLinks[strategy].PAYMENT + (data as any).authority) as string;
+    return (getZarinpalLinks(options?.sandbox).PAYMENT + (data as any).authority) as string;
   } catch (e) {
     if (e instanceof PaymentException) throw e;
     else if (e instanceof Error) throw new PaymentException(e.message);

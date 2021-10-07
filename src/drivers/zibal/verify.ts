@@ -48,7 +48,7 @@ export const verify = async (
 export const verifyManually = async (verifier: ZibalVerifier, options?: ZibalOptions): Promise<ZibalReceipt> => {
   let { merchant, code } = verifier;
 
-  if (options?.strategy === 'sandbox') merchant = 'zibal';
+  if (options?.sandbox) merchant = 'zibal';
 
   try {
     const response = await axios.post<ZibalVerifyRequest, { data: ZibalVerifyResponse }>(

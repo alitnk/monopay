@@ -41,12 +41,8 @@ export interface ZarinpalReceipt extends Receipt {
   };
 }
 
-export type ZarinpalStrategyType = 'default' | 'sandbox';
-
-export const zarinpalDefaultStrategy: ZarinpalStrategyType = 'default';
-
-export class ZarinpalOptions {
-  strategy: ZarinpalStrategyType = 'default';
+export interface ZarinpalOptions {
+  sandbox: boolean;
 }
 
 export interface ZarinpalInvoice extends Invoice {

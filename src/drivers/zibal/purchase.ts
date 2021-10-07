@@ -6,7 +6,7 @@ import { ZibalInvoice, ZibalOptions } from './types';
 export const purchase = async (invoice: ZibalInvoice, options?: ZibalOptions) => {
   let { amount, merchant, ...fields } = invoice;
 
-  if (options?.strategy === 'sandbox') merchant = 'zibal';
+  if (options?.sandbox) merchant = 'zibal';
 
   try {
     const response = await axios.post<ZibalPurchaseRequest, { data: ZibalPurchaseResponse }>(

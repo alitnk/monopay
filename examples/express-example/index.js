@@ -14,7 +14,7 @@ app.get('/purchase', async (req, res) => {
             amount: 20000,
             merchant: '1234',
             callbackUrl: process.env.APP_URL + '/callback',
-        }, { strategy: 'sandbox' })
+        }, { sandbox: true })
 
         res.redirect(payLink)
     } catch (error) {
@@ -32,7 +32,7 @@ app.get('/purchase', async (req, res) => {
  */
 app.get('/callback', async (req, res) => {
     try {
-        const receipt = (await zibal.verify({ amount: 2000, merchant: '1234' }, req, { strategy: 'sandbox' }))
+        const receipt = (await zibal.verify({ amount: 2000, merchant: '1234' }, req, { sandbox: true }))
         console.log(receipt)
         res.json({
             referenceId: receipt.referenceId, // Will be null since it's sandbox
