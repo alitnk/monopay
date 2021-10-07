@@ -5,14 +5,14 @@ import { ZarinpalInvoice, ZarinpalOptions } from './types';
 import { PaymentException } from '../../exception';
 
 export const purchase = async (invoice: ZarinpalInvoice, options?: ZarinpalOptions): Promise<string> => {
-  const { merchant, amount, callbackUrl, mobile, email, ...fields } = invoice;
+  const { merchantId, amount, callbackUrl, mobile, email, ...fields } = invoice;
   let response;
 
   try {
     response = await axios.post<ZarinpalPurchaseRequest, { data: ZarinpalPurchaseResponse }>(
       getZarinpalLinks(options?.sandbox).REQUEST,
       {
-        merchant_id: merchant,
+        merchant_id: merchantId,
         amount: amount * 10, // convert toman to rial
         callback_url: callbackUrl,
         metadata: { email, mobile },

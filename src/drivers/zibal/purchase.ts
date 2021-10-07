@@ -4,14 +4,14 @@ import { zibalLinks, ZibalPurchaseRequest, ZibalPurchaseResponse } from './api';
 import { ZibalInvoice, ZibalOptions } from './types';
 
 export const purchase = async (invoice: ZibalInvoice, options?: ZibalOptions) => {
-  let { amount, merchant, ...fields } = invoice;
+  let { amount, merchantId, ...fields } = invoice;
 
-  if (options?.sandbox) merchant = 'zibal';
+  if (options?.sandbox) merchantId = 'zibal';
 
   try {
     const response = await axios.post<ZibalPurchaseRequest, { data: ZibalPurchaseResponse }>(
       zibalLinks.default.REQUEST,
-      { merchant, amount: amount * 10, ...fields }
+      { merchant: merchantId, amount: amount * 10, ...fields }
     );
     const { message, result, payLink, trackId } = response.data;
 
