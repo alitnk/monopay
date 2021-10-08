@@ -1,17 +1,17 @@
 import axios from 'axios';
 import { PaymentException } from '../../exception';
 import { zibalLinks, ZibalPurchaseRequest, ZibalPurchaseResponse } from './api';
-import { ZibalInvoice, ZibalOptions } from './types';
+import { ZibalPurchaseOptions } from './types';
 
-export const purchase = async (invoice: ZibalInvoice, options?: ZibalOptions) => {
-  let { amount, merchantId, ...fields } = invoice;
+export const purchase = async (options: ZibalPurchaseOptions) => {
+  let { amount, merchantId, sandbox, ...otherOptions } = options;
 
-  if (options?.sandbox) merchantId = 'zibal';
+  if (sandbox) merchantId = 'zibal';
 
   try {
     const response = await axios.post<ZibalPurchaseRequest, { data: ZibalPurchaseResponse }>(
       zibalLinks.default.REQUEST,
-      { merchant: merchantId, amount: amount * 10, ...fields }
+      { merchant: merchantId, amount: amount * 10, ...otherOptions }
     );
     const { message, result, payLink, trackId } = response.data;
 

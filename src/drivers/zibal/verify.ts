@@ -2,12 +2,11 @@ import axios from 'axios';
 import { PaymentException, VerificationException } from '../../exception';
 import { Requestish } from '../../utils';
 import { ZibalCallbackParams, zibalLinks, ZibalVerifyRequest, ZibalVerifyResponse } from './api';
-import { ZibalOptions, ZibalReceipt, ZibalVerifier } from './types';
+import { ZibalReceipt, ZibalVerifyOptions } from './types';
 
 export const verify = async (
-  fields: Omit<ZibalVerifier, 'code'>,
-  request: Requestish<ZibalCallbackParams>,
-  options?: ZibalOptions
+  options: Omit<ZibalVerifyOptions, 'code'>,
+  request: Requestish<ZibalCallbackParams>
 ): Promise<ZibalReceipt> => {
   if (request.query.success === '0') {
     switch (+request.query.status) {
@@ -42,13 +41,13 @@ export const verify = async (
     }
   }
 
-  return await verifyManually({ ...fields, code: request.query.trackId.toString() }, options);
+  return await verifyManually({ ...options, code: request.query.trackId.toString() });
 };
 
-export const verifyManually = async (verifier: ZibalVerifier, options?: ZibalOptions): Promise<ZibalReceipt> => {
-  let { merchantId, code } = verifier;
+export const verifyManually = async (options: ZibalVerifyOptions): Promise<ZibalReceipt> => {
+  let { sandbox, merchantId, code } = options;
 
-  if (options?.sandbox) merchantId = 'zibal';
+  if (sandbox) merchantId = 'zibal';
 
   try {
     const response = await axios.post<ZibalVerifyRequest, { data: ZibalVerifyResponse }>(

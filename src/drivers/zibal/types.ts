@@ -1,9 +1,12 @@
-import { Invoice } from '../../invoice';
+import { PurchaseOptions, VerifyOptions } from '../../options';
 import { Receipt } from '../../receipt';
-import { Verifier } from '../../verifier';
 import { ZibalMultiplexingObject, ZibalVerifyResponse } from './api';
 
-export interface ZibalInvoice extends Invoice {
+export interface ZibalOptions {
+  sandbox?: boolean;
+  merchantId: string;
+}
+export interface ZibalPurchaseOptions extends PurchaseOptions, ZibalOptions {
   mobile?: string;
   orderId?: string;
   allowedCards?: string[];
@@ -14,15 +17,11 @@ export interface ZibalInvoice extends Invoice {
   multiplexingInfos?: ZibalMultiplexingObject[];
 }
 
-export interface ZibalVerifier extends Verifier {}
+export interface ZibalVerifyOptions extends VerifyOptions, ZibalOptions {}
 
 /**
  * @link https://docs.zibal.ir/IPG/API#verify
  */
 export interface ZibalReceipt extends Receipt {
   raw: ZibalVerifyResponse;
-}
-
-export interface ZibalOptions {
-  sandbox: boolean;
 }

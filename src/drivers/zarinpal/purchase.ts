@@ -1,22 +1,22 @@
 import axios from 'axios';
-import { ZarinpalPurchaseRequest, ZarinpalPurchaseResponse } from './api';
-import { getZarinpalLinks } from './utils';
-import { ZarinpalInvoice, ZarinpalOptions } from './types';
 import { PaymentException } from '../../exception';
+import { ZarinpalPurchaseRequest, ZarinpalPurchaseResponse } from './api';
+import { ZarinpalPurchaseOptions } from './types';
+import { getZarinpalLinks } from './utils';
 
-export const purchase = async (invoice: ZarinpalInvoice, options?: ZarinpalOptions): Promise<string> => {
-  const { merchantId, amount, callbackUrl, mobile, email, ...fields } = invoice;
+export const purchase = async (options: ZarinpalPurchaseOptions): Promise<string> => {
+  const { sandbox, merchantId, amount, callbackUrl, mobile, email, ...otherOptions } = options;
   let response;
 
   try {
     response = await axios.post<ZarinpalPurchaseRequest, { data: ZarinpalPurchaseResponse }>(
-      getZarinpalLinks(options?.sandbox).REQUEST,
+      getZarinpalLinks(sandbox).REQUEST,
       {
         merchant_id: merchantId,
         amount: amount * 10, // convert toman to rial
         callback_url: callbackUrl,
         metadata: { email, mobile },
-        ...fields,
+        ...otherOptions,
       }
     );
     const { data, errors } = response.data;
@@ -44,7 +44,7 @@ export const purchase = async (invoice: ZarinpalInvoice, options?: ZarinpalOptio
       }
     }
 
-    return (getZarinpalLinks(options?.sandbox).PAYMENT + (data as any).authority) as string;
+    return (getZarinpalLinks(sandbox).PAYMENT + (data as any).authority) as string;
   } catch (e) {
     if (e instanceof PaymentException) throw e;
     else if (e instanceof Error) throw new PaymentException(e.message);

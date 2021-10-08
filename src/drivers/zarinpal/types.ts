@@ -1,8 +1,17 @@
-import { Invoice } from '../../invoice';
+import { PurchaseOptions, VerifyOptions } from '../../options';
 import { Receipt } from '../../receipt';
-import { Verifier } from '../../verifier';
 
-export interface ZarinpalVerifier extends Verifier {}
+export interface ZarinpalOptions {
+  sandbox?: boolean;
+  merchantId: string;
+}
+
+export interface ZarinpalPurchaseOptions extends PurchaseOptions, ZarinpalOptions {
+  mobile?: string;
+  email?: string;
+}
+
+export interface ZarinpalVerifyOptions extends VerifyOptions, ZarinpalOptions {}
 
 /**
  * @link https://docs.zarinpal.com/paymentGateway/guide/#بازگشت-به-سایت-پذیرنده
@@ -39,13 +48,4 @@ export interface ZarinpalReceipt extends Receipt {
      */
     fee: number;
   };
-}
-
-export interface ZarinpalOptions {
-  sandbox: boolean;
-}
-
-export interface ZarinpalInvoice extends Invoice {
-  mobile?: string;
-  email?: string;
 }
