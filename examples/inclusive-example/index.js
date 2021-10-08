@@ -1,20 +1,33 @@
 require('dotenv').config()
 const express = require('express')
-const { zibal, PaymentException, VerificationException } = require('polypay.js')
+const { zibal, PaymentException, VerificationException, getPaymentDriver } = require('polypay.js')
 
 const app = express()
 const port = 3000
+
+/** @type {import('polypay.js').GlobalConfiguration} */
+const polypayConfiguration = {
+    zarinpal: {
+        merchantId: 'zarinpal-merchant',
+        sandbox: true,
+    },
+    zibal: {
+        merchantId: 'zibal-merchant',
+        sandbox: true,
+    }
+}
 
 /**
  * The purchase route that will redirect the user to the payment gateway
  */
 app.get('/purchase', async (req, res) => {
+    const driver = 'zibal'; // In a real scenario, the user might decide this
+
     try {
-        const payLink = await zibal.purchase({
+        const payLink = await getPaymentDriver(driver, polypayConfiguration).purchase({
             amount: 20000,
-            merchantId: '1234',
             callbackUrl: process.env.APP_URL + '/callback',
-        }, { sandbox: true })
+        })
 
         res.redirect(payLink)
     } catch (error) {
@@ -31,9 +44,15 @@ app.get('/purchase', async (req, res) => {
  * The callback URL that was given to `purchase` 
  */
 app.get('/callback', async (req, res) => {
+    const driver = 'zibal'; // In a real scenario, the user might decide this
+
     try {
-        const receipt = (await zibal.verify({ amount: 2000, merchantId: '1234' }, req, { sandbox: true }))
+        const payLink = await getPaymentDriver(driver, polypayConfiguration).verify({
+            amount: 2000,
+        }, req);
+
         console.log(receipt)
+
         res.json({
             referenceId: receipt.referenceId, // Will be null since it's sandbox
             success: true,
