@@ -19,6 +19,11 @@ function HomepageHeader() {
             to="/docs/quick-start">
             Quick Start
           </Link>
+          <Link
+            className="button button--secondary button--lg"
+            to="/docs/quick-start">
+            زبان فارسی
+          </Link>
         </div>
       </div>
     </header>

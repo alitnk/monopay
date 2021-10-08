@@ -3,7 +3,7 @@ sidebar_position: 2
 title: 'Supported Drivers'
 ---
 
-Currently, the following drivers are supported:
+Each payment service is called a "driver", currently, the following drivers are supported:
 
 - [Zarinpal](https://next.zarinpal.com/auth/register?ref_id=22MEjLK)
 - [Zibal](https://zibal.ir)

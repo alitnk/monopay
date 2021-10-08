@@ -4,7 +4,7 @@ sidebar_position: 1
 
 # Intro
 
-Polypay abstracts away all the different APIs and give you one easy way for making purchases with different payment services.
+Polypay abstracts away all the different APIs and gives you one simple way for making purchases with different payment services.
 
 ### Supported Drivers
 

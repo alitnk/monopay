@@ -1,5 +1,6 @@
 import React from 'react';
 import clsx from 'clsx';
+import Link from '@docusaurus/Link';
 import styles from './HomepageFeatures.module.css';
 
 const FeatureList = [
@@ -9,7 +10,7 @@ const FeatureList = [
     description: (
       <>
         Polypay gives you a single API to communicate with different payment
-        services, you can find a list of the services <a href="http://localhost:3000/docs/supported-drivers">here.</a>
+        services, you can find a list of the services <Link to="/docs/supported-drivers">here.</Link>
       </>
     ),
   },

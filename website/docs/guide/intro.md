@@ -3,7 +3,7 @@ sidebar_position: 1
 title: 'Intro'
 ---
 
-First make sure to install the package
+First install the package.
 
 if you use npm:
 
@@ -17,4 +17,8 @@ if you use yarn:
 yarn add polypay.js
 ```
 
-Then check out the next page!
+---
+
+If you're only planning to use one payment service, check [the exclusive section](/docs/guide/exclusive).
+
+If you're only planning to use multiple payment services, check [the inclusive section](/docs/guide/inclusive).

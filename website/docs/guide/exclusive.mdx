@@ -1,0 +1,62 @@
+---
+sidebar_position: 2
+title: 'The Exclusive API'
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import CodeBlock from '@theme/CodeBlock';
+import requestExclusiveTs from '!!raw-loader!./snippets/exclusive/request.ts';
+import requestExclusiveJs from '!!raw-loader!./snippets/exclusive/request.js';
+import verifyExclusiveTs from '!!raw-loader!./snippets/exclusive/verify.ts';
+import verifyExclusiveJs from '!!raw-loader!./snippets/exclusive/verify.js';
+
+This way of making the payment is for when you _exclusively_, work with one payment driver.
+for instance, here we're only using the Zarinpal driver.
+
+## Request For Payment
+
+Import the driver you want, and call the `purchase` function from it. This function accepts an object and the auto-completion should tell you what fields this driver needs.
+
+<Tabs>
+  <TabItem value="typescript" label="TypeScript" default>
+    <CodeBlock className="language-ts" title="index.ts">
+      {requestExclusiveTs}
+    </CodeBlock>
+  </TabItem>
+  <TabItem value="javascript" label="JavaScript">
+    <CodeBlock className="language-js" title="index.js">
+      {requestExclusiveJs}
+    </CodeBlock>
+  </TabItem>
+</Tabs>
+
+:::note
+the `purchase` function might throw `PaymentException`
+:::
+
+## Verify The Payment
+
+Again, import the driver and then call `verify` from it.
+
+This function accepts two objects:
+
+1. an object, containing the `merchantId` and the `amount` of purchase.
+2. the express/fastify/koa/etc. Request object. (It must have a `query` field on it.)
+
+<Tabs>
+  <TabItem value="typescript" label="TypeScript" default>
+    <CodeBlock className="language-ts" title="index.ts">
+      {verifyExclusiveTs}
+    </CodeBlock>
+  </TabItem>
+  <TabItem value="javascript" label="JavaScript">
+    <CodeBlock className="language-js" title="index.js">
+      {verifyExclusiveJs}
+    </CodeBlock>
+  </TabItem>
+</Tabs>
+
+:::note
+the `verify` function might throw `VerificationException`
+:::

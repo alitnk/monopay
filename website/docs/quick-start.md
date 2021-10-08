@@ -38,17 +38,20 @@ const paymentUrl = await zarinpal.purchase({
 
 This function returns you a URL to the payment gateway. You should redirect the user to the URL.
 
+:::note
 If the purchasing request fails, it will throw a `PaymentException` that you can catch and act upon.
+:::
 
-**Note that this function returns you a promise, so you should either use async/await or resolve it with .then()**
+:::info
+that this function returns you a promise, so you should either use async/await or resolve it with .then()
+:::
 
 ## Verify the payment
 
-Import the payment driver again, and call the `verify` function, when the callback is called:
+Import the payment driver again, and call the `verify` function, when the callback is called. this function accepts two arguments:
 
-For the first parameter, you should give it an object, containing the `merchantId` and the `amount` of purchase.
-
-For the second parameter, you should give it the express/fastify/koa Request object. (It must have a `query` field on it.)
+1. an object, containing the `merchantId` and the `amount` of purchase.
+2. the express/fastify/koa Request object. (It must have a `query` field on it.)
 
 ```ts
 import { zarinpal } from 'polypay.js';
@@ -64,13 +67,15 @@ const receipt = await zarinpal.verify(
 
 If the callback call was verified, this function returns you a "Receipt", that will contain the information about transaction.
 
+:::note
 If the verification fails, this function will throw a `VerificationException` that you can catch and act upon.
+:::
 
-**Note that this function also, returns a promise.**
+:::info
+This function also, returns a promise.
+:::
 
----
+Here you can see an example of it using express.js:
+[Example using express.js](https://github.com/alitnk/polypay.js/blob/main/examples/exclusive-example/index.js)
 
-And yeah that's about it. here you can see an example of it using express.js:
-[Example using express.js](https://github.com/alitnk/polypay.js/blob/main/examples/express-example/index.js)
-
-If you want to know about the other features and dive deeper, check the [full guide](/docs/guide/installation)
+If you want to know about the other features and dive deeper, check the [full guide](/docs/guide/intro)
