@@ -6,7 +6,7 @@ import { VerifyOptions } from './options';
 import { ZarinpalOptions } from './drivers/zarinpal/types';
 import { ZibalOptions } from './drivers/zibal/types';
 
-export type GlobalConfiguration = {
+export type ConfigObject = {
   zarinpal: ZarinpalOptions;
   zibal: ZibalOptions;
 };
@@ -26,13 +26,10 @@ type Driver = {
  * @param driver Enter a driver name (e.g. zarinpal)
  * @returns A driver with `purchase` and `verify` on it
  */
-export const getPaymentDriver = (
-  driverName: keyof GlobalConfiguration,
-  globalConfiguration: Partial<GlobalConfiguration>
-): Driver => {
+export const getPaymentDriver = (driverName: keyof ConfigObject, ConfigObject: Partial<ConfigObject>): Driver => {
   const driver: Driver = drivers[driverName];
-  if (globalConfiguration) {
-    const config = globalConfiguration[driverName] || {};
+  if (ConfigObject) {
+    const config = ConfigObject[driverName] || {};
     driver.purchase = (options: PurchaseOptions) => driver.purchase({ ...config, ...options });
     driver.verify = (options: Omit<VerifyOptions, 'code'>, req: Requestish) =>
       driver.verify({ ...config, ...options }, req);

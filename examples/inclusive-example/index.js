@@ -5,7 +5,7 @@ const { zibal, PaymentException, VerificationException, getPaymentDriver } = req
 const app = express()
 const port = 3000
 
-/** @type {import('polypay.js').GlobalConfiguration} */
+/** @type {import('polypay.js').ConfigObject} */
 const polypayConfiguration = {
     zarinpal: {
         merchantId: 'zarinpal-merchant',
