@@ -1,6 +1,6 @@
 require('dotenv').config()
 const express = require('express')
-const { zibal, PaymentException, VerificationException, getPaymentDriver } = require('polypay.js')
+const { zibal, getScript, PaymentException, VerificationException, getPaymentDriver } = require('polypay.js')
 
 const app = express()
 const port = 3000
@@ -29,7 +29,14 @@ app.get('/purchase', async (req, res) => {
             callbackUrl: process.env.APP_URL + '/callback',
         })
 
-        res.redirect(payLink)
+        res.send(`
+        <html>
+        <body>
+            <h1> We're redirecting you to the payment gateway... </h1>
+            <script>${getScript(purchaseInfo)}</script>
+        </body>
+        </html>
+        `)
     } catch (error) {
         console.log(error)
         if (typeof error === PaymentException) {

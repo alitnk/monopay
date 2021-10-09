@@ -16,9 +16,7 @@ describe('Zarinpal Driver', () => {
 
     mockedAxios.post.mockResolvedValueOnce({ data: serverResponse });
 
-    expect(await purchase({ amount: 2000, callbackUrl: 'asd', merchantId: '123123123' })).toBe(
-      'https://www.zarinpal.com/pg/StartPay/10'
-    );
+    expect(typeof (await purchase({ amount: 2000, callbackUrl: 'asd', merchantId: '123123123' })).url).toBe('string');
   });
 
   it('throws payment errors accordingly', async () => {

@@ -1,5 +1,4 @@
-import { PurchaseOptions, VerifyOptions } from '../../options';
-import { Receipt } from '../../receipt';
+import { PurchaseOptions, Receipt, VerifyOptions } from '../../types';
 
 export interface ZarinpalOptions {
   sandbox?: boolean;

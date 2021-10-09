@@ -1,10 +1,8 @@
 import * as drivers from './drivers';
-import { PurchaseOptions } from './options';
-import { Receipt } from './receipt';
-import { Requestish } from './utils';
-import { VerifyOptions } from './options';
 import { ZarinpalOptions } from './drivers/zarinpal/types';
 import { ZibalOptions } from './drivers/zibal/types';
+import { PurchaseInfo, PurchaseOptions, Receipt, VerifyOptions } from './types';
+import { Requestish } from './utils';
 
 export type ConfigObject = {
   zarinpal: ZarinpalOptions;
@@ -12,7 +10,7 @@ export type ConfigObject = {
 };
 
 type Driver = {
-  purchase(options: PurchaseOptions): Promise<string>;
+  purchase(options: PurchaseOptions): Promise<PurchaseInfo>;
   verify(options: Omit<VerifyOptions, 'code'>, req: Requestish): Promise<Receipt>;
   verifyManually(options: VerifyOptions): Promise<Receipt>;
 };

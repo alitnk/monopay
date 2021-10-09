@@ -1,10 +1,11 @@
 import axios from 'axios';
 import { PaymentException } from '../../exception';
+import { PurchaseInfo } from '../../types';
 import { ZarinpalPurchaseRequest, ZarinpalPurchaseResponse } from './api';
 import { ZarinpalPurchaseOptions } from './types';
 import { getZarinpalLinks } from './utils';
 
-export const purchase = async (options: ZarinpalPurchaseOptions): Promise<string> => {
+export const purchase = async (options: ZarinpalPurchaseOptions): Promise<PurchaseInfo> => {
   const { sandbox, merchantId, amount, callbackUrl, mobile, email, ...otherOptions } = options;
   let response;
 
@@ -44,7 +45,11 @@ export const purchase = async (options: ZarinpalPurchaseOptions): Promise<string
       }
     }
 
-    return (getZarinpalLinks(sandbox).PAYMENT + (data as any).authority) as string;
+    return {
+      url: (getZarinpalLinks(sandbox).PAYMENT + (data as any).authority) as string,
+      method: 'GET',
+      params: {},
+    };
   } catch (e) {
     if (e instanceof PaymentException) throw e;
     else if (e instanceof Error) throw new PaymentException(e.message);

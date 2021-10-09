@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { PaymentException, VerificationException } from '../../exception';
-import { Receipt } from '../../receipt';
+import { Receipt } from '../../types';
 import { Requestish } from '../../utils';
 import { ZarinpalVerifyRequest, ZarinpalVerifyResponse } from './api';
 import { ZarinpalVerifyOptions } from './types';

@@ -1,9 +1,10 @@
 import axios from 'axios';
 import { PaymentException } from '../../exception';
+import { PurchaseInfo } from '../../types';
 import { zibalLinks, ZibalPurchaseRequest, ZibalPurchaseResponse } from './api';
 import { ZibalPurchaseOptions } from './types';
 
-export const purchase = async (options: ZibalPurchaseOptions) => {
+export const purchase = async (options: ZibalPurchaseOptions): Promise<PurchaseInfo> => {
   let { amount, merchantId, sandbox, ...otherOptions } = options;
 
   if (sandbox) merchantId = 'zibal';
@@ -36,7 +37,11 @@ export const purchase = async (options: ZibalPurchaseOptions) => {
           throw new PaymentException(message);
       }
     }
-    return payLink || zibalLinks.default.PAYMENT + trackId;
+    return {
+      url: payLink || zibalLinks.default.PAYMENT + trackId,
+      method: 'GET',
+      params: {},
+    };
   } catch (e) {
     if (e instanceof PaymentException) throw e;
     else if (e instanceof Error) throw new PaymentException(e.message);

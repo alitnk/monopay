@@ -11,15 +11,14 @@ describe('Zibal Driver', () => {
   it('returns the correct payment url', async () => {
     const serverResponse: ZibalPurchaseResponse = {
       message: 'hello',
-      payLink: 'somelinkto.pay/1234',
       result: 100,
       trackId: 1234,
     };
 
     mockedAxios.post.mockResolvedValueOnce({ data: serverResponse });
 
-    expect(await purchase({ merchantId: '2134', callbackUrl: 'https://google.com', amount: 20000 })).toBe(
-      serverResponse.payLink
+    expect(typeof (await purchase({ merchantId: '2134', callbackUrl: 'https://google.com', amount: 20000 })).url).toBe(
+      'string'
     );
   });
 
