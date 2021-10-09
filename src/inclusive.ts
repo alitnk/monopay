@@ -1,4 +1,5 @@
 import * as drivers from './drivers';
+import { SamanOptions } from './drivers/saman/types';
 import { ZarinpalOptions } from './drivers/zarinpal/types';
 import { ZibalOptions } from './drivers/zibal/types';
 import { PurchaseInfo, PurchaseOptions, Receipt, VerifyOptions } from './types';
@@ -7,6 +8,7 @@ import { Requestish } from './utils';
 export type ConfigObject = {
   zarinpal: ZarinpalOptions;
   zibal: ZibalOptions;
+  saman: SamanOptions;
 };
 
 type Driver = {
