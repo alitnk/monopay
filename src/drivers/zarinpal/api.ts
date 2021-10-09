@@ -48,6 +48,18 @@ export interface ZarinpalPurchaseRequest {
   };
 }
 
+/**
+ * @link https://docs.zarinpal.com/paymentGateway/error.html
+ */
+export const zarinpalPurchaseErrors: Record<string, string> = {
+  '-9': 'خطای اعتبار سنجی',
+  '-10': 'ای پی و يا مرچنت كد پذيرنده صحيح نيست.',
+  '-11': 'مرچنت کد فعال نیست لطفا با تیم پشتیبانی ما تماس بگیرید.',
+  '-12': 'تلاش بیش از حد در یک بازه زمانی کوتاه.',
+  '-15': 'ترمینال شما به حالت تعلیق در آمده با تیم پشتیبانی تماس بگیرید.',
+  '-16': 'سطح تاييد پذيرنده پايين تر از سطح نقره اي است.',
+};
+
 export interface ZarinpalPurchaseResponse {
   data:
     | {

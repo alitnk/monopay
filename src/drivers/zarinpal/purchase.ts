@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { PaymentException } from '../../exception';
 import { PurchaseInfo } from '../../types';
-import { ZarinpalPurchaseRequest, ZarinpalPurchaseResponse } from './api';
+import { zarinpalPurchaseErrors, ZarinpalPurchaseRequest, ZarinpalPurchaseResponse } from './api';
 import { ZarinpalPurchaseOptions } from './types';
 import { getZarinpalLinks } from './utils';
 
@@ -25,24 +25,7 @@ export const purchase = async (options: ZarinpalPurchaseOptions): Promise<Purcha
     if (!Array.isArray(errors)) {
       // There are errors (`errors` is an object)
       const { message, code } = errors;
-
-      // Error eference: https://docs.zarinpal.com/paymentGateway/error.html
-      switch (code) {
-        case -9:
-          throw new PaymentException(message, 'خطای اعتبار سنجی');
-        case -10:
-          throw new PaymentException(message, 'ای پی و يا مرچنت كد پذيرنده صحيح نيست.');
-        case -11:
-          throw new PaymentException(message, 'مرچنت کد فعال نیست لطفا با تیم پشتیبانی ما تماس بگیرید.');
-        case -12:
-          throw new PaymentException(message, 'تلاش بیش از حد در یک بازه زمانی کوتاه.');
-        case -15:
-          throw new PaymentException(message, 'ترمینال شما به حالت تعلیق در آمده با تیم پشتیبانی تماس بگیرید.');
-        case -16:
-          throw new PaymentException(message, 'سطح تاييد پذيرنده پايين تر از سطح نقره اي است.');
-        default:
-          throw new PaymentException(message);
-      }
+      throw new PaymentException(message, zarinpalPurchaseErrors[code.toString()]);
     }
 
     return {

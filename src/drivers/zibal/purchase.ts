@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { PaymentException } from '../../exception';
 import { PurchaseInfo } from '../../types';
-import { zibalLinks, ZibalPurchaseRequest, ZibalPurchaseResponse } from './api';
+import { zibalLinks, zibalPurchaseErrors, ZibalPurchaseRequest, ZibalPurchaseResponse } from './api';
 import { ZibalPurchaseOptions } from './types';
 
 export const purchase = async (options: ZibalPurchaseOptions): Promise<PurchaseInfo> => {
@@ -17,26 +17,9 @@ export const purchase = async (options: ZibalPurchaseOptions): Promise<PurchaseI
     const { message, result, payLink, trackId } = response.data;
 
     if (result !== 100) {
-      // Error eference: https://docs.zibal.ir/IPG/API#requestResultCode
-      switch (result) {
-        case 102:
-          throw new PaymentException(message, 'merchant یافت نشد.');
-        case 103:
-          throw new PaymentException(message, 'merchant غیرفعال');
-        case 104:
-          throw new PaymentException(message, 'merchant نامعتبر');
-        case 201:
-          throw new PaymentException(message, 'قبلا تایید شده.');
-        case 105:
-          throw new PaymentException(message, 'amount بایستی بزرگتر از 1,000 ریال باشد.');
-        case 106:
-          throw new PaymentException(message, 'callbackUrl نامعتبر می‌باشد. (شروع با http و یا https)');
-        case 113:
-          throw new PaymentException(message, 'amount مبلغ تراکنش از سقف میزان تراکنش بیشتر است.');
-        default:
-          throw new PaymentException(message);
-      }
+      throw new PaymentException(message, zibalPurchaseErrors[result.toString()]);
     }
+
     return {
       url: payLink || zibalLinks.default.PAYMENT + trackId,
       method: 'GET',

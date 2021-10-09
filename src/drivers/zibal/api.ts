@@ -114,6 +114,19 @@ export interface ZibalPurchaseResponse {
   message: string;
 }
 
+/**
+ * @link https://docs.zibal.ir/IPG/API#requestResultCode
+ */
+export const zibalPurchaseErrors: Record<string, string> = {
+  '102': 'merchant یافت نشد.',
+  '103': 'merchant غیرفعال',
+  '104': 'merchant نامعتبر',
+  '201': 'قبلا تایید شده.',
+  '105': 'amount بایستی بزرگتر از 1,000 ریال باشد.',
+  '106': 'callbackUrl نامعتبر می‌باشد. (شروع با http و یا https)',
+  '113': 'amount مبلغ تراکنش از سقف میزان تراکنش بیشتر است.',
+};
+
 export interface ZibalCallbackParams {
   /**
    * 	در صورت موفقیت‌آمیز بودن تراکنش 1، در غیر این‌صورت 0 می‌باشد.
@@ -136,6 +149,23 @@ export interface ZibalCallbackParams {
    */
   status: '-1' | '-2' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' | '10' | '11' | '12';
 }
+
+export const zibalCallbackErrors: Record<string, string> = {
+  '-1': 'در انتظار پردخت',
+  '-2': 'خطای داخلی',
+  '1': 'پرداخت شده - تاییدشده',
+  '2': 'پرداخت شده - تاییدنشده',
+  '3': 'لغوشده توسط کاربر',
+  '4': '‌شماره کارت نامعتبر می‌باشد.',
+  '5': '‌موجودی حساب کافی نمی‌باشد.',
+  '6': 'رمز واردشده اشتباه می‌باشد.',
+  '7': '‌تعداد درخواست‌ها بیش از حد مجاز می‌باشد.',
+  '8': '‌تعداد پرداخت اینترنتی روزانه بیش از حد مجاز می‌باشد.',
+  '9': 'مبلغ پرداخت اینترنتی روزانه بیش از حد مجاز می‌باشد.',
+  '10': '‌صادرکننده‌ی کارت نامعتبر می‌باشد.',
+  '11': '‌خطای سوییچ',
+  '12': 'کارت قابل دسترسی نمی‌باشد.',
+};
 
 export interface ZibalVerifyRequest {
   /**
@@ -187,3 +217,16 @@ export interface ZibalVerifyResponse {
    */
   message: string;
 }
+
+/**
+ * @link https://docs.zibal.ir/IPG/API#verifyResultTable
+ */
+export const zibalVerifyErrors: Record<string, string> = {
+  '102': 'merchant یافت نشد.',
+  '103': 'merchant غیرفعال',
+  '104': 'merchant نامعتبر',
+  '201': 'قبلا تایید شده.',
+  '105': 'amount بایستی بزرگتر از 1,000 ریال باشد.',
+  '202': 'سفارش پرداخت نشده یا ناموفق بوده است. جهت اطلاعات بیشتر جدول وضعیت‌ها را مطالعه کنید.',
+  '203': 'trackId نامعتبر می‌باشد.',
+};
