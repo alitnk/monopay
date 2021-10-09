@@ -10,7 +10,7 @@ const port = 3000
  */
 app.get('/purchase', async (req, res) => {
     try {
-        const purchaseInfo = await zibal.purchase({
+        const paymentInfo = await zibal.request({
             amount: 20000,
             merchantId: '1234',
             callbackUrl: process.env.APP_URL + '/callback',
@@ -21,7 +21,7 @@ app.get('/purchase', async (req, res) => {
         <html>
         <body>
             <h1> We're redirecting you to the payment gatewayh1>
-            <script>${getScript(purchaseInfo)}</script>
+            <script>${getScript(paymentInfo)}</script>
         </body>
         </html>
         `)

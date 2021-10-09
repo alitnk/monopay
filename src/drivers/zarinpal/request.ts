@@ -1,11 +1,11 @@
 import axios from 'axios';
 import { PaymentException } from '../../exception';
-import { PurchaseInfo } from '../../types';
+import { PaymentInfo } from '../../types';
 import { zarinpalPurchaseErrors, ZarinpalPurchaseRequest, ZarinpalPurchaseResponse } from './api';
 import { ZarinpalPurchaseOptions } from './types';
 import { getZarinpalLinks } from './utils';
 
-export const purchase = async (options: ZarinpalPurchaseOptions): Promise<PurchaseInfo> => {
+export const request = async (options: ZarinpalPurchaseOptions): Promise<PaymentInfo> => {
   const { sandbox, merchantId, amount, callbackUrl, mobile, email, ...otherOptions } = options;
   let response;
 

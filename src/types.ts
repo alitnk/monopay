@@ -15,7 +15,7 @@ export interface Receipt {
   raw: any;
 }
 
-export interface PurchaseInfo {
+export interface PaymentInfo {
   method: 'GET' | 'POST';
   url: string;
   params: Record<string, any>;

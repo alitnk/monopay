@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { purchase, verify } from '../src/drivers/zibal';
+import { request, verify } from '../src/drivers/zibal';
 import { ZibalPurchaseResponse, ZibalVerifyResponse } from '../src/drivers/zibal/api';
 import { ZibalReceipt } from '../src/drivers/zibal/types';
 import { PaymentException } from '../src/exception';
@@ -17,7 +17,7 @@ describe('Zibal Driver', () => {
 
     mockedAxios.post.mockResolvedValueOnce({ data: serverResponse });
 
-    expect(typeof (await purchase({ merchantId: '2134', callbackUrl: 'https://google.com', amount: 20000 })).url).toBe(
+    expect(typeof (await request({ merchantId: '2134', callbackUrl: 'https://google.com', amount: 20000 })).url).toBe(
       'string'
     );
   });
@@ -32,7 +32,7 @@ describe('Zibal Driver', () => {
     mockedAxios.post.mockResolvedValueOnce({ data: serverResponse });
 
     await expect(
-      async () => await purchase({ amount: 2000, callbackUrl: 'asd', merchantId: '123123123' })
+      async () => await request({ amount: 2000, callbackUrl: 'asd', merchantId: '123123123' })
     ).rejects.toThrow(PaymentException);
   });
 

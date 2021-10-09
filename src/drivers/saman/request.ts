@@ -1,11 +1,10 @@
-import { PurchaseInfo } from '../../types';
+import { PaymentInfo } from '../../types';
 import { PaymentException } from '../../exception';
 import { SamanPurchaseOptions } from './types';
 import { samanLinks, samanPurchaseErrors, SamanPurchaseRequest, SamanPurchaseResponse } from './api';
 import axios from 'axios';
 
-// GetMethod = true
-export const purchase = async (options: SamanPurchaseOptions): Promise<PurchaseInfo> => {
+export const request = async (options: SamanPurchaseOptions): Promise<PaymentInfo> => {
   const { merchantId, amount, callbackUrl, mobile, wage } = options;
   const response = await axios.post<SamanPurchaseRequest, { data: SamanPurchaseResponse }>(samanLinks.default.REQUEST, {
     Amount: amount,

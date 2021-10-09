@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { purchase, verify } from '../src/drivers/zarinpal';
+import { request, verify } from '../src/drivers/zarinpal';
 import { ZarinpalPurchaseResponse, ZarinpalVerifyResponse } from '../src/drivers/zarinpal/api';
 import { ZarinpalReceipt } from '../src/drivers/zarinpal/types';
 import { PaymentException } from '../src/exception';
@@ -16,7 +16,7 @@ describe('Zarinpal Driver', () => {
 
     mockedAxios.post.mockResolvedValueOnce({ data: serverResponse });
 
-    expect(typeof (await purchase({ amount: 2000, callbackUrl: 'asd', merchantId: '123123123' })).url).toBe('string');
+    expect(typeof (await request({ amount: 2000, callbackUrl: 'asd', merchantId: '123123123' })).url).toBe('string');
   });
 
   it('throws payment errors accordingly', async () => {
@@ -28,7 +28,7 @@ describe('Zarinpal Driver', () => {
     mockedAxios.post.mockResolvedValueOnce({ data: serverResponse });
 
     await expect(
-      async () => await purchase({ amount: 2000, callbackUrl: 'asd', merchantId: '123123123' })
+      async () => await request({ amount: 2000, callbackUrl: 'asd', merchantId: '123123123' })
     ).rejects.toThrow(PaymentException);
   });
 

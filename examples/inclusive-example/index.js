@@ -24,7 +24,7 @@ app.get('/purchase', async (req, res) => {
     const driver = 'zibal'; // In a real scenario, the user might decide this
 
     try {
-        const payLink = await getPaymentDriver(driver, polypayConfiguration).purchase({
+        const payLink = await getPaymentDriver(driver, polypayConfiguration).request({
             amount: 20000,
             callbackUrl: process.env.APP_URL + '/callback',
         })
@@ -33,7 +33,7 @@ app.get('/purchase', async (req, res) => {
         <html>
         <body>
             <h1> We're redirecting you to the payment gateway... </h1>
-            <script>${getScript(purchaseInfo)}</script>
+            <script>${getScript(paymentInfo)}</script>
         </body>
         </html>
         `)

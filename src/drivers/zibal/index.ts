@@ -1,2 +1,2 @@
-export { purchase } from './purchase';
+export { request } from './request';
 export { verify } from './verify';

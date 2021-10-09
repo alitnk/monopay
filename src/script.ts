@@ -1,7 +1,7 @@
-import { PurchaseInfo } from './types';
+import { PaymentInfo } from './types';
 
-export const getScript = (purchaseInfo: PurchaseInfo) => {
-  const { method, params, url } = purchaseInfo;
+export const getScript = (paymentInfo: PaymentInfo) => {
+  const { method, params, url } = paymentInfo;
   let script = `
 var form = document.createElement("form");
 form.setAttribute("method", "${method}");

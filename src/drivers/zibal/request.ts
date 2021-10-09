@@ -1,10 +1,10 @@
 import axios from 'axios';
 import { PaymentException } from '../../exception';
-import { PurchaseInfo } from '../../types';
+import { PaymentInfo } from '../../types';
 import { zibalLinks, zibalPurchaseErrors, ZibalPurchaseRequest, ZibalPurchaseResponse } from './api';
 import { ZibalPurchaseOptions } from './types';
 
-export const purchase = async (options: ZibalPurchaseOptions): Promise<PurchaseInfo> => {
+export const request = async (options: ZibalPurchaseOptions): Promise<PaymentInfo> => {
   let { amount, merchantId, sandbox, ...otherOptions } = options;
 
   if (sandbox) merchantId = 'zibal';

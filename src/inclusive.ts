@@ -2,7 +2,7 @@ import * as drivers from './drivers';
 import { SamanOptions } from './drivers/saman/types';
 import { ZarinpalOptions } from './drivers/zarinpal/types';
 import { ZibalOptions } from './drivers/zibal/types';
-import { PurchaseInfo, PurchaseOptions, Receipt, VerifyOptions } from './types';
+import { PaymentInfo, PurchaseOptions, Receipt, VerifyOptions } from './types';
 import { Requestish } from './utils';
 
 export type ConfigObject = {
@@ -12,7 +12,7 @@ export type ConfigObject = {
 };
 
 type Driver = {
-  purchase(options: PurchaseOptions): Promise<PurchaseInfo>;
+  request(options: PurchaseOptions): Promise<PaymentInfo>;
   verify(options: VerifyOptions, req: Requestish): Promise<Receipt>;
 };
 
@@ -23,13 +23,13 @@ type Driver = {
  * If you solely want to use one driver, import the driver explicitly.
  *
  * @param driver Enter a driver name (e.g. zarinpal)
- * @returns A driver with `purchase` and `verify` on it
+ * @returns A driver with `request` and `verify` on it
  */
 export const getPaymentDriver = (driverName: keyof ConfigObject, ConfigObject: Partial<ConfigObject>): Driver => {
   const driver: Driver = drivers[driverName];
   if (ConfigObject) {
     const config = ConfigObject[driverName] || {};
-    driver.purchase = (options: PurchaseOptions) => driver.purchase({ ...config, ...options });
+    driver.request = (options: PurchaseOptions) => driver.request({ ...config, ...options });
     driver.verify = (options: VerifyOptions, req: Requestish) => driver.verify({ ...config, ...options }, req);
   }
   return driver;

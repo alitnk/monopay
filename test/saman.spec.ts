@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { purchase, verify } from '../src/drivers/saman';
+import { request, verify } from '../src/drivers/saman';
 import { SamanCallbackParams, SamanPurchaseResponse, SamanVerifyResponse } from '../src/drivers/saman/api';
 import { SamanReceipt } from '../src/drivers/saman/types';
 import { PaymentException } from '../src/exception';
@@ -23,7 +23,7 @@ describe('Saman Driver', () => {
 
     expect(
       typeof (
-        await purchase({
+        await request({
           merchantId: '1234',
           amount: 20000,
           callbackUrl: 'https://mysite.com/callback',
@@ -43,7 +43,7 @@ describe('Saman Driver', () => {
 
     await expect(
       async () =>
-        await purchase({
+        await request({
           merchantId: '1234',
           amount: 20000,
           callbackUrl: 'https://mysite.com/callback',
