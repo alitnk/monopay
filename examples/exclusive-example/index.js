@@ -20,7 +20,7 @@ app.get('/purchase', async (req, res) => {
         res.send(`
         <html>
         <body>
-            <h1> We're redirecting you to the payment gatewayh1>
+            <h1> We're redirecting you to the payment gateway... </h1>
             <script>${getScript(paymentInfo)}</script>
         </body>
         </html>
