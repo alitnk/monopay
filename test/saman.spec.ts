@@ -70,6 +70,8 @@ describe('Saman Driver', () => {
 
     mockSoapClient.verifyTransaction = () => serverResponse;
 
-    expect(await verify({ amount: 2000, merchantId: '123123123' }, { query: callbackParams })).toEqual(expectedResult);
+    expect(
+      await (await verify({ amount: 2000, merchantId: '123123123' }, { query: callbackParams })).transactionId
+    ).toBe(expectedResult.transactionId);
   });
 });

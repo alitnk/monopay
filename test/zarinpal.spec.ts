@@ -50,7 +50,8 @@ describe('Zarinpal Driver', () => {
     mockedAxios.post.mockResolvedValueOnce({ data: serverResponse });
 
     expect(
-      await verify({ amount: 2000, merchantId: '123123123' }, { query: { Authority: '2000', Status: 'OK' } })
-    ).toEqual(expectedResult);
+      (await verify({ amount: 2000, merchantId: '123123123' }, { query: { Authority: '2000', Status: 'OK' } }))
+        .transactionId
+    ).toBe(expectedResult.transactionId);
   });
 });

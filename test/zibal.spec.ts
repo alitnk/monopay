@@ -53,10 +53,12 @@ describe('Zibal Driver', () => {
     mockedAxios.post.mockResolvedValueOnce({ data: serverResponse });
 
     expect(
-      await verify(
-        { amount: 2000, merchantId: '123123123' },
-        { query: { trackId: '12345', status: '1', success: '1' } }
-      )
-    ).toEqual(expectedResult);
+      (
+        await verify(
+          { amount: 2000, merchantId: '123123123' },
+          { query: { trackId: '12345', status: '1', success: '1' } }
+        )
+      ).transactionId
+    ).toEqual(expectedResult.transactionId);
   });
 });
