@@ -48,7 +48,7 @@ describe('Zibal Driver', () => {
       orderId: '2211',
       message: 'success',
     };
-    const expectedResult: ZibalReceipt = { referenceId: 1234, raw: serverResponse };
+    const expectedResult: ZibalReceipt = { transactionId: 1234, raw: serverResponse };
 
     mockedAxios.post.mockResolvedValueOnce({ data: serverResponse });
 

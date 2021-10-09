@@ -10,7 +10,8 @@ export interface PurchaseOptions extends BaseOptions {
 export interface VerifyOptions extends BaseOptions {}
 
 export interface Receipt {
-  referenceId: number;
+  transactionId: string | number;
+  cardPan?: string;
   raw: any;
 }
 

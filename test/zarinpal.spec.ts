@@ -45,7 +45,7 @@ describe('Zarinpal Driver', () => {
       },
       errors: [],
     };
-    const expectedResult: ZarinpalReceipt = { referenceId: 201, raw: serverResponse.data as any };
+    const expectedResult: ZarinpalReceipt = { transactionId: 201, raw: serverResponse.data as any };
 
     mockedAxios.post.mockResolvedValueOnce({ data: serverResponse });
 
