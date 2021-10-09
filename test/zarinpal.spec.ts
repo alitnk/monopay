@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { purchase, verify, verifyManually } from '../src/drivers/zarinpal';
+import { purchase, verify } from '../src/drivers/zarinpal';
 import { ZarinpalPurchaseResponse, ZarinpalVerifyResponse } from '../src/drivers/zarinpal/api';
 import { ZarinpalReceipt } from '../src/drivers/zarinpal/types';
 import { PaymentException } from '../src/exception';
@@ -50,11 +50,7 @@ describe('Zarinpal Driver', () => {
     mockedAxios.post.mockResolvedValueOnce({ data: serverResponse });
 
     expect(
-      await verify({ amount: 2000, merchantId: '123123123' }, { query: { authority: '2000', status: 'OK' } })
+      await verify({ amount: 2000, merchantId: '123123123' }, { query: { Authority: '2000', Status: 'OK' } })
     ).toEqual(expectedResult);
-
-    mockedAxios.post.mockResolvedValueOnce({ data: serverResponse });
-
-    expect(await verifyManually({ amount: 2000, merchantId: '123123123', code: '2000' })).toEqual(expectedResult);
   });
 });

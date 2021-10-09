@@ -2,27 +2,26 @@ import axios from 'axios';
 import { PaymentException, VerificationException } from '../../exception';
 import { Receipt } from '../../types';
 import { Requestish } from '../../utils';
-import { ZarinpalVerifyRequest, ZarinpalVerifyResponse } from './api';
+import { ZarinpalCallbackParams, ZarinpalVerifyRequest, ZarinpalVerifyResponse } from './api';
 import { ZarinpalVerifyOptions } from './types';
 import { getZarinpalLinks } from './utils';
 
-export const verify = async (options: Omit<ZarinpalVerifyOptions, 'code'>, request: Requestish): Promise<Receipt> => {
-  const { authority, status } = request.query;
+export const verify = async (
+  options: ZarinpalVerifyOptions,
+  request: Requestish<ZarinpalCallbackParams>
+): Promise<Receipt> => {
+  const { Authority: authority, Status: status } = request.query;
+  const { sandbox, merchantId, ...otherOptions } = options;
+
   if (status !== 'OK') {
     throw new PaymentException('Payment canceled by the user.', 'پرداخت توسط کاربر لغو شد.');
   }
-
-  return await verifyManually({ ...options, code: authority });
-};
-
-export const verifyManually = async (options: ZarinpalVerifyOptions): Promise<Receipt> => {
-  const { sandbox, code, merchantId, ...otherOptions } = options;
 
   try {
     const response = await axios.post<ZarinpalVerifyRequest, { data: ZarinpalVerifyResponse }>(
       getZarinpalLinks(sandbox).VERIFICATION,
       {
-        authority: code,
+        authority,
         merchant_id: merchantId,
         ...otherOptions,
       },

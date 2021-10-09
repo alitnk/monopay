@@ -7,9 +7,7 @@ export interface PurchaseOptions extends BaseOptions {
   description?: string;
 }
 
-export interface VerifyOptions extends BaseOptions {
-  code: string;
-}
+export interface VerifyOptions extends BaseOptions {}
 
 export interface Receipt {
   referenceId: number;

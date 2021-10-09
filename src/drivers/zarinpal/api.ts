@@ -79,6 +79,11 @@ export interface ZarinpalPurchaseResponse {
     | any[];
 }
 
+export interface ZarinpalCallbackParams {
+  Authority: string | number;
+  Status: 'OK' | 'NOK';
+}
+
 export interface ZarinpalVerifyRequest {
   /**
    * 	كد 36 كاراكتري اختصاصي پذيرنده

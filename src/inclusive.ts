@@ -11,8 +11,7 @@ export type ConfigObject = {
 
 type Driver = {
   purchase(options: PurchaseOptions): Promise<PurchaseInfo>;
-  verify(options: Omit<VerifyOptions, 'code'>, req: Requestish): Promise<Receipt>;
-  verifyManually(options: VerifyOptions): Promise<Receipt>;
+  verify(options: VerifyOptions, req: Requestish): Promise<Receipt>;
 };
 
 /**
@@ -29,9 +28,7 @@ export const getPaymentDriver = (driverName: keyof ConfigObject, ConfigObject: P
   if (ConfigObject) {
     const config = ConfigObject[driverName] || {};
     driver.purchase = (options: PurchaseOptions) => driver.purchase({ ...config, ...options });
-    driver.verify = (options: Omit<VerifyOptions, 'code'>, req: Requestish) =>
-      driver.verify({ ...config, ...options }, req);
-    driver.verifyManually = (options: VerifyOptions) => driver.verifyManually({ ...config, ...options });
+    driver.verify = (options: VerifyOptions, req: Requestish) => driver.verify({ ...config, ...options }, req);
   }
   return driver;
 };

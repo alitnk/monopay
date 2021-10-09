@@ -12,27 +12,25 @@ import {
 import { ZibalReceipt, ZibalVerifyOptions } from './types';
 
 export const verify = async (
-  options: Omit<ZibalVerifyOptions, 'code'>,
+  options: ZibalVerifyOptions,
   request: Requestish<ZibalCallbackParams>
 ): Promise<ZibalReceipt> => {
-  if (request.query.success === '0') {
-    throw new PaymentException('Payment exception', zibalCallbackErrors[request.query.status]);
-  }
-
-  return await verifyManually({ ...options, code: request.query.trackId.toString() });
-};
-
-export const verifyManually = async (options: ZibalVerifyOptions): Promise<ZibalReceipt> => {
-  let { sandbox, merchantId, code } = options;
+  const { status, success, trackId } = request.query;
+  const { sandbox } = options;
+  let { merchantId } = options;
 
   if (sandbox) merchantId = 'zibal';
+
+  if (success === '0') {
+    throw new PaymentException('Payment exception', zibalCallbackErrors[status]);
+  }
 
   try {
     const response = await axios.post<ZibalVerifyRequest, { data: ZibalVerifyResponse }>(
       zibalLinks.default.VERIFICATION,
       {
         merchant: merchantId,
-        trackId: +code,
+        trackId: +trackId,
       }
     );
 

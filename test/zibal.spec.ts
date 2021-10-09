@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { purchase, verify, verifyManually } from '../src/drivers/zibal';
+import { purchase, verify } from '../src/drivers/zibal';
 import { ZibalPurchaseResponse, ZibalVerifyResponse } from '../src/drivers/zibal/api';
 import { ZibalReceipt } from '../src/drivers/zibal/types';
 import { PaymentException } from '../src/exception';
@@ -58,9 +58,5 @@ describe('Zibal Driver', () => {
         { query: { trackId: '12345', status: '1', success: '1' } }
       )
     ).toEqual(expectedResult);
-
-    mockedAxios.post.mockResolvedValueOnce({ data: serverResponse });
-
-    expect(await verifyManually({ amount: 2000, merchantId: '123123123', code: '2000' })).toEqual(expectedResult);
   });
 });
