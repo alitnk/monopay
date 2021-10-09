@@ -1,8 +1,8 @@
 export const samanLinks = {
   default: {
-    PURCHASE: 'https://sep.shaparak.ir/Payments/InitPayment.asmx?WSDL',
-    PAYMENT: 'https://sep.shaparak.ir/payment.aspx',
+    REQUEST: 'https://sep.shaparak.ir/Payments/InitPayment.asmx?WSDL',
     VERIFICATION: 'https://sep.shaparak.ir/payments/referencepayment.asmx?WSDL',
+    PAYMENT: 'https://sep.shaparak.ir/payment.aspx',
   },
 };
 
