@@ -22,7 +22,7 @@ export const verify = async (
   if (sandbox) merchantId = 'zibal';
 
   if (success === '0') {
-    throw new PaymentException('Payment exception', zibalCallbackErrors[status]);
+    throw new PaymentException(zibalCallbackErrors[status]);
   }
 
   try {
@@ -34,13 +34,13 @@ export const verify = async (
       }
     );
 
-    const { result, message } = response.data;
+    const { result } = response.data;
 
     if (result !== 100) {
-      throw new VerificationException(message, zibalVerifyErrors[result.toString()]);
+      throw new VerificationException(zibalVerifyErrors[result.toString()]);
     }
 
-    return { raw: response.data, referenceId: response.data.refNumber };
+    return { raw: response.data, transactionId: response.data.refNumber };
   } catch (e) {
     if (e instanceof VerificationException) throw e;
     else if (e instanceof Error) throw new VerificationException(e.message);

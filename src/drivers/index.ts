@@ -9,6 +9,8 @@
 
 import * as _zarinpal from './zarinpal';
 import * as _zibal from './zibal';
+import * as _saman from './saman';
 
 export let zarinpal = _zarinpal;
 export let zibal = _zibal;
+export let saman = _saman;

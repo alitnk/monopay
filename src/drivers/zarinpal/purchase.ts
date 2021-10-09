@@ -24,8 +24,8 @@ export const purchase = async (options: ZarinpalPurchaseOptions): Promise<Purcha
 
     if (!Array.isArray(errors)) {
       // There are errors (`errors` is an object)
-      const { message, code } = errors;
-      throw new PaymentException(message, zarinpalPurchaseErrors[code.toString()]);
+      const { code } = errors;
+      throw new PaymentException(zarinpalPurchaseErrors[code.toString()]);
     }
 
     return {

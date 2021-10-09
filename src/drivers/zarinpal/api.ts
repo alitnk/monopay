@@ -60,6 +60,18 @@ export const zarinpalPurchaseErrors: Record<string, string> = {
   '-16': 'سطح تاييد پذيرنده پايين تر از سطح نقره اي است.',
 };
 
+/**
+ * @link https://docs.zarinpal.com/paymentGateway/error.html
+ */
+export const zarinpalVerifyErrors: Record<string, string> = {
+  '-50': 'مبلغ پرداخت شده با مقدار مبلغ در تایید شده متفاوت است.',
+  '-51': 'پرداخت ناموفق',
+  '-52': 'خطای غیر منتظره با پشتیبانی تماس بگیرید.',
+  '-53': 'اتوریتی برای این مرچنت کد نیست.',
+  '-54': 'اتوریتی نامعتبر است.',
+  '101': 'تراکنش قبلا یک بار تایید شده است.',
+};
+
 export interface ZarinpalPurchaseResponse {
   data:
     | {

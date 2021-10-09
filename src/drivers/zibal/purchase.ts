@@ -14,10 +14,10 @@ export const purchase = async (options: ZibalPurchaseOptions): Promise<PurchaseI
       zibalLinks.default.REQUEST,
       { merchant: merchantId, amount: amount * 10, ...otherOptions }
     );
-    const { message, result, payLink, trackId } = response.data;
+    const { result, payLink, trackId } = response.data;
 
     if (result !== 100) {
-      throw new PaymentException(message, zibalPurchaseErrors[result.toString()]);
+      throw new PaymentException(zibalPurchaseErrors[result.toString()]);
     }
 
     return {
