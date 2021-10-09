@@ -8,7 +8,7 @@ Polypay abstracts away all the different payment gateways' API's and gives you o
 ## Payment Procedure
 
 If you don't know how payment gateways work, read this page:
-[Payment Procedure](/docs/payment-procedure])
+[Payment Procedure](/docs/payment-procedure)
 
 ## Supported Drivers
 
