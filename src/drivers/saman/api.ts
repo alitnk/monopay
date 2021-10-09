@@ -19,9 +19,9 @@ export interface SamanPurchaseRequest {
 
 export interface SamanPurchaseResponse {
   status: 1 | -1;
-  errorCode: number;
-  errorDesc: string;
-  token: string;
+  errorCode?: number;
+  errorDesc?: string;
+  token?: string;
 }
 
 export interface SamanCallbackParams {
@@ -30,31 +30,31 @@ export interface SamanCallbackParams {
    */
   MID: string;
   /**
-   * وضعیت تراکنش - حروف انگلیس
+   * وضعیت تراکنش - حروف انگلیسی
    */
   State: string;
   /**
-   *وضعیت تراکنش - مقدار عدد
+   * وضعیت تراکنش - مقدار عددی
    */
   Status: string;
   /**
-   * شماره مرج
+   * شماره مرجع تراکنش
    */
   RRN: string;
   /**
-   * رسید دیجیتالی خری
+   * رسید دیجیتالی خرید
    */
   RefNum: string;
   /**
-   * شماره خری
+   * شماره خرید
    */
   ResNum: string;
   /**
-   * شماره ترمینا
+   * شماره ترمینال
    */
   TerminalId: string;
   /**
-   * شماره رهگیر
+   * شماره رهگیری
    */
   TraceNo: string;
   /**
@@ -64,7 +64,7 @@ export interface SamanCallbackParams {
   /**
    *
    */
-  Wage: string;
+  Wage?: string;
   /**
    * شماره کارتی که تراکنش با آن انجام شده است
    */
@@ -113,4 +113,4 @@ export const samanCallbackErrors: Record<string, string> = {
 
 export interface SamanVerifyRequest {}
 
-export interface SamanVerifyResponse {}
+export type SamanVerifyResponse = number;

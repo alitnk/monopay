@@ -37,6 +37,7 @@ export const verify = async (
 
     return {
       transactionId: (data as any).ref_id,
+      cardPan: (data as any).card_pan,
       raw: data,
     };
   } catch (e) {

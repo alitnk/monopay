@@ -19,7 +19,7 @@ export const purchase = async (options: SamanPurchaseOptions): Promise<PurchaseI
     }
   );
 
-  if (response.data.status !== 1) {
+  if (response.data.status !== 1 && response.data.errorCode !== undefined) {
     throw new PaymentException(samanPurchaseErrors[response.data.errorCode.toString()]);
   }
 

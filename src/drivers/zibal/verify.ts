@@ -40,7 +40,11 @@ export const verify = async (
       throw new VerificationException(zibalVerifyErrors[result.toString()]);
     }
 
-    return { raw: response.data, transactionId: response.data.refNumber };
+    return {
+      raw: response.data,
+      transactionId: response.data.refNumber,
+      cardPan: response.data.cardNumber,
+    };
   } catch (e) {
     if (e instanceof VerificationException) throw e;
     else if (e instanceof Error) throw new VerificationException(e.message);

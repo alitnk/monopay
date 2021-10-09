@@ -21,7 +21,8 @@ export const verify = async (
   }
 
   return {
-    transactionId,
+    transactionId: +transactionId,
+    cardPan: req.query.SecurePan,
     raw: req.query,
   };
 };
