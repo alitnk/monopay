@@ -29,13 +29,13 @@ const config = {
         docs: {
           sidebarPath: require.resolve('./sidebars.js'),
           // Please change this to your repo.
-          editUrl: 'https://github.com/facebook/docusaurus/edit/main/website/',
+          editUrl: 'https://github.com/alitnk/polypay.js/edit/main/documentation/',
         },
         blog: {
           showReadingTime: true,
           // Please change this to your repo.
           editUrl:
-            'https://github.com/facebook/docusaurus/edit/main/website/blog/',
+            'https://github.com/alitnk/polypay.js/edit/main/documentation/blog/',
         },
         theme: {
           customCss: require.resolve('./src/css/custom.css'),
@@ -56,12 +56,12 @@ const config = {
         items: [
           {
             type: 'doc',
-            docId: 'intro',
+            docId: 'introduction',
             position: 'left',
             label: 'Documentation',
           },
           {
-            href: 'https://github.com/facebook/docusaurus',
+            href: 'https://github.com/alitnk/polypay.js',
             label: 'GitHub',
             position: 'right',
           },

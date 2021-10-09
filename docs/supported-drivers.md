@@ -1,12 +1,13 @@
 ---
-sidebar_position: 2
-title: 'Supported Drivers'
+sidebar_position: 4
+title: Supported Drivers
 ---
 
 Each payment service is called a "driver", currently, the following drivers are supported:
 
 - [Zarinpal](https://next.zarinpal.com/auth/register?ref_id=22MEjLK)
 - [Zibal](https://zibal.ir)
+- [Saman](https://www.sep.ir)
 
 Looking to implement:
 

@@ -1,0 +1,127 @@
+---
+sidebar_position: 6
+title: "The Inclusive API"
+---
+
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+import CodeBlock from "@theme/CodeBlock";
+import configExclusiveTs from "!!raw-loader!../snippets/inclusive/config.ts";
+import configExclusiveJs from "!!raw-loader!../snippets/inclusive/config.js";
+import requestInclusiveTs from "!!raw-loader!../snippets/inclusive/request.ts";
+import requestInclusiveJs from "!!raw-loader!../snippets/inclusive/request.js";
+import verifyInclusiveTs from "!!raw-loader!../snippets/inclusive/verify.ts";
+import verifyInclusiveJs from "!!raw-loader!../snippets/inclusive/verify.js";
+
+This API is for when you want to multiple services at the same time.
+For instance, when you let your users decide which payment service they wanna use for their transactions.
+
+## Configuration
+
+You can keep your configuration in a separated js file.
+
+<Tabs>
+  <TabItem value="typescript" label="TypeScript" default>
+    <CodeBlock className="language-ts" title="polypay-config.ts">
+      {configExclusiveTs}
+    </CodeBlock>
+  </TabItem>
+  <TabItem value="javascript" label="JavaScript">
+    <CodeBlock className="language-js" title="polypay-config.js">
+      {configExclusiveJs}
+    </CodeBlock>
+  </TabItem>
+</Tabs>
+
+## Request For Payment
+
+Get the driver using `getPaymentDriver` and use the `request` function. Note that you don't need to pass `merchantId` and the other options that you"ve already passed with the config object.
+
+<Tabs>
+  <TabItem value="typescript" label="TypeScript" default>
+    <CodeBlock className="language-ts" title="index.ts">
+      {requestInclusiveTs}
+    </CodeBlock>
+  </TabItem>
+  <TabItem value="javascript" label="JavaScript">
+    <CodeBlock className="language-js" title="index.js">
+      {requestInclusiveJs}
+    </CodeBlock>
+  </TabItem>
+</Tabs>
+
+:::note
+the `request` function might throw `PaymentException`
+:::
+
+## Send User to Payment Page
+
+The `paymentInfo` variable, will be somehting like this:
+
+```json
+{
+  "method": "GET", // Could be POST, depends on the driver you're using
+  "url": "https://payment.gateway/start-payment",
+  "params": {
+    "key": "value"
+  }
+}
+```
+
+When you have the payment info, create a form on the frontend, set its method to the method on `paymentInfo`, set its action to the `url` and add the `params` fields as inputs, then submit the form.
+
+:::note
+Most payment gateways don't require submiting a form on the client side, and are fine with simply redirecting the user from backend, but to support all the drivers with one interface, we're handling all of them on a form.
+:::
+
+:::tip
+If you don't want to do this step manually, polypay exposes you a helper function, called `getScript` that you can use.
+
+First generate the script:
+
+```js
+import { getScript } from "polypay.js";
+
+const script = getScript(paymentInfo);
+```
+
+Then in your HTML, interpolate the script in a `script` tag.
+
+```html
+<h1>We're redirecting you to the payment gateway...</h1>
+<script>
+  {{ interpolate the `script` variable here }}
+</script>
+```
+
+:::
+
+If this step sounds confusing, check out our [examples](#example).
+
+## Verify The Payment
+
+Get the driver using `getPaymentDriver` and use the `verify` function. You should pass 2 arguments to this function:
+
+1. an object, containing `amount` of transaction.
+2. the express/fastify/koa/etc. Request object. (It must have a `query` field on it.)
+
+<Tabs>
+  <TabItem value="typescript" label="TypeScript" default>
+    <CodeBlock className="language-ts" title="index.ts">
+      {verifyInclusiveTs}
+    </CodeBlock>
+  </TabItem>
+  <TabItem value="javascript" label="JavaScript">
+    <CodeBlock className="language-js" title="index.js">
+      {verifyInclusiveJs}
+    </CodeBlock>
+  </TabItem>
+</Tabs>
+
+:::note
+the `verify` function might throw `VerificationException`
+:::
+
+## Example
+
+A example with inclusive API and express.js can be found here: [Inclusive API example](https://github.com/alitnk/polypay.js/blob/main/examples/inclusive-example/index.js)
