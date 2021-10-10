@@ -1,4 +1,4 @@
-import { ErrorList, LinksObject } from "../../types";
+import { ErrorList, LinksObject } from '../../types';
 
 export const links: LinksObject = {
   default: {

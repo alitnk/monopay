@@ -3,7 +3,6 @@ import * as API from './api';
 import { Requestish } from '../../utils';
 import { VerificationException, PaymentException } from '../../exception';
 import axios from 'axios';
-import { TripleDES } from 'crypto-js';
 import { signData } from './utils';
 
 export const verify = async (

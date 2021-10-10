@@ -22,8 +22,11 @@ export interface PaymentInfo {
 }
 
 export type ErrorList = Record<string, string>;
-export type LinksObject = Record<string, {
-  REQUEST: string,
-  VERIFICATION: string,
-  PAYMENT: string,
-}>
+export type LinksObject = Record<
+  string,
+  {
+    REQUEST: string;
+    VERIFICATION: string;
+    PAYMENT: string;
+  }
+>;
