@@ -1,14 +1,14 @@
 import forge from 'node-forge';
 
 export const signData = (data: string, key: string) => {
-  const cert = forge.pki.certificateFromPem(data);
+  const cert = forge.pki.certificateFromPem(key);
   // create envelop data
   const p7 = forge.pkcs7.createEnvelopedData();
   // add certificate as recipient
   p7.addRecipient(cert);
   // set content
   p7.content = forge.util.createBuffer();
-  p7.content.putString('content to be encrypted');
+  p7.content.putString(data);
 
   // encrypt
   p7.encrypt();
