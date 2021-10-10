@@ -8,8 +8,8 @@ const darkCodeTheme = require('prism-react-renderer/themes/dracula');
 const config = {
   title: 'Polypay.js',
   tagline: 'Painless SDK for Iranian payment gateways for Node.js',
-  url: 'https://polypay.ir',
-  baseUrl: '/',
+  url: 'https://alitnk.github.io',
+  baseUrl: '/polypay.js/',
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
   favicon: 'img/favicon.ico',
