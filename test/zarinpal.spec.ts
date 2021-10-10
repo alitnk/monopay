@@ -2,7 +2,7 @@ import axios from 'axios';
 import { request, verify } from '../src/drivers/zarinpal';
 import * as API from '../src/drivers/zarinpal/api';
 import { ZarinpalReceipt } from '../src/drivers/zarinpal/types';
-import { PaymentException } from '../src/exception';
+import { RequestException } from '../src/exception';
 
 jest.mock('axios');
 
@@ -29,7 +29,7 @@ describe('Zarinpal Driver', () => {
 
     await expect(
       async () => await request({ amount: 2000, callbackUrl: 'asd', merchantId: '123123123' })
-    ).rejects.toThrow(PaymentException);
+    ).rejects.toThrow(RequestException);
   });
 
   it('verifies the purchase correctly', async () => {

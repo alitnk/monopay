@@ -2,7 +2,7 @@ import axios from 'axios';
 import { request, verify } from '../src/drivers/zibal';
 import * as API from '../src/drivers/zibal/api';
 import { ZibalReceipt } from '../src/drivers/zibal/types';
-import { PaymentException } from '../src/exception';
+import { RequestException } from '../src/exception';
 
 jest.mock('axios');
 
@@ -33,7 +33,7 @@ describe('Zibal Driver', () => {
 
     await expect(
       async () => await request({ amount: 2000, callbackUrl: 'asd', merchantId: '123123123' })
-    ).rejects.toThrow(PaymentException);
+    ).rejects.toThrow(RequestException);
   });
 
   it('verifies the purchase correctly', async () => {

@@ -2,7 +2,7 @@ import axios from 'axios';
 import { request, verify } from '../src/drivers/saman';
 import * as API from '../src/drivers/saman/api';
 import { SamanReceipt } from '../src/drivers/saman/types';
-import { PaymentException } from '../src/exception';
+import { RequestException } from '../src/exception';
 
 jest.mock('axios');
 const mockSoapClient: any = {};
@@ -49,7 +49,7 @@ describe('Saman Driver', () => {
           callbackUrl: 'https://mysite.com/callback',
           mobile: '09120000000',
         })
-    ).rejects.toThrow(PaymentException);
+    ).rejects.toThrow(RequestException);
   });
 
   it('verifies the purchase correctly', async () => {
