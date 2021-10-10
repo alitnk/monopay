@@ -1,11 +1,11 @@
-import { PurchaseOptions, Receipt, VerifyOptions } from '../../types';
+import { RequestOptions, Receipt, VerifyOptions } from '../../types';
 
 export interface ZarinpalOptions {
   sandbox?: boolean;
   merchantId: string;
 }
 
-export interface ZarinpalPurchaseOptions extends PurchaseOptions, ZarinpalOptions {
+export interface ZarinpalPurchaseOptions extends RequestOptions, ZarinpalOptions {
   mobile?: string;
   email?: string;
 }

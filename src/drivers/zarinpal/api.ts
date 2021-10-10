@@ -1,4 +1,6 @@
-export const links = {
+import { ErrorList, LinksObject } from "../../types";
+
+export const links: LinksObject = {
   default: {
     REQUEST: 'https://api.zarinpal.com/pg/v4/payment/request.json',
     VERIFICATION: 'https://api.zarinpal.com/pg/v4/payment/verify.json',
@@ -125,7 +127,7 @@ export interface VerifyResponse {
 /**
  * @link https://docs.zarinpal.com/paymentGateway/error.html
  */
-export const verifyErrors: Record<string, string> = {
+export const verifyErrors: ErrorList = {
   '-50': 'مبلغ پرداخت شده با مقدار مبلغ در تایید شده متفاوت است.',
   '-51': 'پرداخت ناموفق',
   '-52': 'خطای غیر منتظره با پشتیبانی تماس بگیرید.',

@@ -2,7 +2,7 @@ interface BaseOptions {
   amount: number;
 }
 
-export interface PurchaseOptions extends BaseOptions {
+export interface RequestOptions extends BaseOptions {
   callbackUrl: string;
   description?: string;
 }
@@ -20,3 +20,10 @@ export interface PaymentInfo {
   url: string;
   params: Record<string, any>;
 }
+
+export type ErrorList = Record<string, string>;
+export type LinksObject = Record<string, {
+  REQUEST: string,
+  VERIFICATION: string,
+  PAYMENT: string,
+}>

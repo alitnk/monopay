@@ -1,4 +1,6 @@
-export const links = {
+import { ErrorList, LinksObject } from "../../types";
+
+export const links: LinksObject = {
   default: {
     REQUEST: 'https://gateway.zibal.ir/v1/request',
     VERIFICATION: 'https://gateway.zibal.ir/v1/verify',
@@ -117,7 +119,7 @@ export interface PurchaseResponse {
 /**
  * @link https://docs.zibal.ir/IPG/API#requestResultCode
  */
-export const purchaseErrors: Record<string, string> = {
+export const purchaseErrors: ErrorList = {
   '102': 'merchant یافت نشد.',
   '103': 'merchant غیرفعال',
   '104': 'merchant نامعتبر',
@@ -150,7 +152,7 @@ export interface CallbackParams {
   status: '-1' | '-2' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' | '10' | '11' | '12';
 }
 
-export const CallbackErrors: Record<string, string> = {
+export const CallbackErrors: ErrorList = {
   '-1': 'در انتظار پردخت',
   '-2': 'خطای داخلی',
   '1': 'پرداخت شده - تاییدشده',
@@ -221,7 +223,7 @@ export interface VerifyResponse {
 /**
  * @link https://docs.zibal.ir/IPG/API#verifyResultTable
  */
-export const verifyErrors: Record<string, string> = {
+export const verifyErrors: ErrorList = {
   '102': 'merchant یافت نشد.',
   '103': 'merchant غیرفعال',
   '104': 'merchant نامعتبر',

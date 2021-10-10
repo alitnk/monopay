@@ -1,11 +1,11 @@
-import { PurchaseOptions, Receipt, VerifyOptions } from '../../types';
+import { RequestOptions, Receipt, VerifyOptions } from '../../types';
 import * as API from './api';
 
 export interface SamanOptions {
   merchantId: string;
 }
 
-export interface SamanPurchaseOptions extends PurchaseOptions, SamanOptions {
+export interface SamanPurchaseOptions extends RequestOptions, SamanOptions {
   mobile?: string;
   wage?: number;
 }

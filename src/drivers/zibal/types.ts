@@ -1,11 +1,11 @@
-import { PurchaseOptions, Receipt, VerifyOptions } from '../../types';
+import { RequestOptions, Receipt, VerifyOptions } from '../../types';
 import * as API from './api';
 
 export interface ZibalOptions {
   sandbox?: boolean;
   merchantId: string;
 }
-export interface ZibalPurchaseOptions extends PurchaseOptions, ZibalOptions {
+export interface ZibalPurchaseOptions extends RequestOptions, ZibalOptions {
   mobile?: string;
   orderId?: string;
   allowedCards?: string[];

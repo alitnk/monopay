@@ -1,18 +1,20 @@
 import * as drivers from './drivers';
+import { SadadOptions } from './drivers/sadad/types';
 import { SamanOptions } from './drivers/saman/types';
 import { ZarinpalOptions } from './drivers/zarinpal/types';
 import { ZibalOptions } from './drivers/zibal/types';
-import { PaymentInfo, PurchaseOptions, Receipt, VerifyOptions } from './types';
+import { PaymentInfo, RequestOptions, Receipt, VerifyOptions } from './types';
 import { Requestish } from './utils';
 
 export type ConfigObject = {
   zarinpal: ZarinpalOptions;
   zibal: ZibalOptions;
   saman: SamanOptions;
+  sadad: SadadOptions;
 };
 
 type Driver = {
-  request(options: PurchaseOptions): Promise<PaymentInfo>;
+  request(options: RequestOptions): Promise<PaymentInfo>;
   verify(options: VerifyOptions, req: Requestish): Promise<Receipt>;
 };
 
@@ -29,7 +31,7 @@ export const getPaymentDriver = (driverName: keyof ConfigObject, ConfigObject: P
   const driver: Driver = drivers[driverName];
   if (ConfigObject) {
     const config = ConfigObject[driverName] || {};
-    driver.request = (options: PurchaseOptions) => driver.request({ ...config, ...options });
+    driver.request = (options: RequestOptions) => driver.request({ ...config, ...options });
     driver.verify = (options: VerifyOptions, req: Requestish) => driver.verify({ ...config, ...options }, req);
   }
   return driver;

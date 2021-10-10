@@ -1,4 +1,6 @@
-export const links = {
+import { ErrorList, LinksObject } from "../../types";
+
+export const links: LinksObject = {
   default: {
     REQUEST: 'https://sep.shaparak.ir/Payments/InitPayment.asmx?WSDL',
     VERIFICATION: 'https://sep.shaparak.ir/payments/referencepayment.asmx?WSDL',
@@ -71,7 +73,7 @@ export interface CallbackParams {
   SecurePan: string;
 }
 
-export const purchaseErrors: Record<string, string> = {
+export const purchaseErrors: ErrorList = {
   '-1': 'خطای در پردازش اطالعات ارسالی. )مشکل در یکی از ورودیها و ناموفق بودن فراخوانی متد برگشت تراکنش(',
   '-3': 'ورودیها حاوی کارکترهای غیرمجاز میباشند.',
   '-4': 'Failed Authentication Merchant (کلمه عبور یا کد فروشنده اشتباه است(',
@@ -90,7 +92,7 @@ export const purchaseErrors: Record<string, string> = {
   '-18': 'Address IP فروشنده نا معتبر است',
 };
 
-export const callbackErrors: Record<string, string> = {
+export const callbackErrors: ErrorList = {
   // CanceledByUser
   '1': 'کاربر انصراف داده است',
   // OK
