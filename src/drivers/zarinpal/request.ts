@@ -1,7 +1,7 @@
 import axios from 'axios';
-import { PaymentException } from '../../exception';
+import { RequestException, PolypayException } from '../../exception';
 import { PaymentInfo } from '../../types';
-import { zarinpalPurchaseErrors, ZarinpalPurchaseRequest, ZarinpalPurchaseResponse } from './api';
+import * as API from './api';
 import { ZarinpalPurchaseOptions } from './types';
 import { getZarinpalLinks } from './utils';
 
@@ -10,7 +10,7 @@ export const request = async (options: ZarinpalPurchaseOptions): Promise<Payment
   let response;
 
   try {
-    response = await axios.post<ZarinpalPurchaseRequest, { data: ZarinpalPurchaseResponse }>(
+    response = await axios.post<API.PurchaseRequest, { data: API.PurchaseResponse }>(
       getZarinpalLinks(sandbox).REQUEST,
       {
         merchant_id: merchantId,
@@ -25,7 +25,7 @@ export const request = async (options: ZarinpalPurchaseOptions): Promise<Payment
     if (!Array.isArray(errors)) {
       // There are errors (`errors` is an object)
       const { code } = errors;
-      throw new PaymentException(zarinpalPurchaseErrors[code.toString()]);
+      throw new RequestException(API.requestErrors[code.toString()]);
     }
 
     return {
@@ -34,8 +34,8 @@ export const request = async (options: ZarinpalPurchaseOptions): Promise<Payment
       params: {},
     };
   } catch (e) {
-    if (e instanceof PaymentException) throw e;
-    else if (e instanceof Error) throw new PaymentException(e.message);
+    if (e instanceof PolypayException) throw e;
+    else if (e instanceof Error) throw new RequestException(e.message);
     else throw new Error('Unknown error happened');
   }
 };

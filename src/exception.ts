@@ -6,6 +6,16 @@ export class PolypayException extends Error {
 }
 
 /**
+ * Error in the requesting stage
+ */
+export class RequestException extends PolypayException {
+  constructor(message?: string) {
+    super(message);
+    Object.setPrototypeOf(this, RequestException.prototype);
+  }
+}
+
+/**
  * Error in the paying stage
  */
 export class PaymentException extends PolypayException {

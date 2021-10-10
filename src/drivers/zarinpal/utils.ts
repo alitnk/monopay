@@ -1,5 +1,5 @@
-import { zarinpalLinks } from './api';
+import { links } from './api';
 
 export function getZarinpalLinks(sandbox = false) {
-  return zarinpalLinks[sandbox ? 'sandbox' : 'default'];
+  return links[sandbox ? 'sandbox' : 'default'];
 }

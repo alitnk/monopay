@@ -1,12 +1,12 @@
 import { PaymentInfo } from '../../types';
-import { PaymentException } from '../../exception';
+import { RequestException } from '../../exception';
 import { SamanPurchaseOptions } from './types';
-import { samanLinks, samanPurchaseErrors, SamanPurchaseRequest, SamanPurchaseResponse } from './api';
+import * as API from './api';
 import axios from 'axios';
 
 export const request = async (options: SamanPurchaseOptions): Promise<PaymentInfo> => {
   const { merchantId, amount, callbackUrl, mobile, wage } = options;
-  const response = await axios.post<SamanPurchaseRequest, { data: SamanPurchaseResponse }>(samanLinks.default.REQUEST, {
+  const response = await axios.post<API.PurchaseRequest, { data: API.PurchaseResponse }>(API.links.default.REQUEST, {
     Amount: amount,
     RedirectURL: callbackUrl,
     CellNumber: mobile,
@@ -16,12 +16,12 @@ export const request = async (options: SamanPurchaseOptions): Promise<PaymentInf
   });
 
   if (response.data.status !== 1 && response.data.errorCode !== undefined) {
-    throw new PaymentException(samanPurchaseErrors[response.data.errorCode.toString()]);
+    throw new RequestException(API.purchaseErrors[response.data.errorCode.toString()]);
   }
 
   return {
     method: 'POST',
-    url: samanLinks.default.PAYMENT,
+    url: API.links.default.PAYMENT,
     params: {
       Token: response.data.token,
       GetMethod: true,

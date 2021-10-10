@@ -1,4 +1,4 @@
-export const zarinpalLinks = {
+export const links = {
   default: {
     REQUEST: 'https://api.zarinpal.com/pg/v4/payment/request.json',
     VERIFICATION: 'https://api.zarinpal.com/pg/v4/payment/verify.json',
@@ -11,7 +11,7 @@ export const zarinpalLinks = {
   },
 };
 
-export interface ZarinpalPurchaseRequest {
+export interface PurchaseRequest {
   /**
    * 	بله	كد 36 كاراكتري اختصاصي پذيرنده
    */
@@ -48,31 +48,7 @@ export interface ZarinpalPurchaseRequest {
   };
 }
 
-/**
- * @link https://docs.zarinpal.com/paymentGateway/error.html
- */
-export const zarinpalPurchaseErrors: Record<string, string> = {
-  '-9': 'خطای اعتبار سنجی',
-  '-10': 'ای پی و يا مرچنت كد پذيرنده صحيح نيست.',
-  '-11': 'مرچنت کد فعال نیست لطفا با تیم پشتیبانی ما تماس بگیرید.',
-  '-12': 'تلاش بیش از حد در یک بازه زمانی کوتاه.',
-  '-15': 'ترمینال شما به حالت تعلیق در آمده با تیم پشتیبانی تماس بگیرید.',
-  '-16': 'سطح تاييد پذيرنده پايين تر از سطح نقره اي است.',
-};
-
-/**
- * @link https://docs.zarinpal.com/paymentGateway/error.html
- */
-export const zarinpalVerifyErrors: Record<string, string> = {
-  '-50': 'مبلغ پرداخت شده با مقدار مبلغ در تایید شده متفاوت است.',
-  '-51': 'پرداخت ناموفق',
-  '-52': 'خطای غیر منتظره با پشتیبانی تماس بگیرید.',
-  '-53': 'اتوریتی برای این مرچنت کد نیست.',
-  '-54': 'اتوریتی نامعتبر است.',
-  '101': 'تراکنش قبلا یک بار تایید شده است.',
-};
-
-export interface ZarinpalPurchaseResponse {
+export interface PurchaseResponse {
   data:
     | {
         code: 100;
@@ -91,12 +67,24 @@ export interface ZarinpalPurchaseResponse {
     | any[];
 }
 
-export interface ZarinpalCallbackParams {
+/**
+ * @link https://docs.zarinpal.com/paymentGateway/error.html
+ */
+export const requestErrors: Record<string, string> = {
+  '-9': 'خطای اعتبار سنجی',
+  '-10': 'ای پی و يا مرچنت كد پذيرنده صحيح نيست.',
+  '-11': 'مرچنت کد فعال نیست لطفا با تیم پشتیبانی ما تماس بگیرید.',
+  '-12': 'تلاش بیش از حد در یک بازه زمانی کوتاه.',
+  '-15': 'ترمینال شما به حالت تعلیق در آمده با تیم پشتیبانی تماس بگیرید.',
+  '-16': 'سطح تاييد پذيرنده پايين تر از سطح نقره اي است.',
+};
+
+export interface CallbackParams {
   Authority: string | number;
   Status: 'OK' | 'NOK';
 }
 
-export interface ZarinpalVerifyRequest {
+export interface VerifyRequest {
   /**
    * 	كد 36 كاراكتري اختصاصي پذيرنده
    */
@@ -113,15 +101,15 @@ export interface ZarinpalVerifyRequest {
   authority: string;
 }
 
-export interface ZarinpalVerifyResponse {
+export interface VerifyResponse {
   data:
     | {
         code: number;
         message: string;
         ref_id: number;
-        card_pan: String;
-        card_hash: String;
-        fee_type: String;
+        card_pan: string;
+        card_hash: string;
+        fee_type: string;
         fee: number;
       }
     | any[];
@@ -133,3 +121,15 @@ export interface ZarinpalVerifyResponse {
       }
     | any[];
 }
+
+/**
+ * @link https://docs.zarinpal.com/paymentGateway/error.html
+ */
+export const verifyErrors: Record<string, string> = {
+  '-50': 'مبلغ پرداخت شده با مقدار مبلغ در تایید شده متفاوت است.',
+  '-51': 'پرداخت ناموفق',
+  '-52': 'خطای غیر منتظره با پشتیبانی تماس بگیرید.',
+  '-53': 'اتوریتی برای این مرچنت کد نیست.',
+  '-54': 'اتوریتی نامعتبر است.',
+  '101': 'تراکنش قبلا یک بار تایید شده است.',
+};

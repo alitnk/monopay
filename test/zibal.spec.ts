@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { request, verify } from '../src/drivers/zibal';
-import { ZibalPurchaseResponse, ZibalVerifyResponse } from '../src/drivers/zibal/api';
+import * as API from '../src/drivers/zibal/api';
 import { ZibalReceipt } from '../src/drivers/zibal/types';
 import { PaymentException } from '../src/exception';
 
@@ -9,7 +9,7 @@ jest.mock('axios');
 const mockedAxios = axios as jest.Mocked<typeof axios>;
 describe('Zibal Driver', () => {
   it('returns the correct payment url', async () => {
-    const serverResponse: ZibalPurchaseResponse = {
+    const serverResponse: API.PurchaseResponse = {
       message: 'hello',
       result: 100,
       trackId: 1234,
@@ -23,7 +23,7 @@ describe('Zibal Driver', () => {
   });
 
   it('throws payment errors accordingly', async () => {
-    const serverResponse: ZibalPurchaseResponse = {
+    const serverResponse: API.PurchaseResponse = {
       result: 102,
       message: 'some error',
       trackId: 1234,
@@ -37,7 +37,7 @@ describe('Zibal Driver', () => {
   });
 
   it('verifies the purchase correctly', async () => {
-    const serverResponse: ZibalVerifyResponse = {
+    const serverResponse: API.VerifyResponse = {
       paidAt: '2018-03-25T23:43:01.053000',
       amount: 1600,
       result: 100,

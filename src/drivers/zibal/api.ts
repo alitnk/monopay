@@ -1,4 +1,4 @@
-export const zibalLinks = {
+export const links = {
   default: {
     REQUEST: 'https://gateway.zibal.ir/v1/request',
     VERIFICATION: 'https://gateway.zibal.ir/v1/verify',
@@ -9,7 +9,7 @@ export const zibalLinks = {
 /**
  * @link https://docs.zibal.ir/IPG/API#MultiplexingInfo-object
  */
-export interface ZibalMultiplexingObject {
+export interface MultiplexingObject {
   /**
    * 	شماره شبای ذی نفع
    */
@@ -38,7 +38,7 @@ export interface ZibalMultiplexingObject {
   wagePayer: boolean;
 }
 
-export interface ZibalPurchaseRequest {
+export interface PurchaseRequest {
   /**
    *  ضروری جهت احراز هویت
    */
@@ -89,9 +89,9 @@ export interface ZibalPurchaseRequest {
   /**
    * 	آرایه	لیستی از شی آیتم تسهیم
    */
-  multiplexingInfos?: ZibalMultiplexingObject[];
+  multiplexingInfos?: MultiplexingObject[];
 }
-export interface ZibalPurchaseResponse {
+export interface PurchaseResponse {
   /**
    * شناسه منحصربه‌فرد هر جلسه پرداخت درگاه پرداخت اینترنتی زیبال که استعلام وضعیت پرداخت و درخواست‌های گزارش‌گیری با استفاده از این شناسه امکان‌پذیر است.
    */
@@ -117,7 +117,7 @@ export interface ZibalPurchaseResponse {
 /**
  * @link https://docs.zibal.ir/IPG/API#requestResultCode
  */
-export const zibalPurchaseErrors: Record<string, string> = {
+export const purchaseErrors: Record<string, string> = {
   '102': 'merchant یافت نشد.',
   '103': 'merchant غیرفعال',
   '104': 'merchant نامعتبر',
@@ -127,7 +127,7 @@ export const zibalPurchaseErrors: Record<string, string> = {
   '113': 'amount مبلغ تراکنش از سقف میزان تراکنش بیشتر است.',
 };
 
-export interface ZibalCallbackParams {
+export interface CallbackParams {
   /**
    * 	در صورت موفقیت‌آمیز بودن تراکنش 1، در غیر این‌صورت 0 می‌باشد.
    */
@@ -150,7 +150,7 @@ export interface ZibalCallbackParams {
   status: '-1' | '-2' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' | '10' | '11' | '12';
 }
 
-export const zibalCallbackErrors: Record<string, string> = {
+export const CallbackErrors: Record<string, string> = {
   '-1': 'در انتظار پردخت',
   '-2': 'خطای داخلی',
   '1': 'پرداخت شده - تاییدشده',
@@ -167,7 +167,7 @@ export const zibalCallbackErrors: Record<string, string> = {
   '12': 'کارت قابل دسترسی نمی‌باشد.',
 };
 
-export interface ZibalVerifyRequest {
+export interface VerifyRequest {
   /**
    * 	ضروری جهت احراز هویت
    */
@@ -179,7 +179,7 @@ export interface ZibalVerifyRequest {
   trackId: number;
 }
 
-export interface ZibalVerifyResponse {
+export interface VerifyResponse {
   /**
    * 	تاریخ پرداخت سفارش - به فرمت ISODate (در صورت موفقیت‌آمیز بودن پرداخت)
    */
@@ -221,7 +221,7 @@ export interface ZibalVerifyResponse {
 /**
  * @link https://docs.zibal.ir/IPG/API#verifyResultTable
  */
-export const zibalVerifyErrors: Record<string, string> = {
+export const verifyErrors: Record<string, string> = {
   '102': 'merchant یافت نشد.',
   '103': 'merchant غیرفعال',
   '104': 'merchant نامعتبر',

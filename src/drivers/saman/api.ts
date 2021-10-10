@@ -1,4 +1,4 @@
-export const samanLinks = {
+export const links = {
   default: {
     REQUEST: 'https://sep.shaparak.ir/Payments/InitPayment.asmx?WSDL',
     VERIFICATION: 'https://sep.shaparak.ir/payments/referencepayment.asmx?WSDL',
@@ -6,7 +6,7 @@ export const samanLinks = {
   },
 };
 
-export interface SamanPurchaseRequest {
+export interface PurchaseRequest {
   Amount: number;
   TerminalId: string;
   RedirectURL: string;
@@ -17,14 +17,14 @@ export interface SamanPurchaseRequest {
   CellNumber?: string;
 }
 
-export interface SamanPurchaseResponse {
+export interface PurchaseResponse {
   status: 1 | -1;
   errorCode?: number;
   errorDesc?: string;
   token?: string;
 }
 
-export interface SamanCallbackParams {
+export interface CallbackParams {
   /**
    * شماره ترمینال
    */
@@ -71,7 +71,7 @@ export interface SamanCallbackParams {
   SecurePan: string;
 }
 
-export const samanPurchaseErrors: Record<string, string> = {
+export const purchaseErrors: Record<string, string> = {
   '-1': 'خطای در پردازش اطالعات ارسالی. )مشکل در یکی از ورودیها و ناموفق بودن فراخوانی متد برگشت تراکنش(',
   '-3': 'ورودیها حاوی کارکترهای غیرمجاز میباشند.',
   '-4': 'Failed Authentication Merchant (کلمه عبور یا کد فروشنده اشتباه است(',
@@ -90,7 +90,7 @@ export const samanPurchaseErrors: Record<string, string> = {
   '-18': 'Address IP فروشنده نا معتبر است',
 };
 
-export const samanCallbackErrors: Record<string, string> = {
+export const callbackErrors: Record<string, string> = {
   // CanceledByUser
   '1': 'کاربر انصراف داده است',
   // OK
@@ -111,6 +111,6 @@ export const samanCallbackErrors: Record<string, string> = {
   '12': 'شماره ترمینال ارسال شده یافت نشد.',
 };
 
-export interface SamanVerifyRequest {}
+export interface VerifyRequest {}
 
-export type SamanVerifyResponse = number;
+export type VerifyResponse = number;

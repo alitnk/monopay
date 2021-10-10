@@ -1,5 +1,5 @@
 import { PurchaseOptions, Receipt, VerifyOptions } from '../../types';
-import { ZibalMultiplexingObject, ZibalVerifyResponse } from './api';
+import * as API from './api';
 
 export interface ZibalOptions {
   sandbox?: boolean;
@@ -13,7 +13,7 @@ export interface ZibalPurchaseOptions extends PurchaseOptions, ZibalOptions {
   sms?: boolean;
   percentMode?: 0 | 1;
   feeMode?: 0 | 1 | 2;
-  multiplexingInfos?: ZibalMultiplexingObject[];
+  multiplexingInfos?: API.MultiplexingObject[];
 }
 
 export interface ZibalVerifyOptions extends VerifyOptions, ZibalOptions {}
@@ -22,5 +22,5 @@ export interface ZibalVerifyOptions extends VerifyOptions, ZibalOptions {}
  * @link https://docs.zibal.ir/IPG/API#verify
  */
 export interface ZibalReceipt extends Receipt {
-  raw: ZibalVerifyResponse;
+  raw: API.VerifyResponse;
 }

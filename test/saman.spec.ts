@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { request, verify } from '../src/drivers/saman';
-import { SamanCallbackParams, SamanPurchaseResponse, SamanVerifyResponse } from '../src/drivers/saman/api';
+import * as API from '../src/drivers/saman/api';
 import { SamanReceipt } from '../src/drivers/saman/types';
 import { PaymentException } from '../src/exception';
 
@@ -14,7 +14,7 @@ const mockedAxios = axios as jest.Mocked<typeof axios>;
 // const mockedSoap = soap as jest.Mocked<typeof soap>;
 describe('Saman Driver', () => {
   it('returns the correct payment url', async () => {
-    const serverResponse: SamanPurchaseResponse = {
+    const serverResponse: API.PurchaseResponse = {
       token: '123',
       status: 1,
     };
@@ -34,7 +34,7 @@ describe('Saman Driver', () => {
   });
 
   it('throws payment errors accordingly', async () => {
-    const serverResponse: SamanPurchaseResponse = {
+    const serverResponse: API.PurchaseResponse = {
       errorCode: 2,
       status: -1,
     };
@@ -53,8 +53,8 @@ describe('Saman Driver', () => {
   });
 
   it('verifies the purchase correctly', async () => {
-    const serverResponse: SamanVerifyResponse = 10000;
-    const callbackParams: SamanCallbackParams = {
+    const serverResponse: API.VerifyResponse = 10000;
+    const callbackParams: API.CallbackParams = {
       Amount: '10000',
       MID: '1234',
       RRN: '12345',

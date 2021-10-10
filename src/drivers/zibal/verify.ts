@@ -1,19 +1,12 @@
 import axios from 'axios';
-import { PaymentException, VerificationException } from '../../exception';
+import { PaymentException, PolypayException, VerificationException } from '../../exception';
 import { Requestish } from '../../utils';
-import {
-  zibalCallbackErrors,
-  ZibalCallbackParams,
-  zibalLinks,
-  zibalVerifyErrors,
-  ZibalVerifyRequest,
-  ZibalVerifyResponse,
-} from './api';
+import * as API from './api';
 import { ZibalReceipt, ZibalVerifyOptions } from './types';
 
 export const verify = async (
   options: ZibalVerifyOptions,
-  request: Requestish<ZibalCallbackParams>
+  request: Requestish<API.CallbackParams>
 ): Promise<ZibalReceipt> => {
   const { status, success, trackId } = request.query;
   const { sandbox } = options;
@@ -22,22 +15,19 @@ export const verify = async (
   if (sandbox) merchantId = 'zibal';
 
   if (success === '0') {
-    throw new PaymentException(zibalCallbackErrors[status]);
+    throw new PaymentException(API.CallbackErrors[status]);
   }
 
   try {
-    const response = await axios.post<ZibalVerifyRequest, { data: ZibalVerifyResponse }>(
-      zibalLinks.default.VERIFICATION,
-      {
-        merchant: merchantId,
-        trackId: +trackId,
-      }
-    );
+    const response = await axios.post<API.VerifyRequest, { data: API.VerifyResponse }>(API.links.default.VERIFICATION, {
+      merchant: merchantId,
+      trackId: +trackId,
+    });
 
     const { result } = response.data;
 
     if (result !== 100) {
-      throw new VerificationException(zibalVerifyErrors[result.toString()]);
+      throw new VerificationException(API.verifyErrors[result.toString()]);
     }
 
     return {
@@ -46,7 +36,7 @@ export const verify = async (
       cardPan: response.data.cardNumber,
     };
   } catch (e) {
-    if (e instanceof VerificationException) throw e;
+    if (e instanceof PolypayException) throw e;
     else if (e instanceof Error) throw new VerificationException(e.message);
     else throw new Error('Unknown error happened');
   }

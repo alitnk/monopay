@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { request, verify } from '../src/drivers/zarinpal';
-import { ZarinpalPurchaseResponse, ZarinpalVerifyResponse } from '../src/drivers/zarinpal/api';
+import * as API from '../src/drivers/zarinpal/api';
 import { ZarinpalReceipt } from '../src/drivers/zarinpal/types';
 import { PaymentException } from '../src/exception';
 
@@ -9,7 +9,7 @@ jest.mock('axios');
 const mockedAxios = axios as jest.Mocked<typeof axios>;
 describe('Zarinpal Driver', () => {
   it('returns the correct payment url', async () => {
-    const serverResponse: ZarinpalPurchaseResponse = {
+    const serverResponse: API.PurchaseResponse = {
       data: { authority: '10', code: 100, fee: 20000, message: 'ok', fee_type: 'Merchant' },
       errors: [],
     };
@@ -20,7 +20,7 @@ describe('Zarinpal Driver', () => {
   });
 
   it('throws payment errors accordingly', async () => {
-    const serverResponse: ZarinpalPurchaseResponse = {
+    const serverResponse: API.PurchaseResponse = {
       data: [],
       errors: { code: -11, message: 'Some error happened from zarinpal', validations: [] },
     };
@@ -33,7 +33,7 @@ describe('Zarinpal Driver', () => {
   });
 
   it('verifies the purchase correctly', async () => {
-    const serverResponse: ZarinpalVerifyResponse = {
+    const serverResponse: API.VerifyResponse = {
       data: {
         code: 100,
         message: 'Verified',
