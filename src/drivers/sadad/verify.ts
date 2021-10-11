@@ -11,7 +11,7 @@ export const verify = async (
 ): Promise<SadadReceipt> => {
   const { terminalKey } = options;
   const { HashedCardNo, ResCode, Token } = req.query;
-  if (ResCode === 0) {
+  if (ResCode !== 0) {
     throw new PaymentException('تراکنش توسط کاربر لغو شد.');
   }
 

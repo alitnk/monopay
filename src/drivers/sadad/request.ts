@@ -1,6 +1,5 @@
 import axios from 'axios';
 import { str as crc32Encode } from 'crc-32';
-import dateformat from 'dateformat';
 import { v4 as uuidv4 } from 'uuid';
 import { RequestException } from '../../exception';
 import { PaymentInfo } from '../../types';
@@ -15,7 +14,7 @@ export const request = async (options: SadadPurchaseOptions): Promise<PaymentInf
   const orderId = crc32Encode(uuidv4());
   const response = await axios.post<API.PurchaseRequest, { data: API.PurchaseResponse }>(API.links.default.REQUEST, {
     Amount: amount * 10,
-    LocalDateTime: dateformat(new Date(), 'm/d/Y g:i:s a'),
+    LocalDateTime: new Date().toISOString(),
     MerchantId: merchantId,
     TerminalId: terminalId,
     OrderId: orderId,

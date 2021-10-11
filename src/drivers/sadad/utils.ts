@@ -1,22 +1,15 @@
-import forge from 'node-forge';
+import CryptoJS from 'crypto-js';
 
-export const signData = (data: string, key: string) => {
-  const cert = forge.pki.certificateFromPem(key);
-  // create envelop data
-  const p7 = forge.pkcs7.createEnvelopedData();
-  // add certificate as recipient
-  p7.addRecipient(cert);
-  // set content
-  p7.content = forge.util.createBuffer();
-  p7.content.putString(data);
+export const signData = (message: string, key: string): string => {
+  var keyHex = CryptoJS.enc.Utf8.parse(key);
+  // console.log(CryptoJS.enc.Utf8.stringify(keyHex), CryptoJS.enc.Hex.stringify(keyHex));
+  // console.log(CryptoJS.enc.Hex.parse(CryptoJS.enc.Utf8.parse(key).toString(CryptoJS.enc.Hex)));
 
-  // encrypt
-  p7.encrypt();
+  // CryptoJS use CBC as the default mode, and Pkcs7 as the default padding scheme
+  var encrypted = CryptoJS.DES.encrypt(message, keyHex, {
+    mode: CryptoJS.mode.ECB,
+    padding: CryptoJS.pad.Pkcs7,
+  });
 
-  // obtain encrypted data with DER format
-  const bytes = forge.asn1.toDer(p7.toAsn1()).getBytes();
-
-  const str = Buffer.from(bytes, 'binary').toString('utf8');
-
-  return str;
+  return encrypted.toString();
 };

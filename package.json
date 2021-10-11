@@ -46,9 +46,7 @@
   "devDependencies": {
     "@size-limit/preset-small-lib": "^5.0.5",
     "@types/crypto-js": "^4.0.2",
-    "@types/dateformat": "^3.0.1",
     "@types/node": "^16.10.3",
-    "@types/node-forge": "^0.10.8",
     "@types/uuid": "^8.3.1",
     "husky": "^7.0.2",
     "np": "^7.5.0",
@@ -61,9 +59,7 @@
     "axios": "^0.22.0",
     "crc-32": "^1.2.0",
     "crypto-js": "^4.1.1",
-    "dateformat": "^5.0.1",
     "global": "^4.4.0",
-    "node-forge": "^0.10.0",
     "soap": "^0.42.0",
     "ts-node": "^10.2.1",
     "uuid": "^8.3.2"
