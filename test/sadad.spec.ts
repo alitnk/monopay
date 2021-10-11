@@ -5,7 +5,6 @@ import { SadadReceipt } from '../src/drivers/sadad/types';
 import { RequestException } from '../src/exception';
 
 jest.mock('axios');
-jest.mock('dateformat', () => '');
 
 const mockedAxios = axios as jest.Mocked<typeof axios>;
 describe('Sadad Driver', () => {
