@@ -1,6 +1,6 @@
 require('dotenv').config()
 const express = require('express')
-const { zibal, getScript, PaymentException, VerificationException } = require('polypay.js')
+const { zibal, getScript, PaymentException, VerificationException } = require('polypay')
 
 const app = express()
 const port = 3000

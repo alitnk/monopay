@@ -1,11 +1,11 @@
 require('dotenv').config()
 const express = require('express')
-const { zibal, getScript, PaymentException, VerificationException, getPaymentDriver } = require('polypay.js')
+const { zibal, getScript, PaymentException, VerificationException, getPaymentDriver } = require('polypay')
 
 const app = express()
 const port = 3000
 
-/** @type {import('polypay.js').ConfigObject} */
+/** @type {import('polypay').ConfigObject} */
 const polypayConfiguration = {
     zarinpal: {
         merchantId: 'zarinpal-merchant',
