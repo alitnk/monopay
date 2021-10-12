@@ -3,7 +3,7 @@ sidebar_position: 2
 title: Payment Procedure
 ---
 
-If you wanna implement a payment system in your node.js app, first, you should know how payment gateways work.
+If you want to implement a payment system in your node.js app, you should know how payment gateways work.
 
 ## 1. Requesting A Payment
 

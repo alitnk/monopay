@@ -1,0 +1,117 @@
+---
+sidebar_position: 6
+title: "Usage"
+---
+
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+import CodeBlock from "@theme/CodeBlock";
+import configTs from "!!raw-loader!../snippets/usage/config.ts";
+import configJs from "!!raw-loader!../snippets/usage/config.js";
+import requestTs from "!!raw-loader!../snippets/usage/request.ts";
+import requestJs from "!!raw-loader!../snippets/usage/request.js";
+import verifyTs from "!!raw-loader!../snippets/usage/verify.ts";
+import verifyJs from "!!raw-loader!../snippets/usage/verify.js";
+
+If you don't know how payment gateways work, please take a look at [Payment Procedure](/docs/payment-procedure) first.
+
+## Request For Payment
+
+Get the driver using `getPaymentDriver` and use the `requestPayment` method. This method accepts an object with `callbackUrl`, `amount`, and driver-specific fields. <!-- TODO -->
+
+<Tabs>
+  <TabItem value="typescript" label="TypeScript" default>
+    <CodeBlock className="language-ts" title="index.ts">
+      {requestTs}
+    </CodeBlock>
+  </TabItem>
+  <TabItem value="javascript" label="JavaScript">
+    <CodeBlock className="language-js" title="index.js">
+      {requestJs}
+    </CodeBlock>
+  </TabItem>
+</Tabs>
+
+:::note
+the `requestPayment` function might throw `RequestPaymentException`
+:::
+
+The returned value of `requestPayment`, is a class containing the following:
+
+1. Details about the payment
+
+   - `referenceId`: The ID that references the ongoing payment, you probably want to store it in your database.
+
+2. Details about the payment Page
+
+   - `url`: The url that you should send the form to
+   - `method`: Can be `GET` or `POST` depending on the driver
+   - `params`: An object that you should send with your form
+
+## Send User to Payment Page
+
+In this step you should send the user to the payment page by submiting a form on the client-side using the data you got back from the `requestPayment` method.
+
+:::tip
+If you serve your pages from backend (not using a SPA), you can use the `getScript` method on `paymentInfo` and get a generate you a JS code that will automatically create and submit the form. Like so:
+
+```js
+res.send(
+  `<html>
+    <body>
+        <h1> We're redirecting you to the payment gateway... </h1>
+        <script>${paymentInfo.getScript()}</script>
+    </body>
+  </html>`
+);
+```
+
+:::
+
+## Verify The Payment
+
+The `verifyPayment` method accepts 2 arguments:
+
+1. an object, containing `amount` and `referenceId` of transaction.
+2. the express/fastify/koa/etc. Request object. (It must have a `query` field on it.)
+
+<Tabs>
+  <TabItem value="typescript" label="TypeScript" default>
+    <CodeBlock className="language-ts" title="index.ts">
+      {verifyTs}
+    </CodeBlock>
+  </TabItem>
+  <TabItem value="javascript" label="JavaScript">
+    <CodeBlock className="language-js" title="index.js">
+      {verifyJs}
+    </CodeBlock>
+  </TabItem>
+</Tabs>
+
+This method returns you a `receipt` that will contain a `referenceId` and a `panCard` and some other info about the payment.
+At this point the payment process is finished and you can provide your service/product to the user.
+
+:::note
+the `verify` function might throw `VerificationException`
+:::
+
+<!-- ## Configuration
+
+If you use multiple drivers, you might want to keep your all of your configurations in a separate file.
+
+<Tabs>
+  <TabItem value="typescript" label="TypeScript" default>
+    <CodeBlock className="language-ts" title="polypay-config.ts">
+      {configTs}
+    </CodeBlock>
+  </TabItem>
+  <TabItem value="javascript" label="JavaScript">
+    <CodeBlock className="language-js" title="polypay-config.js">
+      {configJs}
+    </CodeBlock>
+  </TabItem>
+</Tabs> -->
+
+## Example
+
+A example with inclusive API and express.js can be found here: [ API example](https://github.com/alitnk/polypay.js/blob/main/examples/inclusive-example/index.js)

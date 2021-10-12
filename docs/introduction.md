@@ -15,18 +15,12 @@ If you don't know how payment gateways work, read this page:
 You can see the supported payment service drivers here:
 [Supported Drivers](/docs/supported-drivers)
 
-
 ## Installation
 
 Learn how to intall the package here:
 [Installation](/docs/installation)
 
-## Exclusive API
+## Usage
 
-If you only use one service (for instance, you only use Zarinpal), check this page:
-[Exclusive API](/docs/inclusive)
-
-## Inclusive API
-
-If you are planning to user multiple services at the same time, check this page:
-[Inclusive API](/docs/inclusive)
+Learn how to use the package in your Node.js applications:
+[Usage](/docs/usage)

@@ -1,6 +1,6 @@
-import { ConfigObject } from "polypay.js";
+import { ConfigObject } from "polypay";
 
-const polypayConfig: ConfigObject = {
+export const polypayConfig: ConfigObject = {
   zarinpal: {
     merchantId: "zarinpal-merchant",
     sandbox: true,
