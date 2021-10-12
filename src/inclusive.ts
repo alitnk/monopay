@@ -1,38 +1,36 @@
-import * as drivers from './drivers';
-import { SadadOptions } from './drivers/sadad/types';
-import { SamanOptions } from './drivers/saman/types';
-import { ZarinpalOptions } from './drivers/zarinpal/types';
-import { ZibalOptions } from './drivers/zibal/types';
-import { PaymentInfo, RequestOptions, Receipt, VerifyOptions } from './types';
-import { Requestish } from './utils';
+import { Driver as BaseDriver } from './driver';
+import { Sadad } from './drivers/sadad';
+import * as SadadAPI from './drivers/sadad/api';
+import { Saman } from './drivers/saman';
+import * as SamanAPI from './drivers/saman/api';
+import { Zarinpal } from './drivers/zarinpal';
+import * as ZarinpalAPI from './drivers/zarinpal/api';
+import { Zibal } from './drivers/zibal';
+import * as ZibalAPI from './drivers/zibal/api';
 
-export type ConfigObject = {
-  zarinpal: ZarinpalOptions;
-  zibal: ZibalOptions;
-  saman: SamanOptions;
-  sadad: SadadOptions;
+interface ConfigMap {
+  zarinpal: ZarinpalAPI.Config;
+  zibal: ZibalAPI.Config;
+  saman: SamanAPI.Config;
+  sadad: SadadAPI.Config;
+}
+
+export type ConfigObject = Partial<ConfigMap>;
+
+const drivers = {
+  zarinpal: Zarinpal,
+  zibal: Zibal,
+  saman: Saman,
+  sadad: Sadad,
 };
 
-type Driver = {
-  request(options: RequestOptions): Promise<PaymentInfo>;
-  verify(options: VerifyOptions, req: Requestish): Promise<Receipt>;
-};
-
-/**
- * The "inclusive" API
- *
- * This method is used for when you want to let user decide which driver to use.
- * If you solely want to use one driver, import the driver explicitly.
- *
- * @param driver Enter a driver name (e.g. zarinpal)
- * @returns A driver with `request` and `verify` on it
- */
-export const getPaymentDriver = (driverName: keyof ConfigObject, ConfigObject: Partial<ConfigObject>): Driver => {
-  const driver: Driver = drivers[driverName];
-  if (ConfigObject) {
-    const config = ConfigObject[driverName] || {};
-    driver.request = (options: RequestOptions) => driver.request({ ...config, ...options });
-    driver.verify = (options: VerifyOptions, req: Requestish) => driver.verify({ ...config, ...options }, req);
+export const getPaymentDriver = <Driver extends BaseDriver>(
+  driverName: keyof ConfigMap,
+  config: Parameters<Driver['setConfig']>[0]
+): Driver => {
+  if (!drivers[driverName]) {
+    throw Error(`This driver is not supported, supported drivers: ${Object.keys(drivers).join(', ')}`);
   }
-  return driver;
+
+  return (new drivers[driverName](config) as unknown) as Driver;
 };

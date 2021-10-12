@@ -1,4 +1,8 @@
-import { ErrorList, LinksObject } from '../../types';
+import { ErrorList, LinksObject, PaymentRequestOptions, PaymentReceipt, PaymentVerifyOptions } from '../../types';
+
+/*
+ * Zarinpal's API
+ */
 
 export const links: LinksObject = {
   default: {
@@ -135,3 +139,23 @@ export const verifyErrors: ErrorList = {
   '-54': 'اتوریتی نامعتبر است.',
   '101': 'تراکنش قبلا یک بار تایید شده است.',
 };
+
+/*
+ * Package's API
+ */
+
+export interface Config {
+  sandbox?: boolean;
+  merchantId: string;
+}
+
+export interface RequestOptions extends PaymentRequestOptions {
+  mobile?: string;
+  email?: string;
+}
+
+export interface VerifyOptions extends PaymentVerifyOptions {}
+
+export interface Receipt extends PaymentReceipt {
+  raw: Exclude<VerifyResponse['data'], any[]>;
+}

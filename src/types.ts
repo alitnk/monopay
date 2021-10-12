@@ -1,15 +1,14 @@
-interface BaseOptions {
-  amount: number;
-}
-
-export interface RequestOptions extends BaseOptions {
+export interface PaymentRequestOptions {
   callbackUrl: string;
+  amount: number;
   description?: string;
 }
 
-export interface VerifyOptions extends BaseOptions {}
+export interface PaymentVerifyOptions {
+  amount: number;
+}
 
-export interface Receipt {
+export interface PaymentReceipt {
   transactionId: string | number;
   cardPan?: string;
   raw: any;
@@ -22,6 +21,7 @@ export interface PaymentInfo {
 }
 
 export type ErrorList = Record<string, string>;
+
 export type LinksObject = Record<
   string,
   {
@@ -30,3 +30,7 @@ export type LinksObject = Record<
     PAYMENT: string;
   }
 >;
+
+export interface Requestish<ExpectedQuery = any> {
+  query: ExpectedQuery;
+}

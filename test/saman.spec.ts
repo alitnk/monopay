@@ -1,8 +1,8 @@
 import axios from 'axios';
-import { request, verify } from '../src/drivers/saman';
+import { Saman } from '../src/drivers/saman';
 import * as API from '../src/drivers/saman/api';
-import { SamanReceipt } from '../src/drivers/saman/types';
-import { RequestException } from '../src/exception';
+import { RequestException } from '../src/exceptions';
+import { getPaymentDriver } from '../src/inclusive';
 
 jest.mock('axios');
 const mockSoapClient: any = {};
@@ -21,10 +21,11 @@ describe('Saman Driver', () => {
 
     mockedAxios.post.mockResolvedValueOnce({ data: serverResponse });
 
+    const driver = getPaymentDriver<Saman>('saman', { merchantId: '1234' });
+
     expect(
       typeof (
-        await request({
-          merchantId: '1234',
+        await driver.requestPayment({
           amount: 20000,
           callbackUrl: 'https://mysite.com/callback',
           mobile: '09120000000',
@@ -41,10 +42,11 @@ describe('Saman Driver', () => {
 
     mockedAxios.post.mockResolvedValueOnce({ data: serverResponse });
 
+    const driver = getPaymentDriver<Saman>('saman', { merchantId: '1234' });
+
     await expect(
       async () =>
-        await request({
-          merchantId: '1234',
+        await driver.requestPayment({
           amount: 20000,
           callbackUrl: 'https://mysite.com/callback',
           mobile: '09120000000',
@@ -66,12 +68,14 @@ describe('Saman Driver', () => {
       TerminalId: '1234',
       TraceNo: '111111',
     };
-    const expectedResult: SamanReceipt = { transactionId: 111111, raw: callbackParams };
+    const expectedResult: API.Receipt = { transactionId: 111111, raw: callbackParams };
 
     mockSoapClient.verifyTransaction = () => serverResponse;
 
-    expect(
-      await (await verify({ amount: 2000, merchantId: '123123123' }, { query: callbackParams })).transactionId
-    ).toBe(expectedResult.transactionId);
+    const driver = getPaymentDriver<Saman>('saman', { merchantId: '1234' });
+
+    expect(await (await driver.verifyPayment({ amount: 2000 }, { query: callbackParams })).transactionId).toBe(
+      expectedResult.transactionId
+    );
   });
 });

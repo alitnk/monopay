@@ -1,4 +1,8 @@
-import { ErrorList, LinksObject } from '../../types';
+import { ErrorList, LinksObject, PaymentRequestOptions, PaymentReceipt, PaymentVerifyOptions } from '../../types';
+
+/*
+ * Zibal's API
+ */
 
 export const links: LinksObject = {
   default: {
@@ -232,3 +236,28 @@ export const verifyErrors: ErrorList = {
   '202': 'سفارش پرداخت نشده یا ناموفق بوده است. جهت اطلاعات بیشتر جدول وضعیت‌ها را مطالعه کنید.',
   '203': 'trackId نامعتبر می‌باشد.',
 };
+
+/*
+ * Package's API
+ */
+
+export interface Config {
+  sandbox?: boolean;
+  merchantId: string;
+}
+export interface RequestOptions extends PaymentRequestOptions {
+  mobile?: string;
+  orderId?: string;
+  allowedCards?: string[];
+  linkToPay?: boolean;
+  sms?: boolean;
+  percentMode?: 0 | 1;
+  feeMode?: 0 | 1 | 2;
+  multiplexingInfos?: MultiplexingObject[];
+}
+
+export interface VerifyOptions extends PaymentVerifyOptions {}
+
+export interface Receipt extends PaymentReceipt {
+  raw: VerifyResponse;
+}

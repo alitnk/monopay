@@ -1,8 +1,8 @@
 import axios from 'axios';
-import { request, verify } from '../src/drivers/zibal';
+import { Zibal } from '../src/drivers/zibal';
 import * as API from '../src/drivers/zibal/api';
-import { ZibalReceipt } from '../src/drivers/zibal/types';
-import { RequestException } from '../src/exception';
+import { RequestException } from '../src/exceptions';
+import { getPaymentDriver } from '../src/inclusive';
 
 jest.mock('axios');
 
@@ -17,7 +17,9 @@ describe('Zibal Driver', () => {
 
     mockedAxios.post.mockResolvedValueOnce({ data: serverResponse });
 
-    expect(typeof (await request({ merchantId: '2134', callbackUrl: 'https://google.com', amount: 20000 })).url).toBe(
+    const driver = getPaymentDriver<Zibal>('zibal', { merchantId: '2134' });
+
+    expect(typeof (await driver.requestPayment({ callbackUrl: 'https://google.com', amount: 20000 })).url).toBe(
       'string'
     );
   });
@@ -31,9 +33,11 @@ describe('Zibal Driver', () => {
 
     mockedAxios.post.mockResolvedValueOnce({ data: serverResponse });
 
-    await expect(
-      async () => await request({ amount: 2000, callbackUrl: 'asd', merchantId: '123123123' })
-    ).rejects.toThrow(RequestException);
+    const driver = getPaymentDriver<Zibal>('zibal', { merchantId: '2134' });
+
+    await expect(async () => await driver.requestPayment({ amount: 2000, callbackUrl: 'asd' })).rejects.toThrow(
+      RequestException
+    );
   });
 
   it('verifies the purchase correctly', async () => {
@@ -48,17 +52,15 @@ describe('Zibal Driver', () => {
       orderId: '2211',
       message: 'success',
     };
-    const expectedResult: ZibalReceipt = { transactionId: 1234, raw: serverResponse };
+    const expectedResult: API.Receipt = { transactionId: 1234, raw: serverResponse };
 
     mockedAxios.post.mockResolvedValueOnce({ data: serverResponse });
 
+    const driver = getPaymentDriver<Zibal>('zibal', { merchantId: '2134' });
+
     expect(
-      (
-        await verify(
-          { amount: 2000, merchantId: '123123123' },
-          { query: { trackId: '12345', status: '1', success: '1' } }
-        )
-      ).transactionId
+      (await driver.verifyPayment({ amount: 2000 }, { query: { trackId: '12345', status: '1', success: '1' } }))
+        .transactionId
     ).toEqual(expectedResult.transactionId);
   });
 });

@@ -1,8 +1,8 @@
 import axios from 'axios';
-import { request, verify } from '../src/drivers/sadad';
+import { Sadad } from '../src/drivers/sadad';
 import * as API from '../src/drivers/sadad/api';
-import { SadadReceipt } from '../src/drivers/sadad/types';
-import { RequestException } from '../src/exception';
+import { RequestException } from '../src/exceptions';
+import { getPaymentDriver } from '../src/inclusive';
 
 jest.mock('axios');
 
@@ -17,12 +17,15 @@ describe('Sadad Driver', () => {
 
     mockedAxios.post.mockResolvedValueOnce({ data: serverResponse });
 
+    const driver = getPaymentDriver<Sadad>('sadad', {
+      merchantId: 'asd',
+      terminalKey: 'NTkwNDQ3M2NhM2RhOTRkMWM5MWFhMjcw',
+      terminalId: 'H3AHMXaS',
+    });
+
     expect(
       typeof (
-        await request({
-          merchantId: 'asd',
-          terminalKey: 'NTkwNDQ3M2NhM2RhOTRkMWM5MWFhMjcw',
-          terminalId: 'H3AHMXaS',
+        await driver.requestPayment({
           amount: 20000,
           callbackUrl: 'https://callback.url/',
           mobile: '09120000000',
@@ -40,12 +43,15 @@ describe('Sadad Driver', () => {
 
     mockedAxios.post.mockResolvedValueOnce({ data: serverResponse });
 
+    const driver = getPaymentDriver<Sadad>('sadad', {
+      merchantId: 'asd',
+      terminalKey: 'NTkwNDQ3M2NhM2RhOTRkMWM5MWFhMjcw',
+      terminalId: 'H3AHMXaS',
+    });
+
     await expect(
       async () =>
-        await request({
-          merchantId: 'asd',
-          terminalKey: 'NTkwNDQ3M2NhM2RhOTRkMWM5MWFhMjcw',
-          terminalId: 'H3AHMXaS',
+        await driver.requestPayment({
           amount: 20000,
           callbackUrl: 'https://callback.url/',
           mobile: '09120000000',
@@ -70,22 +76,18 @@ describe('Sadad Driver', () => {
       Token: 'token',
       SwitchResCode: '',
     };
-    const expectedResult: SadadReceipt = { transactionId: '4321', raw: callbackParams };
+    const expectedResult: API.Receipt = { transactionId: '4321', raw: callbackParams };
 
     mockedAxios.post.mockResolvedValueOnce({ data: serverResponse });
 
-    expect(
-      (
-        await verify(
-          {
-            amount: 10000,
-            terminalId: 'H3AHMXaS',
-            terminalKey: 'NTkwNDQ3M2NhM2RhOTRkMWM5MWFhMjcw',
-            merchantId: '123213',
-          },
-          { query: callbackParams }
-        )
-      ).transactionId
-    ).toBe(expectedResult.transactionId);
+    const driver = getPaymentDriver<Sadad>('sadad', {
+      merchantId: 'asd',
+      terminalKey: 'NTkwNDQ3M2NhM2RhOTRkMWM5MWFhMjcw',
+      terminalId: 'H3AHMXaS',
+    });
+
+    expect((await driver.verifyPayment({ amount: 10000 }, { query: callbackParams })).transactionId).toBe(
+      expectedResult.transactionId
+    );
   });
 });

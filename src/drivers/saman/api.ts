@@ -1,4 +1,8 @@
-import { ErrorList, LinksObject } from '../../types';
+import { ErrorList, LinksObject, PaymentRequestOptions, PaymentReceipt, PaymentVerifyOptions } from '../../types';
+
+/*
+ * Saman's API
+ */
 
 export const links: LinksObject = {
   default: {
@@ -116,3 +120,22 @@ export const callbackErrors: ErrorList = {
 export interface VerifyRequest {}
 
 export type VerifyResponse = number;
+
+/*
+ * Package's API
+ */
+
+export interface Config {
+  merchantId: string;
+}
+
+export interface RequestOptions extends PaymentRequestOptions {
+  mobile?: string;
+  wage?: number;
+}
+
+export interface VerifyOptions extends PaymentVerifyOptions {}
+
+export interface Receipt extends PaymentReceipt {
+  raw: CallbackParams;
+}

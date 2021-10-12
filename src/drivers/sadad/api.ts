@@ -1,5 +1,7 @@
-import { ErrorList, LinksObject } from '../../types';
+import { PaymentRequestOptions, PaymentVerifyOptions, PaymentReceipt, ErrorList, LinksObject } from '../../types';
+
 /*
+ * Sadad's API
  * link: https://sadadpsp.ir/file/attach/202002/654.pdf
  */
 
@@ -233,3 +235,25 @@ export const verifyErrors: ErrorList = {
   '-1': 'پارامترهای ارسالی صحیح نیست و يا تراکنش در سیستم وجود ندارد',
   '101': 'مهلت ارسال تراکنش به پايان رسیده است',
 };
+
+/*
+ * Package's API
+ */
+
+export interface Config {
+  merchantId: string;
+  terminalId: string;
+  terminalKey: string;
+}
+
+export interface RequestOptions extends PaymentRequestOptions {
+  mobile?: string;
+  multiplexingData?: MultiplexingObject;
+  appName?: string;
+}
+
+export interface VerifyOptions extends PaymentVerifyOptions {}
+
+export interface Receipt extends PaymentReceipt {
+  raw: CallbackParams;
+}
