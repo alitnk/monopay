@@ -30,11 +30,11 @@ const config = {
           sidebarPath: require.resolve('./sidebars.js'),
           editUrl: 'https://github.com/alitnk/polypay.js/edit/main/documentation/',
         },
-        blog: {
-          showReadingTime: true,
-          editUrl:
-            'https://github.com/alitnk/polypay.js/edit/main/documentation/blog/',
-        },
+        // blog: {
+        //   showReadingTime: true,
+        //   editUrl:
+        //     'https://github.com/alitnk/polypay.js/edit/main/documentation/blog/',
+        // },
         theme: {
           customCss: require.resolve('./src/css/custom.css'),
         },
@@ -72,7 +72,7 @@ const config = {
             label: 'GitHub',
             position: 'right',
           },
-          { to: '/blog', label: 'Blog', position: 'left' },
+          // { to: '/blog', label: 'Blog', position: 'left' },
           {
             type: 'localeDropdown',
             position: 'right',
