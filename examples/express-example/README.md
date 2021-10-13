@@ -1,10 +1,8 @@
-# Example using express.js and javascript
+# Example using Express and JavaScript
 
 We have two routes in this example:
 
-1. `/purchase` route, that will redirect the user to the gateway
-2. `/callback` route, that will get the data from the service and verify it
+1. `/purchase`: requests the payment and then sends the user to the payment gateway
+2. `/callback`: receives the data from the gateway and verifies it
 
-To test using this example, you can use ngrok.com and add your ngrok url to the `.env` file.
-
-This exmaple uses Zibal on `sandbox` mode.
+To test using this example with SSL, you can use ngrok.com and add your ngrok url to the `.env` file.
