@@ -14,5 +14,9 @@
   "item.label.Blog": {
     "message": "بلاگ",
     "description": "Navbar item with label Blog"
+  },
+  "item.label.Submit An Issue": {
+    "message": "گزارش مشکل",
+    "description": "Navbar item with label Issues"
   }
 }

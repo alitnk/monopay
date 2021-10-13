@@ -1,5 +1,5 @@
 ---
-sidebar_position: 1
+sidebar_position: 4
 title: گرفتن استثنا ها (خطا ها)
 ---
 
@@ -19,5 +19,4 @@ title: گرفتن استثنا ها (خطا ها)
 
 ## Polypay Exception
 
-همه استثنا های بالا از استثنای `PolypayException` ارث‌بری می کنند.
-
+همه استثنا‌های بالا از استثنای `PolypayException` ارث‌بری می کنند.

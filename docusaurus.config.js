@@ -68,6 +68,11 @@ const config = {
             label: 'Documentation',
           },
           {
+            href: 'https://github.com/alitnk/polypay.js/issues/new',
+            label: 'Submit An Issue',
+            position: 'left',
+          },
+          {
             href: 'https://github.com/alitnk/polypay.js',
             label: 'GitHub',
             position: 'right',
