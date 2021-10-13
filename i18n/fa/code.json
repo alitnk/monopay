@@ -16,11 +16,11 @@
     "description": "The ARIA label for close button of announcement bar"
   },
   "theme.blog.archive.title": {
-    "message": "Archive",
+    "message": "آرشیو",
     "description": "The page & hero title of the blog archive page"
   },
   "theme.blog.archive.description": {
-    "message": "Archive",
+    "message": "آرشیو",
     "description": "The page & hero description of the blog archive page"
   },
   "theme.blog.paginator.navAriaLabel": {
@@ -178,5 +178,13 @@
   "theme.tags.tagsPageTitle": {
     "message": "برچسب ها",
     "description": "The title of the tag list page"
+  },
+  "quick-start": {
+    "message": "شروع سریع",
+    "description": "a"
+  },
+  "tagline": {
+    "message": "پکیج Node.js برای انجام تراکنش های آنلاین با درگاه های پرداخت مختلف",
+    "description": "a"
   }
 }

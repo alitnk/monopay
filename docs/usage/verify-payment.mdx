@@ -27,9 +27,9 @@ The `verifyPayment` method accepts 2 arguments:
   </TabItem>
 </Tabs>
 
-This method returns you a `receipt` that will contain a `referenceId` and a `panCard` and some other info about the payment.
+This method returns you a `receipt` that will contain a `transactionId` and a `panCard` and some other info about the payment.
 At this point the payment process is finished and you can provide your service/product to the user.
 
 :::note
-the `verify` function might throw `VerificationException`
+the `verifyPayment` function might throw `VerificationException`
 :::

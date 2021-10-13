@@ -1,14 +1,14 @@
 {
   "version.label": {
-    "message": "Next",
+    "message": "بعدی",
     "description": "The label for version current"
   },
-  "sidebar.tutorialSidebar.category.Installation": {
-    "message": "Installation",
-    "description": "The label for category Installation in sidebar tutorialSidebar"
+  "sidebar.tutorialSidebar.category.Usage": {
+    "message": "نحوه استفاده",
+    "description": "The label for category Usage in sidebar tutorialSidebar"
   },
-  "sidebar.tutorialSidebar.category.Tutorial - Extras": {
-    "message": "Tutorial - Extras",
-    "description": "The label for category Tutorial - Extras in sidebar tutorialSidebar"
+  "sidebar.tutorialSidebar.category.Best Practices": {
+    "message": "راهکار های سرآمد",
+    "description": "The label for category Best Practices in sidebar tutorialSidebar"
   }
 }

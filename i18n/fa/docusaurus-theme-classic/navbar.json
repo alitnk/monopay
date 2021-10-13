@@ -3,16 +3,16 @@
     "message": "Polypay.js",
     "description": "The title in the navbar"
   },
-  "item.label.Tutorial": {
-    "message": "Tutorial",
-    "description": "Navbar item with label Tutorial"
+  "item.label.Documentation": {
+    "message": "مستندات",
+    "description": "Navbar item with label Documentation"
   },
   "item.label.GitHub": {
-    "message": "GitHub",
+    "message": "گیت‌هاب",
     "description": "Navbar item with label GitHub"
   },
   "item.label.Blog": {
-    "message": "Blog",
+    "message": "بلاگ",
     "description": "Navbar item with label Blog"
   }
 }

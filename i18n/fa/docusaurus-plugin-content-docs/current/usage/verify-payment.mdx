@@ -1,0 +1,35 @@
+---
+sidebar_position: 3
+title: تایید پیداخت
+---
+
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+import CodeBlock from "@theme/CodeBlock";
+import verifyTs from "!!raw-loader!../../../../../snippets/usage/verify.ts";
+import verifyJs from "!!raw-loader!../../../../../snippets/usage/verify.js";
+
+متد `verifyPayment` دو ورودی قبول می‌کند:
+
+1. یک آبجکت که `amount` و `referenceId` را در بر دارد.‌
+2. آبجکت درخواست سرور (express/fastify/koa/غیره). (باید فیلد `query` را داشته باشد.)
+
+<Tabs>
+  <TabItem value="typescript" label="TypeScript" default>
+    <CodeBlock className="language-ts" title="index.ts">
+      {verifyTs}
+    </CodeBlock>
+  </TabItem>
+  <TabItem value="javascript" label="JavaScript">
+    <CodeBlock className="language-js" title="index.js">
+      {verifyJs}
+    </CodeBlock>
+  </TabItem>
+</Tabs>
+
+این متد یک رسید (`receipt`) باز می گرداند که شامل کد رهگیری (`transactionId`) و کارت استفاده شده به صورت هش شده (`panCard`) و اطلاعات دیگر مربوط به پرداخت است.
+در صورت تایید پرداخت شما می‌توانید سرویس/محصول خود را به همراه کد رهگیری به کاربر ارائه دهید.
+
+:::note
+متد `verifyPayment` ممکن است استثنای `VerificationException` را بیندازد.
+  :::

@@ -28,12 +28,10 @@ const config = {
       ({
         docs: {
           sidebarPath: require.resolve('./sidebars.js'),
-          // Please change this to your repo.
           editUrl: 'https://github.com/alitnk/polypay.js/edit/main/documentation/',
         },
         blog: {
           showReadingTime: true,
-          // Please change this to your repo.
           editUrl:
             'https://github.com/alitnk/polypay.js/edit/main/documentation/blog/',
         },
@@ -47,6 +45,15 @@ const config = {
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
+      // Commenting since it's not translatable
+      // announcementBar: {
+      //   id: 'github_start_announcement',
+      //   content:
+      //     'If you like polypay, please <a target="_blank" rel="noopener noreferrer" href="https://github.com/alitnk/polypay.js">give it a star on GitHub.</a>',
+      //   backgroundColor: '#fafbfc',
+      //   textColor: '#091E42',
+      //   isCloseable: false,
+      // },
       navbar: {
         title: 'Polypay.js',
         logo: {
@@ -72,28 +79,28 @@ const config = {
           },
         ],
       },
-      footer: {
-        // style: 'dark',
-        // links: [
-        //   {
-        //     items: [
-        //       {
-        //         label: 'Tutorial',
-        //         to: '/docs/intro',
-        //       },
-        //       {
-        //         label: 'Blog',
-        //         to: '/blog',
-        //       },
-        //       {
-        //         label: 'GitHub',
-        //         href: 'https://github.com/alitnk/polypay.js',
-        //       },
-        //     ],
-        //   },
-        // ],
-        copyright: `Copyright © ${new Date().getFullYear()} Polypay.js`,
-      },
+      // footer: {
+      //   // style: 'dark',
+      //   // links: [
+      //   //   {
+      //   //     items: [
+      //   //       {
+      //   //         label: 'Tutorial',
+      //   //         to: '/docs/intro',
+      //   //       },
+      //   //       {
+      //   //         label: 'Blog',
+      //   //         to: '/blog',
+      //   //       },
+      //   //       {
+      //   //         label: 'GitHub',
+      //   //         href: 'https://github.com/alitnk/polypay.js',
+      //   //       },
+      //   //     ],
+      //   //   },
+      //   // ],
+      //   copyright: `Copyright © ${new Date().getFullYear()} Polypay.js`,
+      // },
       prism: {
         theme: lightCodeTheme,
         darkTheme: darkCodeTheme,

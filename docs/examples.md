@@ -5,4 +5,4 @@ title: Examples
 
 ## Example With Express
 
-A example with inclusive API and express.js can be found here: [Express.js example](https://github.com/alitnk/polypay.js/blob/main/examples/inclusive-example/index.js)
+An example express as the server can be found here: [Express example](https://github.com/alitnk/polypay.js/blob/main/examples/express-example)

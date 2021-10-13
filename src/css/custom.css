@@ -1,28 +1,99 @@
-/**
- * Any CSS included here will be global. The classic template
- * bundles Infima by default. Infima is a CSS framework designed to
- * work well for content-centric websites.
- */
+/* Vazir */
 
-/* You can override the default Infima variables here. */
+@font-face {
+  font-family: Vazir;
+  src: url("Vazir-Regular.eot");
+  src: url("Vazir-Regular.eot?#iefix") format("embedded-opentype"),
+    url("Vazir-Regular.woff2") format("woff2"),
+    url("Vazir-Regular.woff") format("woff"),
+    url("Vazir-Regular.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: Vazir;
+  src: url("Vazir-Bold.eot");
+  src: url("Vazir-Bold.eot?#iefix") format("embedded-opentype"),
+    url("Vazir-Bold.woff2") format("woff2"),
+    url("Vazir-Bold.woff") format("woff"),
+    url("Vazir-Bold.ttf") format("truetype");
+  font-weight: bold;
+  font-style: normal;
+}
+@font-face {
+  font-family: Vazir;
+  src: url("Vazir-Black.eot");
+  src: url("Vazir-Black.eot?#iefix") format("embedded-opentype"),
+    url("Vazir-Black.woff2") format("woff2"),
+    url("Vazir-Black.woff") format("woff"),
+    url("Vazir-Black.ttf") format("truetype");
+  font-weight: 900;
+  font-style: normal;
+}
+@font-face {
+  font-family: Vazir;
+  src: url("Vazir-Medium.eot");
+  src: url("Vazir-Medium.eot?#iefix") format("embedded-opentype"),
+    url("Vazir-Medium.woff2") format("woff2"),
+    url("Vazir-Medium.woff") format("woff"),
+    url("Vazir-Medium.ttf") format("truetype");
+  font-weight: 500;
+  font-style: normal;
+}
+@font-face {
+  font-family: Vazir;
+  src: url("Vazir-Light.eot");
+  src: url("Vazir-Light.eot?#iefix") format("embedded-opentype"),
+    url("Vazir-Light.woff2") format("woff2"),
+    url("Vazir-Light.woff") format("woff"),
+    url("Vazir-Light.ttf") format("truetype");
+  font-weight: 300;
+  font-style: normal;
+}
+@font-face {
+  font-family: Vazir;
+  src: url("Vazir-Thin.eot");
+  src: url("Vazir-Thin.eot?#iefix") format("embedded-opentype"),
+    url("Vazir-Thin.woff2") format("woff2"),
+    url("Vazir-Thin.woff") format("woff"),
+    url("Vazir-Thin.ttf") format("truetype");
+  font-weight: 100;
+  font-style: normal;
+}
+
+/* Vazir Code */
+
+@font-face {
+  font-family: Vazir Code;
+  src: url("Vazir-Code.eot");
+  src: url("Vazir-Code.eot?#iefix") format("embedded-opentype"),
+    url("Vazir-Code.woff") format("woff"),
+    url("Vazir-Code.ttf") format("truetype");
+  font-weight: normal;
+}
+
+@font-face {
+  font-family: Vazir Code Hack;
+  src: url("Vazir-Code-Hack.eot");
+  src: url("Vazir-Code-Hack.eot?#iefix") format("embedded-opentype"),
+    url("Vazir-Code-Hack.woff") format("woff"),
+    url("Vazir-Code-Hack.ttf") format("truetype");
+  font-weight: normal;
+}
+
+/* Styles */
 :root {
-  --ifm-color-primary: #25c2a0;
-  --ifm-color-primary-dark: rgb(33, 175, 144);
-  --ifm-color-primary-darker: rgb(31, 165, 136);
-  --ifm-color-primary-darkest: rgb(26, 136, 112);
-  --ifm-color-primary-light: rgb(70, 203, 174);
-  --ifm-color-primary-lighter: rgb(102, 212, 189);
-  --ifm-color-primary-lightest: rgb(146, 224, 208);
-  --ifm-code-font-size: 95%;
+  --ifm-color-primary: #3578e5;
+  --ifm-color-primary-dark: #1d68e1;
+  --ifm-color-primary-darker: #1b62d4;
+  --ifm-color-primary-darkest: #1751af;
+  --ifm-color-primary-light: #4e89e8;
+  --ifm-color-primary-lighter: #5a91ea;
+  --ifm-color-primary-lightest: #80aaef;
+  --ifm-heading-font-family: "Vazir";
+  --ifm-font-family-monospace: "Vazir Code";
 }
 
-.docusaurus-highlight-code-line {
-  background-color: rgba(0, 0, 0, 0.1);
-  display: block;
-  margin: 0 calc(-1 * var(--ifm-pre-padding));
-  padding: 0 var(--ifm-pre-padding);
-}
-
-html[data-theme='dark'] .docusaurus-highlight-code-line {
-  background-color: rgba(0, 0, 0, 0.3);
+html {
+  font-family: "Vazir";
 }

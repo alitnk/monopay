@@ -9,9 +9,6 @@ import CodeBlock from "@theme/CodeBlock";
 import requestTs from "!!raw-loader!../../snippets/usage/request.ts";
 import requestJs from "!!raw-loader!../../snippets/usage/request.js";
 
-<!-- If you don't know how payment gateways work, please take a look at [Payment Procedure](/docs/payment-procedure) first. -->
-
-
 Get the driver using `getPaymentDriver` and use the `requestPayment` method. This method accepts an object with `callbackUrl`, `amount`, and driver-specific fields. <!-- TODO -->
 
 <Tabs>
@@ -37,9 +34,8 @@ The returned value of `requestPayment`, is a class containing the following:
 
    - `referenceId`: The ID that references the ongoing payment, you probably want to store it in your database.
 
-2. Details about the payment Page
+2. Details about how to send the user
 
-   - `url`: The url that you should send the form to
-   - `method`: Can be `GET` or `POST` depending on the driver
-   - `params`: An object that you should send with your form
-
+   - `url`: The url that you should send the user to
+   - `method`: The method with which you should send the user with. Can be `GET` or `POST` depending on the driver
+   - `params`: The data that you should send the user with
