@@ -1,0 +1,5 @@
+- [zarinpal](https://next.zarinpal.com/auth/register?ref_id=22MEjLK)
+- [zibal](https://zibal.ir)
+- [saman](https://www.sep.ir)
+- [idpay](https://idpay.ir/s/140178)
+- [sadad](https://sadadpsp.ir/)
