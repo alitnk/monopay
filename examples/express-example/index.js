@@ -1,8 +1,11 @@
 require('dotenv').config()
 const express = require('express')
-const { zibal, getScript, PaymentException, VerificationException, getPaymentDriver } = require('polypay')
+const { getPaymentDriver } = require('polypay')
 
 const app = express()
+app.use(express.urlencoded({
+    extended: true
+}));
 const port = 3000
 
 /** @type {import('polypay').ConfigObject} */
@@ -26,15 +29,12 @@ const polypayConfiguration = {
  * The purchase route that will redirect the user to the payment gateway
  */
 app.get('/purchase', async (req, res) => {
-    if (!Object.keys(polypayConfiguration).includes(req.params.preferedDriver)) {
-        throw Error("We don't use that payment service.")
-    }
+    const driver = getPaymentDriver('zibal', polypayConfiguration.zibal);
 
-    const paymentInfo = await getPaymentDriver(req.params.preferedDriver, polypayConfiguration)
-        .request({
-            amount: 20000,
-            callbackUrl: process.env.APP_URL + '/callback',
-        })
+    const paymentInfo = await driver.requestPayment({
+        amount: 20000,
+        callbackUrl: process.env.APP_URL + '/callback',
+    })
 
     // Store the payment info in a database //
 
@@ -51,16 +51,14 @@ app.get('/purchase', async (req, res) => {
  * The callback URL that was given to `purchase` 
  */
 app.all('/callback', async (req, res) => {
-    const driver = 'zibal'; // In a real scenario, the user might decide this
+    const driver = getPaymentDriver('zibal', polypayConfiguration.zibal)
 
     // Get the payment info from database //
 
-    const payLink = await getPaymentDriver(driver, polypayConfiguration).verify({
+    const receipt = await driver.verifyPayment({
         amount: 2000, // from database
         referenceId: 1234 // from database
-    }, req);
-
-    console.log(receipt)
+    }, { ...req.query, ...req.body }); // support both GET and POST
 
     res.json({
         referenceId: receipt.referenceId,
