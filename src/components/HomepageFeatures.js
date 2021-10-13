@@ -15,22 +15,20 @@ const FeatureList = [
     ),
   },
   {
-    title: 'Easy to use',
+    title: 'Different Drivers',
     Svg: require('../../static/img/undraw_docusaurus_tree.svg').default,
     description: (
       <>
-        The package is really easy to use. all you literally have to do is to
-        call two simple functions.
+        You'll be able to use multiple payment services and change them on runtime.
       </>
     ),
   },
   {
-    title: 'Awesome type-safety',
+    title: 'Full type-safety',
     Svg: require('../../static/img/undraw_docusaurus_react.svg').default,
     description: (
       <>
-        Nothing can go wrong if you're using TypeScript with this package.
-        and even if you don't use TypeScript, you still get a nice auto-completion.
+        You can get full type-safety if you use this package with TypeScript.
       </>
     ),
   },

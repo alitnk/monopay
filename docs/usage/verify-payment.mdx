@@ -1,0 +1,35 @@
+---
+sidebar_position: 3
+title: "Verify Payment"
+---
+
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+import CodeBlock from "@theme/CodeBlock";
+import verifyTs from "!!raw-loader!../../snippets/usage/verify.ts";
+import verifyJs from "!!raw-loader!../../snippets/usage/verify.js";
+
+The `verifyPayment` method accepts 2 arguments:
+
+1. an object, containing `amount` and `referenceId` of transaction.
+2. the express/fastify/koa/etc. Request object. (It must have a `query` field on it.)
+
+<Tabs>
+  <TabItem value="typescript" label="TypeScript" default>
+    <CodeBlock className="language-ts" title="index.ts">
+      {verifyTs}
+    </CodeBlock>
+  </TabItem>
+  <TabItem value="javascript" label="JavaScript">
+    <CodeBlock className="language-js" title="index.js">
+      {verifyJs}
+    </CodeBlock>
+  </TabItem>
+</Tabs>
+
+This method returns you a `receipt` that will contain a `referenceId` and a `panCard` and some other info about the payment.
+At this point the payment process is finished and you can provide your service/product to the user.
+
+:::note
+the `verify` function might throw `VerificationException`
+:::

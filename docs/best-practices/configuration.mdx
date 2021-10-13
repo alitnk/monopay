@@ -1,0 +1,27 @@
+---
+sidebar_position: 2
+title: Configuration
+---
+
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+import CodeBlock from "@theme/CodeBlock";
+import configTs from "!!raw-loader!../../snippets/config.ts";
+import configJs from "!!raw-loader!../../snippets/config.js";
+
+If you use multiple drivers, you might want to keep your all of your configurations in a separate file.
+
+<Tabs>
+  <TabItem value="typescript" label="TypeScript" default>
+    <CodeBlock className="language-ts" title="polypay-config.ts">
+      {configTs}
+    </CodeBlock>
+  </TabItem>
+  <TabItem value="javascript" label="JavaScript">
+    <CodeBlock className="language-js" title="polypay-config.js">
+      {configJs}
+    </CodeBlock>
+  </TabItem>
+</Tabs>
+
+And then import the configuration when creating the driver instance.

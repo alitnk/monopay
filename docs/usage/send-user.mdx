@@ -1,0 +1,30 @@
+---
+sidebar_position: 2
+title: "Send User to Payment Page"
+---
+
+In this step you should send the user to the payment page by submiting a form on the client-side using the data you got back from the `requestPayment` method.
+
+As mentioned in the previous page, the returned value contains the following:
+
+- `url`: The url that you should send the form to
+- `method`: Can be `GET` or `POST` depending on the driver
+- `params`: An object that you should send with your form
+
+You should create a form on the client-side, set its action to the `url`, its method to the `method` and add the `params` as input fields and submit the form.
+
+:::tip
+If you serve your pages from backend (not using a SPA), you can use the `getScript` method on `paymentInfo` and get a generate you a JS code that will automatically create and submit the form. Like so:
+
+```js
+res.send(
+  `<html>
+    <body>
+        <h1> We're redirecting you to the payment gateway... </h1>
+        <script>${paymentInfo.getScript()}</script>
+    </body>
+  </html>`
+);
+```
+
+:::

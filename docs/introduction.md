@@ -23,4 +23,9 @@ Learn how to intall the package here:
 ## Usage
 
 Learn how to use the package in your Node.js applications:
-[Usage](/docs/usage)
+[Usage](/docs/usage/request-payment)
+
+## Examples
+
+Learn how to use the package with examples:
+[Examples](/docs/examples)

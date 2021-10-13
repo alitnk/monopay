@@ -1,0 +1,45 @@
+---
+sidebar_position: 1
+title: "Request Payment"
+---
+
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+import CodeBlock from "@theme/CodeBlock";
+import requestTs from "!!raw-loader!../../snippets/usage/request.ts";
+import requestJs from "!!raw-loader!../../snippets/usage/request.js";
+
+<!-- If you don't know how payment gateways work, please take a look at [Payment Procedure](/docs/payment-procedure) first. -->
+
+
+Get the driver using `getPaymentDriver` and use the `requestPayment` method. This method accepts an object with `callbackUrl`, `amount`, and driver-specific fields. <!-- TODO -->
+
+<Tabs>
+  <TabItem value="typescript" label="TypeScript" default>
+    <CodeBlock className="language-ts" title="index.ts">
+      {requestTs}
+    </CodeBlock>
+  </TabItem>
+  <TabItem value="javascript" label="JavaScript">
+    <CodeBlock className="language-js" title="index.js">
+      {requestJs}
+    </CodeBlock>
+  </TabItem>
+</Tabs>
+
+:::note
+the `requestPayment` function might throw `RequestPaymentException`
+:::
+
+The returned value of `requestPayment`, is a class containing the following:
+
+1. Details about the payment
+
+   - `referenceId`: The ID that references the ongoing payment, you probably want to store it in your database.
+
+2. Details about the payment Page
+
+   - `url`: The url that you should send the form to
+   - `method`: Can be `GET` or `POST` depending on the driver
+   - `params`: An object that you should send with your form
+

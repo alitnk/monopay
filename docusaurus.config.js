@@ -7,7 +7,7 @@ const darkCodeTheme = require('prism-react-renderer/themes/dracula');
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   title: 'Polypay.js',
-  tagline: 'Painless SDK for Iranian payment gateways for Node.js',
+  tagline: 'A node.js package for making payment transactions with different Iranian IPGs',
   url: 'https://alitnk.github.io',
   baseUrl: '/polypay.js/',
   onBrokenLinks: 'throw',
