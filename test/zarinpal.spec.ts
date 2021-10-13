@@ -55,8 +55,8 @@ describe('Zarinpal Driver', () => {
 
     const driver = getPaymentDriver<Zarinpal>('zarinpal', { merchantId: '2134' });
 
-    expect(
-      (await driver.verifyPayment({ amount: 2000 }, { query: { Authority: '2000', Status: 'OK' } })).transactionId
-    ).toBe(expectedResult.transactionId);
+    expect((await driver.verifyPayment({ amount: 2000 }, { Authority: '2000', Status: 'OK' })).transactionId).toBe(
+      expectedResult.transactionId
+    );
   });
 });

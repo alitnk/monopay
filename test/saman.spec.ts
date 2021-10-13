@@ -74,7 +74,7 @@ describe('Saman Driver', () => {
 
     const driver = getPaymentDriver<Saman>('saman', { merchantId: '1234' });
 
-    expect(await (await driver.verifyPayment({ amount: 2000 }, { query: callbackParams })).transactionId).toBe(
+    expect(await (await driver.verifyPayment({ amount: 2000 }, callbackParams)).transactionId).toBe(
       expectedResult.transactionId
     );
   });

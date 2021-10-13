@@ -1,7 +1,6 @@
 import axios from 'axios';
 import { Driver } from '../../driver';
 import { PaymentException, RequestException, VerificationException } from '../../exceptions';
-import { Requestish } from '../../types';
 import * as API from './api';
 import CryptoJS from 'crypto-js';
 
@@ -35,8 +34,8 @@ export class Sadad extends Driver<API.Config> {
     });
   };
 
-  verifyPayment = async (_options: API.VerifyOptions, req: Requestish<API.CallbackParams>): Promise<API.Receipt> => {
-    const { HashedCardNo, ResCode, Token } = req.query;
+  verifyPayment = async (_options: API.VerifyOptions, params: API.CallbackParams): Promise<API.Receipt> => {
+    const { HashedCardNo, ResCode, Token } = params;
     const { terminalKey } = this.config;
 
     if (ResCode !== 0) {
@@ -57,7 +56,14 @@ export class Sadad extends Driver<API.Config> {
     return {
       transactionId: SystemTraceNo,
       cardPan: HashedCardNo,
-      raw: req.query,
+      raw: {
+        HashedCardNo: params.HashedCardNo,
+        OrderId: params.OrderId,
+        PrimaryAccNo: params.PrimaryAccNo,
+        ResCode: params.ResCode,
+        SwitchResCode: params.SwitchResCode,
+        Token: params.Token,
+      },
     };
   };
 }

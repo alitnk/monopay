@@ -30,7 +30,3 @@ export type LinksObject = Record<
     PAYMENT: string;
   }
 >;
-
-export interface Requestish<ExpectedQuery = any> {
-  query: ExpectedQuery;
-}

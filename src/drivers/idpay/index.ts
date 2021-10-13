@@ -1,7 +1,6 @@
 import axios from 'axios';
 import { Driver } from '../../driver';
 import { PaymentException, RequestException, VerificationException } from '../../exceptions';
-import { Requestish } from '../../types';
 import * as API from './api';
 
 export class IdPay extends Driver<API.Config> {
@@ -43,9 +42,9 @@ export class IdPay extends Driver<API.Config> {
 
   verifyPayment = async (
     _options: API.VerifyOptions,
-    request: Requestish<API.CallbackParamsGET | API.CallbackParamsPOST>
+    params: API.CallbackParamsGET | API.CallbackParamsPOST
   ): Promise<API.Receipt> => {
-    const { id, order_id, status } = request.query;
+    const { id, order_id, status } = params;
 
     if (status.toString() !== '200') {
       throw new PaymentException(API.callbackErrors[status.toString()]);

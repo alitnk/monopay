@@ -64,12 +64,8 @@ describe('IdPay Driver', () => {
     const driver = getPaymentDriver<IdPay>('idpay', { apiKey: '2134' });
 
     expect(
-      (
-        await driver.verifyPayment(
-          { amount: 2000 },
-          { query: { status: '200', track_id: '1234', id: '123', order_id: '321' } }
-        )
-      ).transactionId
+      (await driver.verifyPayment({ amount: 2000 }, { status: '200', track_id: '1234', id: '123', order_id: '321' }))
+        .transactionId
     ).toEqual(expectedResult.transactionId);
   });
 });

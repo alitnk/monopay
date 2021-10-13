@@ -1,4 +1,4 @@
-import { Requestish, LinksObject, PaymentReceipt } from './types';
+import { LinksObject, PaymentReceipt } from './types';
 import { PaymentInfo } from './payment-info';
 import { str as crc32Encode } from 'crc-32';
 import { v4 as uuidv4 } from 'uuid';
@@ -27,7 +27,7 @@ export abstract class Driver<Config = any> {
 
   abstract requestPayment: (requestOptions: any) => Promise<PaymentInfo>;
 
-  abstract verifyPayment: (verifyOptions: any, request: Requestish) => Promise<PaymentReceipt>;
+  abstract verifyPayment: (verifyOptions: any, requestParams: any) => Promise<PaymentReceipt>;
 
   protected makeRequestInfo = (
     referenceId: ConstructorParameters<typeof PaymentInfo>[0],

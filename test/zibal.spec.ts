@@ -59,8 +59,7 @@ describe('Zibal Driver', () => {
     const driver = getPaymentDriver<Zibal>('zibal', { merchantId: '2134' });
 
     expect(
-      (await driver.verifyPayment({ amount: 2000 }, { query: { trackId: '12345', status: '1', success: '1' } }))
-        .transactionId
+      (await driver.verifyPayment({ amount: 2000 }, { trackId: '12345', status: '1', success: '1' })).transactionId
     ).toEqual(expectedResult.transactionId);
   });
 });

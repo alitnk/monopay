@@ -2,7 +2,6 @@ import axios from 'axios';
 import soap from 'soap';
 import { Driver } from '../../driver';
 import { PaymentException, RequestException, VerificationException } from '../../exceptions';
-import { Requestish } from '../../types';
 import * as API from './api';
 
 export class Saman extends Driver<API.Config> {
@@ -34,8 +33,8 @@ export class Saman extends Driver<API.Config> {
     });
   };
 
-  verifyPayment = async (_options: API.VerifyOptions, req: Requestish<API.CallbackParams>): Promise<API.Receipt> => {
-    const { RefNum: referenceId, TraceNo: transactionId, Status: status } = req.query;
+  verifyPayment = async (_options: API.VerifyOptions, params: API.CallbackParams): Promise<API.Receipt> => {
+    const { RefNum: referenceId, TraceNo: transactionId, Status: status } = params;
     const { merchantId } = this.config;
     if (!referenceId) {
       throw new PaymentException(API.purchaseErrors[status.toString()]);
@@ -43,7 +42,6 @@ export class Saman extends Driver<API.Config> {
 
     const soapClient = await soap.createClientAsync(this.getLinks().VERIFICATION);
 
-    // TODO: use try-catch here
     const responseStatus = +(await soapClient.verifyTransaction(referenceId, merchantId));
 
     if (responseStatus < 0) {
@@ -52,8 +50,20 @@ export class Saman extends Driver<API.Config> {
 
     return {
       transactionId: +transactionId,
-      cardPan: req.query.SecurePan,
-      raw: req.query,
+      cardPan: params.SecurePan,
+      raw: {
+        MID: params.MID,
+        State: params.State,
+        Status: params.Status,
+        RRN: params.RRN,
+        RefNum: params.RefNum,
+        ResNum: params.ResNum,
+        TerminalId: params.TerminalId,
+        TraceNo: params.TraceNo,
+        Amount: params.Amount,
+        Wage: params.Wage,
+        SecurePan: params.SecurePan,
+      },
     };
   };
 }

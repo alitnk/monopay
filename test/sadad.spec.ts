@@ -86,7 +86,7 @@ describe('Sadad Driver', () => {
       terminalId: 'H3AHMXaS',
     });
 
-    expect((await driver.verifyPayment({ amount: 10000 }, { query: callbackParams })).transactionId).toBe(
+    expect((await driver.verifyPayment({ amount: 10000 }, callbackParams)).transactionId).toBe(
       expectedResult.transactionId
     );
   });

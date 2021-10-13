@@ -1,7 +1,6 @@
 import axios from 'axios';
 import { Driver } from '../../driver';
 import { PaymentException, RequestException, VerificationException } from '../../exceptions';
-import { Requestish } from '../../types';
 import * as API from './api';
 
 export class Zarinpal extends Driver<API.Config> {
@@ -37,8 +36,8 @@ export class Zarinpal extends Driver<API.Config> {
     throw new RequestException();
   };
 
-  verifyPayment = async (options: API.VerifyOptions, request: Requestish<API.CallbackParams>): Promise<API.Receipt> => {
-    const { Authority: authority, Status: status } = request.query;
+  verifyPayment = async (options: API.VerifyOptions, params: API.CallbackParams): Promise<API.Receipt> => {
+    const { Authority: authority, Status: status } = params;
     const { amount } = options;
     const { merchantId } = this.config;
 

@@ -1,7 +1,6 @@
 import { Driver } from '../../driver';
 import * as API from './api';
 import axios from 'axios';
-import { Requestish } from '../../types';
 import { PaymentException, RequestException, VerificationException } from '../../exceptions';
 
 export class Zibal extends Driver<API.Config> {
@@ -29,11 +28,8 @@ export class Zibal extends Driver<API.Config> {
     return this.makeRequestInfo(trackId, 'GET', this.getLinks().PAYMENT + trackId);
   };
 
-  verifyPayment = async (
-    _options: API.VerifyOptions,
-    request: Requestish<API.CallbackParams>
-  ): Promise<API.Receipt> => {
-    const { status, success, trackId } = request.query;
+  verifyPayment = async (_options: API.VerifyOptions, params: API.CallbackParams): Promise<API.Receipt> => {
+    const { status, success, trackId } = params;
     let { merchantId } = this.config;
 
     if (success === '0') {
