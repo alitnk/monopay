@@ -4,14 +4,11 @@ import { str as crc32Encode } from 'crc-32';
 import { v4 as uuidv4 } from 'uuid';
 
 export abstract class Driver<Config = any> {
-  constructor(protected config: Config) {
-    this.afterConfigUpdate(config);
-  }
+  constructor(protected config: Config) {}
+
   setConfig(config: Config) {
     this.config = config;
-    this.afterConfigUpdate(config);
   }
-  protected afterConfigUpdate: (config: Config) => void = () => {};
 
   protected abstract links: LinksObject;
 

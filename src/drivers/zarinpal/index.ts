@@ -4,8 +4,8 @@ import { PaymentException, RequestException, VerificationException } from '../..
 import * as API from './api';
 
 export class Zarinpal extends Driver<API.Config> {
-  afterConfigUpdate = (config: API.Config) => {
-    if (config.sandbox) this.setLinkStrategy('sandbox');
+  afterConfigUpdate = () => {
+    if (this.config.sandbox) this.setLinkStrategy('sandbox');
   };
 
   protected links = API.links;
