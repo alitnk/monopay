@@ -36,7 +36,11 @@ export abstract class Driver<Config = any> {
     params: ConstructorParameters<typeof PaymentInfo>[3] = {}
   ) => new PaymentInfo(referenceId, method, url, params);
 
+  protected generateUuid() {
+    return uuidv4();
+  }
+
   protected generateId() {
-    return crc32Encode(uuidv4());
+    return crc32Encode(this.generateUuid());
   }
 }

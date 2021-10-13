@@ -1,4 +1,6 @@
 import { Driver as BaseDriver } from './driver';
+import { IdPay } from './drivers/idpay';
+import * as IdPayAPI from './drivers/idpay/api';
 import { Sadad } from './drivers/sadad';
 import * as SadadAPI from './drivers/sadad/api';
 import { Saman } from './drivers/saman';
@@ -9,19 +11,21 @@ import { Zibal } from './drivers/zibal';
 import * as ZibalAPI from './drivers/zibal/api';
 
 interface ConfigMap {
+  idpay: IdPayAPI.Config;
+  sadad: SadadAPI.Config;
+  saman: SamanAPI.Config;
   zarinpal: ZarinpalAPI.Config;
   zibal: ZibalAPI.Config;
-  saman: SamanAPI.Config;
-  sadad: SadadAPI.Config;
 }
 
 export type ConfigObject = Partial<ConfigMap>;
 
 const drivers = {
+  idpay: IdPay,
+  sadad: Sadad,
+  saman: Saman,
   zarinpal: Zarinpal,
   zibal: Zibal,
-  saman: Saman,
-  sadad: Sadad,
 };
 
 export const getPaymentDriver = <Driver extends BaseDriver>(
