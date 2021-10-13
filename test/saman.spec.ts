@@ -2,7 +2,7 @@ import axios from 'axios';
 import { Saman } from '../src/drivers/saman';
 import * as API from '../src/drivers/saman/api';
 import { RequestException } from '../src/exceptions';
-import { getPaymentDriver } from '../src/inclusive';
+import { getPaymentDriver } from '../src/drivers';
 
 jest.mock('axios');
 const mockSoapClient: any = {};

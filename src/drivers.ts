@@ -10,6 +10,11 @@ import * as ZarinpalAPI from './drivers/zarinpal/api';
 import { Zibal } from './drivers/zibal';
 import * as ZibalAPI from './drivers/zibal/api';
 
+export { IdPay } from './drivers/idpay';
+export { Sadad } from './drivers/sadad';
+export { Saman } from './drivers/saman';
+export { Zarinpal } from './drivers/zarinpal';
+export { Zibal } from './drivers/zibal';
 interface ConfigMap {
   idpay: IdPayAPI.Config;
   sadad: SadadAPI.Config;
