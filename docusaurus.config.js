@@ -46,12 +46,6 @@ const config = {
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
       image: 'img/thumbnail.jpeg',
-      colorMode: {
-        switchConfig: {
-          darkIcon: '⚫️',
-          lightIcon: '⚪️',
-        },
-      },
       // Commenting since it's not translatable
       // announcementBar: {
       //   id: 'github_start_announcement',
