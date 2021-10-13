@@ -12,7 +12,7 @@ import verifyJs from "!!raw-loader!../../snippets/usage/verify.js";
 The `verifyPayment` method accepts 2 arguments:
 
 1. an object, containing `amount` and `referenceId` of transaction.
-2. the express/fastify/koa/etc. Request object. (It must have a `query` field on it.)
+2. request parameters in the callback route
 
 <Tabs>
   <TabItem value="typescript" label="TypeScript" default>

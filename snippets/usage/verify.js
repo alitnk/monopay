@@ -9,5 +9,5 @@ const receipt = await driver.verifyPayment(
     amount: 5000,
     referenceId: 1234,
   },
-  request
+  request.params()
 );
