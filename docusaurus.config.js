@@ -28,12 +28,12 @@ const config = {
       ({
         docs: {
           sidebarPath: require.resolve('./sidebars.js'),
-          editUrl: 'https://github.com/alitnk/polypay.js/edit/main/documentation/',
+          editUrl: 'https://github.com/alitnk/polypay.js/edit/documentation/',
         },
         // blog: {
         //   showReadingTime: true,
         //   editUrl:
-        //     'https://github.com/alitnk/polypay.js/edit/main/documentation/blog/',
+        //     'https://github.com/alitnk/polypay.js/edit/documentation/blog/',
         // },
         theme: {
           customCss: require.resolve('./src/css/custom.css'),
