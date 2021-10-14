@@ -17,6 +17,6 @@ If an error occurs in the user"s payment process, a `PaymentException` will be t
 
 If an error occurs in the verification process, a `VerificationException` will be thrown.
 
-## Polypay Exception
+## Bad Config Exception
 
-All of the mentioned exceptions extend `PolypayException`.
+If the provided configurations were invalid, a `BadConfigException` will be thrown.

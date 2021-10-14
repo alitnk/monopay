@@ -17,6 +17,6 @@ title: گرفتن استثنا ها (خطا ها)
 
 اگر خطایی در مرحله تایید کردن پرداخت اتفاق بیفتد، استثنا `VerificationException` انداخته می‌شود.
 
-## Polypay Exception
+## Bad Config Exception
 
-همه استثنا‌های بالا از استثنای `PolypayException` ارث‌بری می کنند.
+اگر پیکربندی مربوط به درایور اشتباه بود، استثنا `BadConfigException` انداخته می‌شود.
