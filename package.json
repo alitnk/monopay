@@ -1,5 +1,5 @@
 {
-  "version": "0.1.0",
+  "version": "1.0.0",
   "license": "MIT",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -19,6 +19,10 @@
     "size": "size-limit",
     "analyze": "size-limit --why"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/alitnk/polypay.js.git"
+  },
   "husky": {
     "hooks": {
       "pre-commit": "tsdx lint"
@@ -31,7 +35,21 @@
     "trailingComma": "es5"
   },
   "name": "polypay",
-  "author": "Ali",
+  "description": "A node.js package for making payment transactions with different Iranian IPGs",
+  "keywords": [
+    "payment",
+    "iran",
+    "iranian",
+    "iranian bank",
+    "ipg",
+    "persian bank",
+    "iranian payment gateway",
+    "payment gateway"
+  ],
+  "author": {
+    "name": "Ali",
+    "email": "alirezazamani2922@gmail.com"
+  },
   "module": "dist/polypay.esm.js",
   "size-limit": [
     {
