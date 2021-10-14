@@ -5,7 +5,6 @@ import { RequestException } from '../src/exceptions';
 import { getPaymentDriver } from '../src/drivers';
 
 jest.mock('axios');
-jest.mock('io-ts');
 
 const mockedAxios = axios as jest.Mocked<typeof axios>;
 describe('Zibal Driver', () => {

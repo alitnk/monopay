@@ -11,8 +11,7 @@ export abstract class Driver<Config = any> {
   protected config: Config;
 
   constructor(config: Config, protected configCodec: any) {
-    config = this.getParsedData(config, configCodec);
-    this.config = config;
+    this.config = this.getParsedData(config, configCodec);
   }
 
   setConfig(config: Config) {
