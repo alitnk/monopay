@@ -3,3 +3,4 @@
 - [saman](https://www.sep.ir)
 - [idpay](https://idpay.ir/s/140178)
 - [sadad](https://sadadpsp.ir/)
+- [nextpay](https://nextpay.ir/)
