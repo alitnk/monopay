@@ -34,3 +34,13 @@ export class VerificationException extends PolypayException {
     Object.setPrototypeOf(this, VerificationException.prototype);
   }
 }
+
+/**
+ * Error when the configuration has problems
+ */
+export class BadConfigException extends PolypayException {
+  constructor(errors: string[]) {
+    super(errors.join(',\n'));
+    Object.setPrototypeOf(this, BadConfigException.prototype);
+  }
+}

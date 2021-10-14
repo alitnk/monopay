@@ -5,6 +5,10 @@ import { PaymentException, RequestException, VerificationException } from '../..
 import * as API from './api';
 
 export class Saman extends Driver<API.Config> {
+  constructor(config: API.Config) {
+    super(config, API.tConfig);
+  }
+
   protected links = API.links;
 
   requestPayment = async (options: API.RequestOptions) => {

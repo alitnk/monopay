@@ -8,10 +8,10 @@ export interface PaymentVerifyOptions {
   amount: number;
 }
 
-export interface PaymentReceipt {
+export interface PaymentReceipt<RawReceipt = any> {
   transactionId: string | number;
   cardPan?: string;
-  raw: any;
+  raw: RawReceipt;
 }
 
 export interface PaymentInfo {

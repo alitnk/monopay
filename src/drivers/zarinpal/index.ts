@@ -4,9 +4,9 @@ import { PaymentException, RequestException, VerificationException } from '../..
 import * as API from './api';
 
 export class Zarinpal extends Driver<API.Config> {
-  afterConfigUpdate = () => {
-    if (this.config.sandbox) this.setLinkStrategy('sandbox');
-  };
+  constructor(config: API.Config) {
+    super(config, API.tConfig);
+  }
 
   protected links = API.links;
 
@@ -73,4 +73,8 @@ export class Zarinpal extends Driver<API.Config> {
 
     throw new VerificationException();
   };
+
+  protected getLinks() {
+    return this.config.sandbox ? this.links.sandbox : this.links.default;
+  }
 }

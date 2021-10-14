@@ -4,14 +4,11 @@ import { PaymentException, RequestException, VerificationException } from '../..
 import * as API from './api';
 
 export class IdPay extends Driver<API.Config> {
-  protected links = API.links;
-
-  getHeaders() {
-    return {
-      'X-SANDBOX': this.config.sandbox ? '1' : '0',
-      'X-API-KEY': this.config.apiKey,
-    };
+  constructor(config: API.Config) {
+    super(config, API.tConfig);
   }
+
+  protected links = API.links;
 
   requestPayment = async (options: API.RequestOptions) => {
     const { amount, callbackUrl, mobile, email, description, name } = options;
@@ -71,4 +68,11 @@ export class IdPay extends Driver<API.Config> {
       raw: response.data,
     };
   };
+
+  protected getHeaders() {
+    return {
+      'X-SANDBOX': this.config.sandbox ? '1' : '0',
+      'X-API-KEY': this.config.apiKey,
+    };
+  }
 }

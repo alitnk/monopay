@@ -5,6 +5,7 @@ import { RequestException } from '../src/exceptions';
 import { getPaymentDriver } from '../src/drivers';
 
 jest.mock('axios');
+
 const mockSoapClient: any = {};
 jest.mock('soap', () => ({
   createClientAsync: async () => mockSoapClient,

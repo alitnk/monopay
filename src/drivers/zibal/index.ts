@@ -4,8 +4,8 @@ import axios from 'axios';
 import { PaymentException, RequestException, VerificationException } from '../../exceptions';
 
 export class Zibal extends Driver<API.Config> {
-  getMerchantId() {
-    return this.config.sandbox ? 'zibal' : this.config.merchantId;
+  constructor(config: API.Config) {
+    super(config, API.tConfig);
   }
 
   protected links = API.links;
@@ -34,10 +34,13 @@ export class Zibal extends Driver<API.Config> {
       throw new PaymentException(API.callbackErrors[status]);
     }
 
-    const response = await axios.post<API.VerifyPaymentReq, { data: API.VerifyPaymentRes }>(this.getLinks().VERIFICATION, {
-      merchant: this.getMerchantId(),
-      trackId: +trackId,
-    });
+    const response = await axios.post<API.VerifyPaymentReq, { data: API.VerifyPaymentRes }>(
+      this.getLinks().VERIFICATION,
+      {
+        merchant: this.getMerchantId(),
+        trackId: +trackId,
+      }
+    );
 
     const { result } = response.data;
 
@@ -51,4 +54,8 @@ export class Zibal extends Driver<API.Config> {
       cardPan: response.data.cardNumber,
     };
   };
+
+  protected getMerchantId() {
+    return this.config.sandbox ? 'zibal' : this.config.merchantId;
+  }
 }

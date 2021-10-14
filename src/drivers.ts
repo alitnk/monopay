@@ -41,5 +41,7 @@ export const getPaymentDriver = <Driver extends BaseDriver>(
     throw Error(`This driver is not supported, supported drivers: ${Object.keys(drivers).join(', ')}`);
   }
 
-  return (new drivers[driverName](config) as unknown) as Driver;
+  const driver = drivers[driverName];
+
+  return new (driver as any)(config) as Driver;
 };

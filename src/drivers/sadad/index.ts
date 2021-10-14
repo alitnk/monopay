@@ -5,6 +5,10 @@ import * as API from './api';
 import CryptoJS from 'crypto-js';
 
 export class Sadad extends Driver<API.Config> {
+  constructor(config: API.Config) {
+    super(config, API.tConfig);
+  }
+
   protected links = API.links;
 
   requestPayment = async (options: API.RequestOptions) => {
@@ -42,10 +46,13 @@ export class Sadad extends Driver<API.Config> {
       throw new PaymentException('تراکنش توسط کاربر لغو شد.');
     }
 
-    const response = await axios.post<API.VerifyPaymentReq, { data: API.VerifyPaymentRes }>(this.getLinks().VERIFICATION, {
-      SignData: signData(Token, terminalKey),
-      Token,
-    });
+    const response = await axios.post<API.VerifyPaymentReq, { data: API.VerifyPaymentRes }>(
+      this.getLinks().VERIFICATION,
+      {
+        SignData: signData(Token, terminalKey),
+        Token,
+      }
+    );
 
     const { ResCode: verificationResCode, SystemTraceNo } = response.data;
 

@@ -10,7 +10,7 @@ const port = 3000
 
 /** @type {import('polypay').ConfigObject} */
 const polypayConfiguration = {
-    zarinpal: {
+    zibal: {
         merchantId: 'your-merchant-id',
         sandbox: true,
     },
@@ -22,7 +22,7 @@ const polypayConfiguration = {
         merchantId: 'your-merchant-id',
         terminalId: 'your-terminal-id',
         terminalKey: 'your-terminal-key'
-    }
+    },
 }
 
 /**

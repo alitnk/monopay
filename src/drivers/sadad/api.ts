@@ -1,3 +1,4 @@
+import * as t from 'io-ts';
 import { PaymentRequestOptions, PaymentVerifyOptions, PaymentReceipt, ErrorList, LinksObject } from '../../types';
 
 /*
@@ -240,11 +241,13 @@ export const verifyErrors: ErrorList = {
  * Package's API
  */
 
-export interface Config {
-  merchantId: string;
-  terminalId: string;
-  terminalKey: string;
-}
+export const tConfig = t.interface({
+  merchantId: t.string,
+  terminalId: t.string,
+  terminalKey: t.string,
+});
+
+export type Config = t.TypeOf<typeof tConfig>;
 
 export interface RequestOptions extends PaymentRequestOptions {
   mobile?: string;
@@ -254,6 +257,4 @@ export interface RequestOptions extends PaymentRequestOptions {
 
 export interface VerifyOptions extends PaymentVerifyOptions {}
 
-export interface Receipt extends PaymentReceipt {
-  raw: CallbackParams;
-}
+export type Receipt = PaymentReceipt<CallbackParams>;
