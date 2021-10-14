@@ -50,7 +50,10 @@ export abstract class Driver<Config = any> {
     return crc32Encode(this.generateUuid());
   }
 
-  protected getParsedData = <TData extends any = any, O = TData, I = unknown>(rawData: I, codec: t.Type<TData, O, I>): TData => {
+  protected getParsedData = <TData extends any = any, O = TData, I = unknown>(
+    rawData: I,
+    codec: t.Type<TData, O, I>
+  ): TData => {
     const result = codec.decode(rawData);
     if (isLeft(result)) {
       // Use a reporter to throw an error if validation fails
