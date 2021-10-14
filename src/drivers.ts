@@ -3,6 +3,8 @@ import { IdPay } from './drivers/idpay';
 import * as IdPayAPI from './drivers/idpay/api';
 import { NextPay } from './drivers/nextpay';
 import * as NextPayAPI from './drivers/nextpay/api';
+import { Payir } from './drivers/payir';
+import * as PayirAPI from './drivers/payir/api';
 import { Sadad } from './drivers/sadad';
 import * as SadadAPI from './drivers/sadad/api';
 import { Saman } from './drivers/saman';
@@ -25,6 +27,7 @@ interface ConfigMap {
   saman: SamanAPI.Config;
   zarinpal: ZarinpalAPI.Config;
   zibal: ZibalAPI.Config;
+  payir: PayirAPI.Config;
 }
 
 export type ConfigObject = Partial<ConfigMap>;
@@ -36,6 +39,7 @@ const drivers = {
   saman: Saman,
   zarinpal: Zarinpal,
   zibal: Zibal,
+  payir: Payir,
 };
 
 export const getPaymentDriver = <Driver extends BaseDriver>(
