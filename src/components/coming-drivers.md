@@ -1,4 +1,3 @@
-- [nextpay](https://nextpay.ir/)
 - [payping](https://payping.ir)
 - [payir](https://pay.ir)
 - [asanpardakht](https://asanpardakht.ir/)
