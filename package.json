@@ -19,6 +19,7 @@
     "size": "size-limit",
     "analyze": "size-limit --why"
   },
+  "homepage": "https://alitnk.github.io/polypay.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/alitnk/polypay.js.git"
