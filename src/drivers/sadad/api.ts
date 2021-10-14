@@ -124,7 +124,7 @@ export const tMultiplexingObject = t.interface({
 export type MultiplexingObject = t.TypeOf<typeof tMultiplexingObject>;
 
 export interface CallbackParams {
-  OrderId: number;
+  OrderId: number | string;
   HashedCardNo: string;
   PrimaryAccNo: string;
   SwitchResCode: string | number;
