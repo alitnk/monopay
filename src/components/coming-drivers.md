@@ -1,5 +1,4 @@
 - [payping](https://payping.ir)
-- [payir](https://pay.ir)
 - [asanpardakht](https://asanpardakht.ir/)
 - [behpardakht](http://www.behpardakht.com/)
 - [digipay](https://www.mydigipay.com/)
