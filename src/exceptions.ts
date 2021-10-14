@@ -17,6 +17,8 @@ export class RequestException extends PolypayException {
 
 /**
  * Error in the paying stage
+ * 
+ * You can show this error message to your end user
  */
 export class PaymentException extends PolypayException {
   constructor(message?: string) {

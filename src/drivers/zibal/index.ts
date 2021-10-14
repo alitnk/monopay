@@ -30,7 +30,7 @@ export class Zibal extends Driver<API.Config> {
   verifyPayment = async (_options: API.VerifyOptions, params: API.CallbackParams): Promise<API.Receipt> => {
     const { status, success, trackId } = params;
 
-    if (success === '0') {
+    if (success.toString() === '0') {
       throw new PaymentException(API.callbackErrors[status]);
     }
 
