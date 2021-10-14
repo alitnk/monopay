@@ -11,6 +11,8 @@ export class Zibal extends Driver<API.Config> {
   protected links = API.links;
 
   requestPayment = async (options: API.RequestOptions) => {
+    options = this.getParsedData(options, API.tRequestOptions);
+
     let { amount, ...otherOptions } = options;
 
     const response = await axios.post<API.RequestPaymentReq, { data: API.RequestPaymentRes }>(this.getLinks().REQUEST, {

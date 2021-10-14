@@ -1,14 +1,23 @@
-export interface PaymentRequestOptions {
-  callbackUrl: string;
-  amount: number;
-  description?: string;
-}
+import * as t from 'io-ts';
 
-export interface PaymentVerifyOptions {
-  amount: number;
-}
+export const tBaseRequestOptions = t.intersection([
+  t.interface({
+    callbackUrl: t.string,
+    amount: t.number,
+  }),
+  t.partial({
+    description: t.string,
+  }),
+]);
+export type BaseRequestOptions = t.TypeOf<typeof tBaseRequestOptions>;
 
-export interface PaymentReceipt<RawReceipt = any> {
+export const tBaseVerifyOptions = t.interface({
+  amount: t.number,
+});
+
+export type BaseVerifyOptions = t.Type<typeof tBaseVerifyOptions>;
+
+export interface BaseReceipt<RawReceipt = any> {
   transactionId: string | number;
   cardPan?: string;
   raw: RawReceipt;

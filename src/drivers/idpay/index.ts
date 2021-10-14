@@ -11,6 +11,8 @@ export class IdPay extends Driver<API.Config> {
   protected links = API.links;
 
   requestPayment = async (options: API.RequestOptions) => {
+    options = this.getParsedData(options, API.tRequestOptions);
+
     const { amount, callbackUrl, mobile, email, description, name } = options;
 
     let response = await axios.post<API.RequestPaymentReq, { data: API.RequestPaymentRes }>(

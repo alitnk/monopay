@@ -1,5 +1,5 @@
 import * as t from 'io-ts';
-import { ErrorList, LinksObject, PaymentRequestOptions, PaymentReceipt, PaymentVerifyOptions } from '../../types';
+import { BaseReceipt, ErrorList, LinksObject, tBaseRequestOptions, tBaseVerifyOptions } from '../../types';
 
 /*
  * Saman's API
@@ -132,11 +132,18 @@ export const tConfig = t.interface({
 
 export type Config = t.TypeOf<typeof tConfig>;
 
-export interface RequestOptions extends PaymentRequestOptions {
-  mobile?: string;
-  wage?: number;
-}
+export const tRequestOptions = t.intersection([
+  t.partial({
+    mobile: t.string,
+    wage: t.number,
+  }),
+  tBaseRequestOptions,
+]);
 
-export interface VerifyOptions extends PaymentVerifyOptions {}
+export type RequestOptions = t.TypeOf<typeof tRequestOptions>;
 
-export type Receipt = PaymentReceipt<CallbackParams>;
+export const tVerifyOptions = t.intersection([t.interface({}), tBaseVerifyOptions]);
+
+export type VerifyOptions = t.TypeOf<typeof tVerifyOptions>;
+
+export type Receipt = BaseReceipt<CallbackParams>;

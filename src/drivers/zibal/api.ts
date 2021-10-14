@@ -1,5 +1,5 @@
 import * as t from 'io-ts';
-import { ErrorList, LinksObject, PaymentRequestOptions, PaymentReceipt, PaymentVerifyOptions } from '../../types';
+import { BaseReceipt, ErrorList, LinksObject, tBaseRequestOptions, tBaseVerifyOptions } from '../../types';
 
 /*
  * Zibal's API
@@ -16,34 +16,36 @@ export const links: LinksObject = {
 /**
  * @link https://docs.zibal.ir/IPG/API#MultiplexingInfo-object
  */
-export interface MultiplexingObject {
+export const tMultiplexingObject = t.interface({
   /**
    * 	شماره شبای ذی نفع
    */
-  bankAccount: string;
+  bankAccount: t.string,
 
   /**
    * 	شناسه ذی نفع
    */
-  subMerchantId: string;
+  subMerchantId: t.string,
 
   /**
    * 	شناسه کیف پول در پرداختیاری پشتیبانی نمی شود
    */
-  walletID: string;
+  walletID: t.string,
 
   /**
    * 	مبلغ یا درصد
    */
-  amount: number;
+  amount: t.number,
 
   /**
    * 	کارمزد از این آیتم گرفته شود؟
    * فقط در صورتیکه `feeMode: 0` موثر است.
    * اگر مشخص نشود از ذی نفع اصلی با `id: self` کارمزد اخذ میگردد.
    */
-  wagePayer: boolean;
-}
+  wagePayer: t.boolean,
+});
+
+export type MultiplexingObject = t.TypeOf<typeof tMultiplexingObject>;
 
 export interface RequestPaymentReq {
   /**
@@ -252,17 +254,25 @@ export const tConfig = t.intersection([
 ]);
 
 export type Config = t.TypeOf<typeof tConfig>;
-export interface RequestOptions extends PaymentRequestOptions {
-  mobile?: string;
-  orderId?: string;
-  allowedCards?: string[];
-  linkToPay?: boolean;
-  sms?: boolean;
-  percentMode?: 0 | 1;
-  feeMode?: 0 | 1 | 2;
-  multiplexingInfos?: MultiplexingObject[];
-}
 
-export interface VerifyOptions extends PaymentVerifyOptions {}
+export const tRequestOptions = t.intersection([
+  t.partial({
+    mobile: t.string,
+    orderId: t.string,
+    allowedCards: t.array(t.string),
+    linkToPay: t.boolean,
+    sms: t.boolean,
+    percentMode: t.union([t.literal(0), t.literal(1)]),
+    feeMode: t.union([t.literal(0), t.literal(1), t.literal(2)]),
+    multiplexingInfos: t.array(tMultiplexingObject),
+  }),
+  tBaseRequestOptions,
+]);
 
-export type Receipt = PaymentReceipt<VerifyPaymentRes>;
+export type RequestOptions = t.TypeOf<typeof tRequestOptions>;
+
+export const tVerifyOptions = t.intersection([t.partial({}), tBaseVerifyOptions]);
+
+export type VerifyOptions = t.TypeOf<typeof tVerifyOptions>;
+
+export type Receipt = BaseReceipt<VerifyPaymentRes>;

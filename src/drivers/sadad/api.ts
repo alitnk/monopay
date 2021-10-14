@@ -1,5 +1,5 @@
 import * as t from 'io-ts';
-import { PaymentRequestOptions, PaymentVerifyOptions, PaymentReceipt, ErrorList, LinksObject } from '../../types';
+import { BaseReceipt, ErrorList, LinksObject, tBaseRequestOptions, tBaseVerifyOptions } from '../../types';
 
 /*
  * Sadad's API
@@ -96,29 +96,32 @@ export interface RequestPaymentRes {
   Description: string;
 }
 
-export interface MultiplexingObject {
-  /**
-   * ریز مبالغ و ردیف (یا شماره شبا) حساب های متناظر می بایست ارسال گردد)
-   */
-  Type: 'Percentage' | 'Amount';
-
-  /**
-   * درصد مورد نظر جهت واریز و ردیف یا شماره شبا حساب های مورد نظر می بایست ارسال گردد
-   */
-  MultiplexingRows: MultiplexingRow[];
-}
-
-export interface MultiplexingRow {
+export const tMultiplexingRow = t.interface({
   /**
    * رديف يا شماره شبا حساب
    */
-  IbanNumber: number;
+  IbanNumber: t.number,
 
   /**
    * مبلغ یا درصد
    */
-  Value: number;
-}
+  Value: t.number,
+});
+
+export type MultiplexingRow = t.TypeOf<typeof tMultiplexingRow>;
+
+export const tMultiplexingObject = t.interface({
+  /**
+   * ریز مبالغ و ردیف (یا شماره شبا) حساب های متناظر می بایست ارسال گردد)
+   */
+  Type: t.union([t.literal('Percentage'), t.literal('Amount')]),
+
+  /**
+   * درصد مورد نظر جهت واریز و ردیف یا شماره شبا حساب های مورد نظر می بایست ارسال گردد
+   */
+  MultiplexingRows: t.array(tMultiplexingRow),
+});
+export type MultiplexingObject = t.TypeOf<typeof tMultiplexingObject>;
 
 export interface CallbackParams {
   OrderId: number;
@@ -249,12 +252,19 @@ export const tConfig = t.interface({
 
 export type Config = t.TypeOf<typeof tConfig>;
 
-export interface RequestOptions extends PaymentRequestOptions {
-  mobile?: string;
-  multiplexingData?: MultiplexingObject;
-  appName?: string;
-}
+export const tRequestOptions = t.intersection([
+  tBaseRequestOptions,
+  t.partial({
+    mobile: t.string,
+    multiplexingData: tMultiplexingObject,
+    appName: t.string,
+  }),
+]);
 
-export interface VerifyOptions extends PaymentVerifyOptions {}
+export type RequestOptions = t.TypeOf<typeof tRequestOptions>;
 
-export type Receipt = PaymentReceipt<CallbackParams>;
+export const tVerifyOptions = t.intersection([t.interface({}), tBaseVerifyOptions]);
+
+export type VerifyOptions = t.TypeOf<typeof tVerifyOptions>;
+
+export type Receipt = BaseReceipt<CallbackParams>;

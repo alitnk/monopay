@@ -12,6 +12,8 @@ export class Saman extends Driver<API.Config> {
   protected links = API.links;
 
   requestPayment = async (options: API.RequestOptions) => {
+    options = this.getParsedData(options, API.tRequestOptions);
+
     const { amount, callbackUrl, mobile, wage } = options;
     const { merchantId } = this.config;
     const response = await axios.post<API.RequestPaymentReq, { data: API.RequestPaymentRes }>(this.getLinks().REQUEST, {

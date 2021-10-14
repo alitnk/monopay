@@ -5,7 +5,7 @@ import reporter from 'io-ts-reporters';
 import { v4 as uuidv4 } from 'uuid';
 import { BadConfigException } from './exceptions';
 import { PaymentInfo } from './payment-info';
-import { LinksObject, PaymentReceipt } from './types';
+import { LinksObject, BaseReceipt } from './types';
 
 export abstract class Driver<Config = any> {
   protected config: Config;
@@ -32,7 +32,7 @@ export abstract class Driver<Config = any> {
 
   abstract requestPayment: (requestOptions: any) => Promise<PaymentInfo>;
 
-  abstract verifyPayment: (verifyOptions: any, requestParams: any) => Promise<PaymentReceipt>;
+  abstract verifyPayment: (verifyOptions: any, requestParams: any) => Promise<BaseReceipt>;
 
   protected makeRequestInfo = (
     referenceId: ConstructorParameters<typeof PaymentInfo>[0],
@@ -49,6 +49,11 @@ export abstract class Driver<Config = any> {
     return crc32Encode(this.generateUuid());
   }
 
+  /**
+   * Parses using the codec and throws an exception if not matching
+   *
+   * @throws BadConfigException
+   */
   protected getParsedData = <TData extends any = any, O = TData, I = unknown>(
     rawData: I,
     codec: t.Type<TData, O, I>

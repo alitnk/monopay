@@ -11,6 +11,8 @@ export class Zarinpal extends Driver<API.Config> {
   protected links = API.links;
 
   requestPayment = async (options: API.RequestOptions) => {
+    options = this.getParsedData(options, API.tRequestOptions);
+
     const { amount, callbackUrl, mobile, email, ...otherOptions } = options;
     const { merchantId } = this.config;
 
@@ -37,6 +39,8 @@ export class Zarinpal extends Driver<API.Config> {
   };
 
   verifyPayment = async (options: API.VerifyOptions, params: API.CallbackParams): Promise<API.Receipt> => {
+    options = this.getParsedData(options, API.tVerifyOptions);
+
     const { Authority: authority, Status: status } = params;
     const { amount } = options;
     const { merchantId } = this.config;

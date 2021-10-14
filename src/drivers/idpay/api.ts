@@ -1,5 +1,5 @@
 import * as t from 'io-ts';
-import { ErrorList, LinksObject, PaymentRequestOptions, PaymentReceipt, PaymentVerifyOptions } from '../../types';
+import { BaseReceipt, ErrorList, LinksObject, tBaseRequestOptions, tBaseVerifyOptions } from '../../types';
 
 /*
  * IDPay's API
@@ -298,12 +298,19 @@ export const tConfig = t.intersection([
 
 export type Config = t.TypeOf<typeof tConfig>;
 
-export interface RequestOptions extends PaymentRequestOptions {
-  mobile?: string;
-  email?: string;
-  name?: string;
-}
+export const tRequestOptions = t.intersection([
+  t.partial({
+    mobile: t.string,
+    email: t.string,
+    name: t.string,
+  }),
+  tBaseRequestOptions,
+]);
 
-export interface VerifyOptions extends PaymentVerifyOptions {}
+export type RequestOptions = t.TypeOf<typeof tRequestOptions>;
 
-export type Receipt = PaymentReceipt<Exclude<VerifyPaymentRes, any[]>>;
+export const tVerifyOptions = t.intersection([t.interface({}), tBaseVerifyOptions]);
+
+export type VerifyOptions = t.TypeOf<typeof tVerifyOptions>;
+
+export type Receipt = BaseReceipt<Exclude<VerifyPaymentRes, any[]>>;
