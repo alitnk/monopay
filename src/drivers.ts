@@ -43,5 +43,5 @@ export const getPaymentDriver = <Driver extends BaseDriver>(
 
   const driver = drivers[driverName];
 
-  return new driver(config) as unknown as Driver;
+  return (new driver(config) as unknown) as Driver;
 };
