@@ -48,7 +48,7 @@ app.get('/purchase', async (req, res) => {
 })
 
 /**
- * The callback URL that was given to `purchase` 
+ * The callback URL that was given to `requestPayment` 
  */
 app.all('/callback', async (req, res) => {
     const driver = getPaymentDriver('zibal', polypayConfiguration.zibal)
