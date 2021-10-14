@@ -6,14 +6,9 @@ import { ErrorList, LinksObject, PaymentRequestOptions, PaymentReceipt, PaymentV
 
 export const links: LinksObject = {
   default: {
-    REQUEST: 'https://api.zarinpal.com/pg/v4/payment/request.json',
-    VERIFICATION: 'https://api.zarinpal.com/pg/v4/payment/verify.json',
-    PAYMENT: 'https://www.zarinpal.com/pg/StartPay/',
-  },
-  sandbox: {
-    REQUEST: 'https://sandbox.zarinpal.com/pg/v4/payment/request.json',
-    VERIFICATION: 'https://sandbox.zarinpal.com/pg/v4/payment/verify.json',
-    PAYMENT: 'https://sandbox.zarinpal.com/pg/StartPay/',
+    REQUEST: 'https://api.idpay.ir/v1.1/payment',
+    VERIFICATION: 'https://api.idpay.ir/v1.1/payment/verify',
+    PAYMENT: '',
   },
 };
 
