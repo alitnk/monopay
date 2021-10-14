@@ -9,7 +9,7 @@ jest.mock('axios');
 const mockedAxios = axios as jest.Mocked<typeof axios>;
 describe('IdPay Driver', () => {
   it('returns the correct payment url', async () => {
-    const serverResponse: API.PurchaseResponse = {
+    const serverResponse: API.RequestPaymentRes = {
       id: '123',
       link: 'https://somelink.com/',
     };
@@ -24,7 +24,7 @@ describe('IdPay Driver', () => {
   });
 
   it('throws payment errors accordingly', async () => {
-    const serverResponse: API.PurchaseResponse = {
+    const serverResponse: API.RequestPaymentRes = {
       error_code: 100,
       error_message: 'Some error happened',
     };
@@ -39,7 +39,7 @@ describe('IdPay Driver', () => {
   });
 
   it('verifies the purchase correctly', async () => {
-    const serverResponse: API.VerifyResponse = {
+    const serverResponse: API.VerifyPaymentRes = {
       status: 200,
       date: new Date().toString(),
       order_id: '321',

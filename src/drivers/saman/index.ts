@@ -10,7 +10,7 @@ export class Saman extends Driver<API.Config> {
   requestPayment = async (options: API.RequestOptions) => {
     const { amount, callbackUrl, mobile, wage } = options;
     const { merchantId } = this.config;
-    const response = await axios.post<API.PurchaseRequest, { data: API.PurchaseResponse }>(this.getLinks().REQUEST, {
+    const response = await axios.post<API.RequestPaymentReq, { data: API.RequestPaymentRes }>(this.getLinks().REQUEST, {
       Amount: amount,
       RedirectURL: callbackUrl,
       CellNumber: mobile,

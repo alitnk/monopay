@@ -44,7 +44,7 @@ export interface MultiplexingObject {
   wagePayer: boolean;
 }
 
-export interface PurchaseRequest {
+export interface RequestPaymentReq {
   /**
    *  ضروری جهت احراز هویت
    */
@@ -97,7 +97,7 @@ export interface PurchaseRequest {
    */
   multiplexingInfos?: MultiplexingObject[];
 }
-export interface PurchaseResponse {
+export interface RequestPaymentRes {
   /**
    * شناسه منحصربه‌فرد هر جلسه پرداخت درگاه پرداخت اینترنتی زیبال که استعلام وضعیت پرداخت و درخواست‌های گزارش‌گیری با استفاده از این شناسه امکان‌پذیر است.
    */
@@ -173,7 +173,7 @@ export const callbackErrors: ErrorList = {
   '12': 'کارت قابل دسترسی نمی‌باشد.',
 };
 
-export interface VerifyRequest {
+export interface VerifyPaymentReq {
   /**
    * 	ضروری جهت احراز هویت
    */
@@ -185,7 +185,7 @@ export interface VerifyRequest {
   trackId: number;
 }
 
-export interface VerifyResponse {
+export interface VerifyPaymentRes {
   /**
    * 	تاریخ پرداخت سفارش - به فرمت ISODate (در صورت موفقیت‌آمیز بودن پرداخت)
    */
@@ -259,5 +259,5 @@ export interface RequestOptions extends PaymentRequestOptions {
 export interface VerifyOptions extends PaymentVerifyOptions {}
 
 export interface Receipt extends PaymentReceipt {
-  raw: VerifyResponse;
+  raw: VerifyPaymentRes;
 }

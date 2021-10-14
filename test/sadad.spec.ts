@@ -9,7 +9,7 @@ jest.mock('axios');
 const mockedAxios = axios as jest.Mocked<typeof axios>;
 describe('Sadad Driver', () => {
   it('returns the correct payment url', async () => {
-    const serverResponse: API.PurchaseResponse = {
+    const serverResponse: API.RequestPaymentRes = {
       Token: 'some-token',
       ResCode: 0,
       Description: 'description',
@@ -35,7 +35,7 @@ describe('Sadad Driver', () => {
   });
 
   it('throws payment errors accordingly', async () => {
-    const serverResponse: API.PurchaseResponse = {
+    const serverResponse: API.RequestPaymentRes = {
       Token: 'some-token',
       ResCode: 3,
       Description: 'description',
@@ -60,7 +60,7 @@ describe('Sadad Driver', () => {
   });
 
   it('verifies the purchase correctly', async () => {
-    const serverResponse: API.VerifyResponse = {
+    const serverResponse: API.VerifyPaymentRes = {
       Amount: 10000,
       OrderId: 123123,
       Description: 'description',

@@ -16,7 +16,7 @@ export class IdPay extends Driver<API.Config> {
   requestPayment = async (options: API.RequestOptions) => {
     const { amount, callbackUrl, mobile, email, description, name } = options;
 
-    let response = await axios.post<API.PurchaseRequest, { data: API.PurchaseResponse }>(
+    let response = await axios.post<API.RequestPaymentReq, { data: API.RequestPaymentRes }>(
       this.getLinks().REQUEST,
       {
         amount: amount,
@@ -33,7 +33,7 @@ export class IdPay extends Driver<API.Config> {
     );
 
     if ('error_message' in response.data) {
-      const error = response.data as API.FailedResponse;
+      const error = response.data as API.RequestPaymentRes_Failed;
       throw new RequestException(API.errors[error.error_code.toString()]);
     }
 
@@ -42,7 +42,7 @@ export class IdPay extends Driver<API.Config> {
 
   verifyPayment = async (
     _options: API.VerifyOptions,
-    params: API.CallbackParamsGET | API.CallbackParamsPOST
+    params: API.CallbackParams_GET | API.CallbackParams_POST
   ): Promise<API.Receipt> => {
     const { id, order_id, status } = params;
 
@@ -50,7 +50,7 @@ export class IdPay extends Driver<API.Config> {
       throw new PaymentException(API.callbackErrors[status.toString()]);
     }
 
-    const response = await axios.post<API.VerifyRequest, { data: API.VerifyResponse }>(
+    const response = await axios.post<API.VerifyPaymentReq, { data: API.VerifyPaymentRes }>(
       this.getLinks().VERIFICATION,
       {
         order_id,

@@ -17,7 +17,7 @@ export const links: LinksObject = {
   },
 };
 
-export interface PurchaseRequest {
+export interface RequestPaymentReq {
   /**
    * 	بله	كد 36 كاراكتري اختصاصي پذيرنده
    */
@@ -54,7 +54,7 @@ export interface PurchaseRequest {
   };
 }
 
-export interface PurchaseResponse {
+export interface RequestPaymentRes {
   data:
     | {
         code: 100;
@@ -90,7 +90,7 @@ export interface CallbackParams {
   Status: 'OK' | 'NOK';
 }
 
-export interface VerifyRequest {
+export interface VerifyPaymentReq {
   /**
    * 	كد 36 كاراكتري اختصاصي پذيرنده
    */
@@ -107,7 +107,7 @@ export interface VerifyRequest {
   authority: string;
 }
 
-export interface VerifyResponse {
+export interface VerifyPaymentRes {
   data:
     | {
         code: number;
@@ -157,5 +157,5 @@ export interface RequestOptions extends PaymentRequestOptions {
 export interface VerifyOptions extends PaymentVerifyOptions {}
 
 export interface Receipt extends PaymentReceipt {
-  raw: Exclude<VerifyResponse['data'], any[]>;
+  raw: Exclude<VerifyPaymentRes['data'], any[]>;
 }

@@ -9,7 +9,7 @@ jest.mock('axios');
 const mockedAxios = axios as jest.Mocked<typeof axios>;
 describe('Zibal Driver', () => {
   it('returns the correct payment url', async () => {
-    const serverResponse: API.PurchaseResponse = {
+    const serverResponse: API.RequestPaymentRes = {
       message: 'hello',
       result: 100,
       trackId: 1234,
@@ -25,7 +25,7 @@ describe('Zibal Driver', () => {
   });
 
   it('throws payment errors accordingly', async () => {
-    const serverResponse: API.PurchaseResponse = {
+    const serverResponse: API.RequestPaymentRes = {
       result: 102,
       message: 'some error',
       trackId: 1234,
@@ -41,7 +41,7 @@ describe('Zibal Driver', () => {
   });
 
   it('verifies the purchase correctly', async () => {
-    const serverResponse: API.VerifyResponse = {
+    const serverResponse: API.VerifyPaymentRes = {
       paidAt: '2018-03-25T23:43:01.053000',
       amount: 1600,
       result: 100,

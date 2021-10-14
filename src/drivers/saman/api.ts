@@ -12,7 +12,7 @@ export const links: LinksObject = {
   },
 };
 
-export interface PurchaseRequest {
+export interface RequestPaymentReq {
   Amount: number;
   TerminalId: string;
   RedirectURL: string;
@@ -23,7 +23,7 @@ export interface PurchaseRequest {
   CellNumber?: string;
 }
 
-export interface PurchaseResponse {
+export interface RequestPaymentRes {
   status: 1 | -1;
   errorCode?: number;
   errorDesc?: string;
@@ -117,9 +117,9 @@ export const callbackErrors: ErrorList = {
   '12': 'شماره ترمینال ارسال شده یافت نشد.',
 };
 
-export interface VerifyRequest {}
+export interface VerifyPaymentReq {}
 
-export type VerifyResponse = number;
+export type VerifyPaymentRes = number;
 
 /*
  * Package's API

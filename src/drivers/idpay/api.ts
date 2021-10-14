@@ -12,7 +12,7 @@ export const links: LinksObject = {
   },
 };
 
-export interface PurchaseRequest {
+export interface RequestPaymentReq {
   /**
    * سفارش پذیرنده
    * به طول حداکثر 50 کاراکتر
@@ -57,7 +57,7 @@ export interface PurchaseRequest {
   callback: string;
 }
 
-export interface SuccessfulPurchaseResponse {
+export interface RequestPaymenRes_Successful {
   /**
    *  کلید منحصر بفرد تراکنش
    */
@@ -69,14 +69,14 @@ export interface SuccessfulPurchaseResponse {
   link: string;
 }
 
-export interface FailedResponse {
+export interface RequestPaymentRes_Failed {
   error_code: number;
   error_message: string;
 }
 
-export type PurchaseResponse = SuccessfulPurchaseResponse | FailedResponse;
+export type RequestPaymentRes = RequestPaymenRes_Successful | RequestPaymentRes_Failed;
 
-export interface CallbackParamsPOST {
+export interface CallbackParams_POST {
   /**
    * وضعیت تراکنش
    */
@@ -111,7 +111,7 @@ export interface CallbackParamsPOST {
   date: string;
 }
 
-export interface CallbackParamsGET {
+export interface CallbackParams_GET {
   /**
    *  وضعیت تراکنش
    */
@@ -148,7 +148,7 @@ export const callbackErrors: ErrorList = {
   '200': 'به دریافت کننده واریز شد',
 };
 
-export interface VerifyRequest {
+export interface VerifyPaymentReq {
   /**
    *  بله کلید منحصر بفرد تراکنش که در مرحله ایجاد تراکنش دریافت شده است
    */
@@ -160,7 +160,7 @@ export interface VerifyRequest {
   order_id: string;
 }
 
-export interface SuccessfulVerifyResponse {
+export interface VerifyPaymentRes_Successful {
   /**
    * 	وضعیت تراکنش
    */
@@ -222,7 +222,13 @@ export interface SuccessfulVerifyResponse {
   };
 }
 
-export type VerifyResponse = SuccessfulVerifyResponse | FailedResponse;
+export interface VerifyPaymentRes_Failed {
+  error_code: number;
+  error_message: string;
+}
+
+
+export type VerifyPaymentRes = VerifyPaymentRes_Successful | VerifyPaymentRes_Failed;
 
 /**
  * @link https://idpay.ir/web-service/v1.1/#ad39f18522
@@ -295,5 +301,5 @@ export interface RequestOptions extends PaymentRequestOptions {
 export interface VerifyOptions extends PaymentVerifyOptions {}
 
 export interface Receipt extends PaymentReceipt {
-  raw: Exclude<VerifyResponse, any[]>;
+  raw: Exclude<VerifyPaymentRes, any[]>;
 }

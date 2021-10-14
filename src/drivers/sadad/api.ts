@@ -13,7 +13,7 @@ export const links: LinksObject = {
   },
 };
 
-export interface PurchaseRequest {
+export interface RequestPaymentReq {
   /**
    * شماره پذيرنده اختصاص داده شده.
    */
@@ -78,7 +78,7 @@ export interface PurchaseRequest {
   ApplicationName?: string;
 }
 
-export interface PurchaseResponse {
+export interface RequestPaymentRes {
   /**
    * نتیجه تراکنش
    */
@@ -107,7 +107,7 @@ export interface MultiplexingObject {
   MultiplexingRows: MultiplexingRow[];
 }
 
-interface MultiplexingRow {
+export interface MultiplexingRow {
   /**
    * رديف يا شماره شبا حساب
    */
@@ -132,7 +132,7 @@ export interface CallbackParams {
   Token: string;
 }
 
-export interface VerifyRequest {
+export interface VerifyPaymentReq {
   /**
    * توکن
    */
@@ -146,7 +146,7 @@ export interface VerifyRequest {
   SignData: string;
 }
 
-export interface VerifyResponse {
+export interface VerifyPaymentRes {
   /**
    * نتیجه تراکنش
    *

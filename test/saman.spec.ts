@@ -14,7 +14,7 @@ const mockedAxios = axios as jest.Mocked<typeof axios>;
 // const mockedSoap = soap as jest.Mocked<typeof soap>;
 describe('Saman Driver', () => {
   it('returns the correct payment url', async () => {
-    const serverResponse: API.PurchaseResponse = {
+    const serverResponse: API.RequestPaymentRes = {
       token: '123',
       status: 1,
     };
@@ -35,7 +35,7 @@ describe('Saman Driver', () => {
   });
 
   it('throws payment errors accordingly', async () => {
-    const serverResponse: API.PurchaseResponse = {
+    const serverResponse: API.RequestPaymentRes = {
       errorCode: 2,
       status: -1,
     };
@@ -55,7 +55,7 @@ describe('Saman Driver', () => {
   });
 
   it('verifies the purchase correctly', async () => {
-    const serverResponse: API.VerifyResponse = 10000;
+    const serverResponse: API.VerifyPaymentRes = 10000;
     const callbackParams: API.CallbackParams = {
       Amount: '10000',
       MID: '1234',

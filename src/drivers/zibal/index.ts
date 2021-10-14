@@ -13,7 +13,7 @@ export class Zibal extends Driver<API.Config> {
   requestPayment = async (options: API.RequestOptions) => {
     let { amount, ...otherOptions } = options;
 
-    const response = await axios.post<API.PurchaseRequest, { data: API.PurchaseResponse }>(this.getLinks().REQUEST, {
+    const response = await axios.post<API.RequestPaymentReq, { data: API.RequestPaymentRes }>(this.getLinks().REQUEST, {
       merchant: this.getMerchantId(),
       amount: amount,
       ...otherOptions,
@@ -34,7 +34,7 @@ export class Zibal extends Driver<API.Config> {
       throw new PaymentException(API.callbackErrors[status]);
     }
 
-    const response = await axios.post<API.VerifyRequest, { data: API.VerifyResponse }>(this.getLinks().VERIFICATION, {
+    const response = await axios.post<API.VerifyPaymentReq, { data: API.VerifyPaymentRes }>(this.getLinks().VERIFICATION, {
       merchant: this.getMerchantId(),
       trackId: +trackId,
     });
