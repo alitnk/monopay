@@ -23,27 +23,29 @@ export { Zibal } from './drivers/zibal';
 interface ConfigMap {
   idpay: IdPayAPI.Config;
   nextpay: NextPayAPI.Config;
+  payir: PayirAPI.Config;
   sadad: SadadAPI.Config;
   saman: SamanAPI.Config;
   zarinpal: ZarinpalAPI.Config;
   zibal: ZibalAPI.Config;
-  payir: PayirAPI.Config;
 }
 
 export type ConfigObject = Partial<ConfigMap>;
 
+export type DriverName = keyof ConfigMap;
+
 const drivers = {
   idpay: IdPay,
   nextpay: NextPay,
+  payir: Payir,
   sadad: Sadad,
   saman: Saman,
   zarinpal: Zarinpal,
   zibal: Zibal,
-  payir: Payir,
 };
 
 export const getPaymentDriver = <Driver extends BaseDriver>(
-  driverName: keyof ConfigMap,
+  driverName: DriverName,
   config: Parameters<Driver['setConfig']>[0]
 ): Driver => {
   if (!drivers[driverName]) {

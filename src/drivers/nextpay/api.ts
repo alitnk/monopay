@@ -3,6 +3,7 @@ import { BaseReceipt, ErrorList, LinksObject, tBaseRequestOptions, tBaseVerifyOp
 
 /*
  * Zarinpal's API
+ * Currency: IRT
  */
 
 export const links: LinksObject = {

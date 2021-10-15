@@ -3,6 +3,7 @@ import { BaseReceipt, ErrorList, LinksObject, tBaseRequestOptions, tBaseVerifyOp
 
 /*
  * Sadad's API
+ * Currency: IRR
  * link: https://sadadpsp.ir/file/attach/202002/654.pdf
  */
 
