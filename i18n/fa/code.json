@@ -181,10 +181,34 @@
   },
   "get-started": {
     "message": "شروع کنید",
-    "description": "a"
+    "description": "Empty"
   },
   "tagline": {
     "message": "پکیج Node.js برای انجام تراکنش های آنلاین با درگاه های پرداخت مختلف",
-    "description": "a"
+    "description": "Empty"
+  },
+  "features.1.title": {
+    "message": "رابط همگانی",
+    "description": "Empty"
+  },
+  "features.1.description": {
+    "message": "از یک رابط واحد برای ارتباط با تمام درگاه ها استفاده کنید.",
+    "description": "Empty"
+  },
+  "features.2.title": {
+    "message": "درگاه های مختلف",
+    "description": "Empty"
+  },
+  "features.2.description": {
+    "message": "می‌توانید هم‌زمان از چندین درگاه پرداخت مختلف استفاده کنید.",
+    "description": "Empty"
+  },
+  "features.3.title": {
+    "message": "تایپ های امن",
+    "description": "Empty"
+  },
+  "features.3.description": {
+    "message": "در صورتی که از تایپ‌اسکریپت استفاده می‌کنید،‌ تمام تایپ ها برای شما مشخص خواهند شد.",
+    "description": "Empty"
   }
 }

@@ -12,14 +12,14 @@ import configJs from "!!raw-loader!../../../../../snippets/config.js";
 اگر از چند درایور استفاده می‌کنید، می توانید یک فایل جدا بسازید و همه ی پیکربندی‌ها را در آن نگه دارید.
 
 <Tabs>
-  <TabItem value="typescript" label="TypeScript">
-    <CodeBlock className="language-ts" title="polypay-config.ts">
-      {configTs}
-    </CodeBlock>
-  </TabItem>
   <TabItem value="javascript" label="JavaScript" default>
     <CodeBlock className="language-js" title="polypay-config.js">
       {configJs}
+    </CodeBlock>
+  </TabItem>
+  <TabItem value="typescript" label="TypeScript">
+    <CodeBlock className="language-ts" title="polypay-config.ts">
+      {configTs}
     </CodeBlock>
   </TabItem>
 </Tabs>

@@ -1,35 +1,34 @@
 import React from 'react';
 import clsx from 'clsx';
-import Link from '@docusaurus/Link';
 import styles from './HomepageFeatures.module.css';
+import Translate, { translate } from '@docusaurus/Translate';
 
 const FeatureList = [
   {
-    title: 'Monolithic API',
+    title: translate({ id: 'features.1.title', message: 'Monolithic API' }),
     Svg: require('../../static/img/undraw_docusaurus_mountain.svg').default,
     description: (
-      <>
-        Polypay gives you a single API to communicate with different payment
-        services, you can find a list of the services <Link to="/docs/supported-drivers">here.</Link>
-      </>
+      <Translate id="features.1.description">
+        Polypay gives you a single API to communicate with different payment services.
+      </Translate>
     ),
   },
   {
-    title: 'Different Drivers',
+    title: translate({ id: 'features.2.title', message: 'Different Drivers' }),
     Svg: require('../../static/img/undraw_docusaurus_tree.svg').default,
     description: (
-      <>
+      <Translate id="features.2.description">
         You'll be able to use multiple payment services and change them on runtime.
-      </>
+      </Translate>
     ),
   },
   {
-    title: 'Full type-safety',
+    title: translate({ id: 'features.3.title', message: 'Full type-safety' }),
     Svg: require('../../static/img/undraw_docusaurus_react.svg').default,
     description: (
-      <>
-        You can get full type-safety if you use this package with TypeScript.
-      </>
+      <Translate id="features.3.description">
+        You get full type-safety if you use this package with TypeScript.
+      </Translate>
     ),
   },
 ];
