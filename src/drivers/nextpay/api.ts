@@ -2,7 +2,7 @@ import * as t from 'io-ts';
 import { BaseReceipt, ErrorList, LinksObject, tBaseRequestOptions, tBaseVerifyOptions } from '../../types';
 
 /*
- * Zarinpal's API
+ * NextPay's API
  * Currency: IRT
  */
 
