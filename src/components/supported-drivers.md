@@ -5,3 +5,5 @@
 - [sadad](https://sadadpsp.ir/)
 - [nextpay](https://nextpay.ir/)
 - [payir](https://pay.ir)
+- [payping](https://payping.ir)
+
