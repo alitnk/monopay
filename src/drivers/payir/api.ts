@@ -3,7 +3,7 @@ import { BaseReceipt, ErrorList, LinksObject, tBaseRequestOptions, tBaseVerifyOp
 
 /*
  * Payir's API
-* Currency: IRR
+ * Currency: IRR
  */
 
 export const links: LinksObject = {
