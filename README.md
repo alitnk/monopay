@@ -21,9 +21,8 @@ yarn add polypay
 
 ## Usage
 
-[Usage Guide](https://alitnk.github.io/polypay.js/docs/usage/request-payment)
-
-[نحوه استفاده به فارسی](https://alitnk.github.io/polypay.js/fa/docs/usage/request-payment)
+- [Usage Guide](https://alitnk.github.io/polypay.js/docs/usage/request-payment)
+- [نحوه استفاده به فارسی](https://alitnk.github.io/polypay.js/fa/docs/usage/request-payment)
 
 ## Example
 
@@ -40,7 +39,7 @@ const driver = getPaymentDriver('zibal', {
 
 ```javascript
 const paymentInfo = await driver.requestPayment({
-    amount: 20000,
+    amount: 200000, // IRR
     callbackUrl: 'mysite.com/callback',
 });
 ```
@@ -49,7 +48,7 @@ const paymentInfo = await driver.requestPayment({
 ```javascript
 app.all('/callback', async (req, res) => {
   const receipt = await driver.verifyPayment({
-      amount: 2000, 
+      amount: 200000, // IRR
       referenceId: 1234,
   }, { ...req.query, ...req.body }); 
 
