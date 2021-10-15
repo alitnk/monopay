@@ -25,6 +25,42 @@ yarn add polypay
 
 [نحوه استفاده به فارسی](https://alitnk.github.io/polypay.js/fa/docs/usage/request-payment)
 
+## Example
+
+### Getting a payment driver
+
+```javascript
+const driver = getPaymentDriver('zibal', {
+  merchantId: 'merchant-id',
+  sandbox: true,
+});
+```
+
+### Requesting for payment
+
+```javascript
+const paymentInfo = await driver.requestPayment({
+    amount: 20000,
+    callbackUrl: 'mysite.com/callback',
+});
+```
+
+### Verifying the payment in callback
+```javascript
+app.all('/callback', async (req, res) => {
+  const receipt = await driver.verifyPayment({
+      amount: 2000, 
+      referenceId: 1234,
+  }, { ...req.query, ...req.body }); 
+
+  res.json({
+      referenceId: receipt.referenceId,
+      success: true,
+      message: 'The payment transaction was successful.',
+  })
+})
+```
+A full example with express can be found [here](examples/express-example)
 
 ## Contribution
 
