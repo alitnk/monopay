@@ -17,12 +17,13 @@ export class NextPay extends Driver<API.Config> {
 
     const response = await axios.post<API.RequestPaymentReq, { data: API.RequestPaymentRes }>(this.getLinks().REQUEST, {
       api_key: this.config.apiKey,
-      amount,
+      amount: amount * 10,
       callback_uri: callbackUrl,
       customer_phone: mobile ? +mobile : undefined,
       order_id: this.generateUuid(),
       custom_json_fields: customFields,
     });
+
     const { code, trans_id } = response.data;
 
     if (code.toString() !== '0') {
@@ -42,7 +43,7 @@ export class NextPay extends Driver<API.Config> {
     const response = await axios.post<API.VerifyPaymentReq, { data: API.VerifyPaymentRes }>(
       this.getLinks().VERIFICATION,
       {
-        amount: +amount,
+        amount: +amount * 10,
         trans_id,
         api_key: this.config.apiKey,
       }
