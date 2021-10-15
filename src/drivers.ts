@@ -1,4 +1,6 @@
 import { Driver as BaseDriver } from './driver';
+import { Behpardakht } from './drivers/behpardakht';
+import * as BehpardakhtAPI from './drivers/behpardakht/api';
 import { IdPay } from './drivers/idpay';
 import * as IdPayAPI from './drivers/idpay/api';
 import { NextPay } from './drivers/nextpay';
@@ -16,6 +18,7 @@ import * as ZarinpalAPI from './drivers/zarinpal/api';
 import { Zibal } from './drivers/zibal';
 import * as ZibalAPI from './drivers/zibal/api';
 
+export { Behpardakht } from './drivers/behpardakht';
 export { IdPay } from './drivers/idpay';
 export { NextPay } from './drivers/nextpay';
 export { PayPing } from './drivers/payping';
@@ -24,6 +27,7 @@ export { Saman } from './drivers/saman';
 export { Zarinpal } from './drivers/zarinpal';
 export { Zibal } from './drivers/zibal';
 interface ConfigMap {
+  behpardakht: BehpardakhtAPI.Config;
   idpay: IdPayAPI.Config;
   nextpay: NextPayAPI.Config;
   payir: PayirAPI.Config;
@@ -39,6 +43,7 @@ export type ConfigObject = Partial<ConfigMap>;
 export type DriverName = keyof ConfigMap;
 
 const drivers = {
+  behpardakht: Behpardakht,
   idpay: IdPay,
   nextpay: NextPay,
   payir: Payir,
