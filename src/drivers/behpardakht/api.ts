@@ -148,7 +148,7 @@ export interface VerifyPaymentReq {
 
 /**
  * The response of `bpVerifyRequest`
- * 
+ *
  * a ResCode
  */
 export type VerifyPaymentRes = string;
