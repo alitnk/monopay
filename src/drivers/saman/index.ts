@@ -57,19 +57,7 @@ export class Saman extends Driver<API.Config> {
     return {
       transactionId: +transactionId,
       cardPan: params.SecurePan,
-      raw: {
-        MID: params.MID,
-        State: params.State,
-        Status: params.Status,
-        RRN: params.RRN,
-        RefNum: params.RefNum,
-        ResNum: params.ResNum,
-        TerminalId: params.TerminalId,
-        TraceNo: params.TraceNo,
-        Amount: params.Amount,
-        Wage: params.Wage,
-        SecurePan: params.SecurePan,
-      },
+      raw: params,
     };
   };
 }

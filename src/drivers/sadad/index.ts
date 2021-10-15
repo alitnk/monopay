@@ -65,14 +65,7 @@ export class Sadad extends Driver<API.Config> {
     return {
       transactionId: SystemTraceNo,
       cardPan: HashedCardNo,
-      raw: {
-        HashedCardNo: params.HashedCardNo,
-        OrderId: params.OrderId,
-        PrimaryAccNo: params.PrimaryAccNo,
-        ResCode: params.ResCode,
-        SwitchResCode: params.SwitchResCode,
-        Token: params.Token,
-      },
+      raw: params,
     };
   };
 }
