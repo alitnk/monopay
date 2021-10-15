@@ -22,6 +22,7 @@ yarn add polypay
 ## Usage
 
 [Usage Guide](https://alitnk.github.io/polypay.js/docs/usage/request-payment)
+
 [نحوه استفاده به فارسی](https://alitnk.github.io/polypay.js/fa/docs/usage/request-payment)
 
 
