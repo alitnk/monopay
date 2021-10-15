@@ -18,9 +18,9 @@ describe('IdPay Driver', () => {
 
     const driver = getPaymentDriver<IdPay>('idpay', { apiKey: '2134' });
 
-    expect(typeof (await driver.requestPayment({ callbackUrl: 'https://google.com', amount: 20000 })).url).toBe(
-      'string'
-    );
+    expect(
+      typeof (await driver.requestPayment({ callbackUrl: 'https://path.to/callback-url', amount: 20000 })).url
+    ).toBe('string');
   });
 
   it('throws payment errors accordingly', async () => {
