@@ -1,6 +1,8 @@
+![polypay.js](https://github.com/alitnk/polypay.js/raw/graphics/github-readme-logo.png)
+
 # polypay.js
 
-A node.js package for making payment transactions with different Iranian IPGs
+A node.js package for making payment transactions with different Iranian IPGs with one single API.
 
 ## Documentation
 
@@ -12,6 +14,7 @@ A node.js package for making payment transactions with different Iranian IPGs
 For npm users:
 ```shell
 npm install polypay
+
 ```
 
 For yarn users:
