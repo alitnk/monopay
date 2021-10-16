@@ -210,5 +210,21 @@
   "features.3.description": {
     "message": "در صورتی که از تایپ‌اسکریپت استفاده می‌کنید،‌ تمام تایپ ها برای شما مشخص خواهند شد.",
     "description": "Empty"
+  },
+  "driver": {
+    "message": "درایور",
+    "description": "Empty"
+  },
+  "implemented": {
+    "message": "انجام شده",
+    "description": "Empty"
+  },
+  "unit-tests": {
+    "message": "یونیت تست",
+    "description": "Empty"
+  },
+  "stable": {
+    "message": "پایدار (تست شده در پروژه واقعی)",
+    "description": "Empty"
   }
 }
