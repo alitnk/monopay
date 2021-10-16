@@ -1,7 +1,7 @@
-import { Behpardakht } from '../src/drivers/behpardakht';
-import * as API from '../src/drivers/behpardakht/api';
-import { RequestException } from '../src/exceptions';
-import { getPaymentDriver } from '../src/drivers';
+import { Behpardakht } from '../../src/drivers/behpardakht';
+import * as API from '../../src/drivers/behpardakht/api';
+import { RequestException } from '../../src/exceptions';
+import { getPaymentDriver } from '../../src/drivers';
 
 const mockSoapClient: any = {};
 jest.mock('soap', () => ({

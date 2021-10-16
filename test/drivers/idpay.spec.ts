@@ -1,23 +1,22 @@
 import axios from 'axios';
-import { Zibal } from '../src/drivers/zibal';
-import * as API from '../src/drivers/zibal/api';
-import { RequestException } from '../src/exceptions';
-import { getPaymentDriver } from '../src/drivers';
+import { IdPay } from '../../src/drivers/idpay';
+import * as API from '../../src/drivers/idpay/api';
+import { RequestException } from '../../src/exceptions';
+import { getPaymentDriver } from '../../src/drivers';
 
 jest.mock('axios');
 
 const mockedAxios = axios as jest.Mocked<typeof axios>;
-describe('Zibal Driver', () => {
+describe('IdPay Driver', () => {
   it('returns the correct payment url', async () => {
     const serverResponse: API.RequestPaymentRes = {
-      message: 'hello',
-      result: 100,
-      trackId: 1234,
+      id: '123',
+      link: 'https://somelink.com/',
     };
 
     mockedAxios.post.mockResolvedValueOnce({ data: serverResponse });
 
-    const driver = getPaymentDriver<Zibal>('zibal', { merchantId: '2134' });
+    const driver = getPaymentDriver<IdPay>('idpay', { apiKey: '2134' });
 
     expect(
       typeof (await driver.requestPayment({ callbackUrl: 'https://path.to/callback-url', amount: 20000 })).url
@@ -26,14 +25,13 @@ describe('Zibal Driver', () => {
 
   it('throws payment errors accordingly', async () => {
     const serverResponse: API.RequestPaymentRes = {
-      result: 102,
-      message: 'some error',
-      trackId: 1234,
+      error_code: 100,
+      error_message: 'Some error happened',
     };
 
     mockedAxios.post.mockResolvedValueOnce({ data: serverResponse });
 
-    const driver = getPaymentDriver<Zibal>('zibal', { merchantId: '2134' });
+    const driver = getPaymentDriver<IdPay>('idpay', { apiKey: '2134' });
 
     await expect(async () => await driver.requestPayment({ amount: 2000, callbackUrl: 'asd' })).rejects.toThrow(
       RequestException
@@ -42,24 +40,32 @@ describe('Zibal Driver', () => {
 
   it('verifies the purchase correctly', async () => {
     const serverResponse: API.VerifyPaymentRes = {
-      paidAt: '2018-03-25T23:43:01.053000',
-      amount: 1600,
-      result: 100,
-      status: 1,
-      refNumber: 1234,
-      description: 'Hello World!',
-      cardNumber: '62741****44',
-      orderId: '2211',
-      message: 'success',
+      status: 200,
+      date: new Date().toString(),
+      order_id: '321',
+      id: '123',
+      track_id: 1234,
+      amount: 20000,
+      verify: {
+        date: new Date().toString(),
+      },
+      payment: {
+        amount: 20000,
+        card_no: '1234-****-***-1234',
+        date: new Date().toString(),
+        hashed_card_no: 'hash',
+        track_id: '1234',
+      },
     };
     const expectedResult: API.Receipt = { transactionId: 1234, raw: serverResponse };
 
     mockedAxios.post.mockResolvedValueOnce({ data: serverResponse });
 
-    const driver = getPaymentDriver<Zibal>('zibal', { merchantId: '2134' });
+    const driver = getPaymentDriver<IdPay>('idpay', { apiKey: '2134' });
 
     expect(
-      (await driver.verifyPayment({ amount: 2000 }, { trackId: '12345', status: '1', success: '1' })).transactionId
+      (await driver.verifyPayment({ amount: 2000 }, { status: '200', track_id: '1234', id: '123', order_id: '321' }))
+        .transactionId
     ).toEqual(expectedResult.transactionId);
   });
 });

@@ -1,8 +1,8 @@
 import axios from 'axios';
-import { Zarinpal } from '../src/drivers/zarinpal';
-import * as API from '../src/drivers/zarinpal/api';
-import { RequestException } from '../src/exceptions';
-import { getPaymentDriver } from '../src/drivers';
+import { Zarinpal } from '../../src/drivers/zarinpal';
+import * as API from '../../src/drivers/zarinpal/api';
+import { RequestException } from '../../src/exceptions';
+import { getPaymentDriver } from '../../src/drivers';
 
 jest.mock('axios');
 
