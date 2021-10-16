@@ -4,6 +4,8 @@ import { BaseReceipt, ErrorList, LinksObject, tBaseRequestOptions, tBaseVerifyOp
 /*
  * Behpardakht's API
  * Currency: IRR
+ *
+ * Docs: https://vrgl.ir/WgLQh
  */
 
 export const links: LinksObject = {
