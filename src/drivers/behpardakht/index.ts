@@ -90,7 +90,7 @@ export class Behpardakht extends Driver<API.Config> {
   };
 
   /**
-   * ‫‪YYYYMMDD‬‬
+   * YYYYMMDD
    */
   dateFormat(date = new Date()) {
     const yyyy = date.getFullYear();
