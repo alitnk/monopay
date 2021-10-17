@@ -4,12 +4,12 @@
 
 A node.js package for making payment transactions with different Iranian IPGs with one single API.
 
-## Documentation
+## 📖 Documentation
 
 - [Documentation](https://alitnk.github.io/polypay.js/)
 - [مستندات فارسی](https://alitnk.github.io/polypay.js/fa/)
 
-## Installation
+## 🔌 Installation
 
 For npm users:
 ```shell
@@ -22,12 +22,12 @@ For yarn users:
 yarn add polypay
 ```
 
-## Usage
+## 🚀 Usage
 
 - [Usage Guide](https://alitnk.github.io/polypay.js/docs/usage/request-payment)
 - [نحوه استفاده به فارسی](https://alitnk.github.io/polypay.js/fa/docs/usage/request-payment)
 
-## Example
+## ⚒ Examples
 
 ### Getting a payment driver
 
@@ -64,14 +64,10 @@ app.all('/callback', async (req, res) => {
 ```
 A full example with express can be found [here](examples/express-example)
 
-## Contribution
+## 🤝 Contribution
 
 Please read [Contribution](CONTRIBUTING.md) and [Code Of Conduct](CODE_OF_CONDUCT.md).
 
-## License
+## 📝 License
 
 MIT License - Please see [License File](License) for more information.
-
-## Attribution
-
-Thumbnail attribution: [Abstract vector created by vectorjuice](https://www.freepik.com/vectors/abstract)
