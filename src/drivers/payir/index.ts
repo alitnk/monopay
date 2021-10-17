@@ -1,7 +1,7 @@
-import { Driver } from '../../driver';
-import * as API from './api';
 import axios from 'axios';
+import { Driver } from '../../driver';
 import { PaymentException, RequestException, VerificationException } from '../../exceptions';
+import * as API from './api';
 
 export class Payir extends Driver<API.Config> {
   constructor(config: API.Config) {

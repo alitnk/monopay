@@ -1,8 +1,8 @@
 import axios from 'axios';
+import { getPaymentDriver } from '../../src/drivers';
 import { NextPay } from '../../src/drivers/nextpay';
 import * as API from '../../src/drivers/nextpay/api';
 import { RequestException } from '../../src/exceptions';
-import { getPaymentDriver } from '../../src/drivers';
 
 jest.mock('axios');
 

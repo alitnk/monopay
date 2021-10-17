@@ -1,7 +1,7 @@
+import { getPaymentDriver } from '../../src/drivers';
 import { Parsian } from '../../src/drivers/parsian';
 import * as API from '../../src/drivers/parsian/api';
 import { RequestException } from '../../src/exceptions';
-import { getPaymentDriver } from '../../src/drivers';
 
 const mockSoapClient: any = {};
 jest.mock('soap', () => ({

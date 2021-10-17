@@ -5,7 +5,7 @@ import reporter from 'io-ts-reporters';
 import { v4 as uuidv4 } from 'uuid';
 import { BadConfigException } from './exceptions';
 import { PaymentInfo } from './payment-info';
-import { LinksObject, BaseReceipt } from './types';
+import { BaseReceipt, LinksObject } from './types';
 
 export abstract class Driver<Config = any> {
   protected config: Config;

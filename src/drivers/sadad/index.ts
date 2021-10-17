@@ -1,8 +1,8 @@
 import axios from 'axios';
+import CryptoJS from 'crypto-js';
 import { Driver } from '../../driver';
 import { PaymentException, RequestException, VerificationException } from '../../exceptions';
 import * as API from './api';
-import CryptoJS from 'crypto-js';
 
 export class Sadad extends Driver<API.Config> {
   constructor(config: API.Config) {

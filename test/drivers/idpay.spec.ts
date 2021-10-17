@@ -1,8 +1,8 @@
 import axios from 'axios';
+import { getPaymentDriver } from '../../src/drivers';
 import { IdPay } from '../../src/drivers/idpay';
 import * as API from '../../src/drivers/idpay/api';
 import { RequestException } from '../../src/exceptions';
-import { getPaymentDriver } from '../../src/drivers';
 
 jest.mock('axios');
 
