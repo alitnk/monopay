@@ -24,6 +24,7 @@ export { Behpardakht } from './drivers/behpardakht';
 export { IdPay } from './drivers/idpay';
 export { NextPay } from './drivers/nextpay';
 export { Parsian } from './drivers/parsian';
+export { Payir } from './drivers/payir';
 export { PayPing } from './drivers/payping';
 export { Sadad } from './drivers/sadad';
 export { Saman } from './drivers/saman';
