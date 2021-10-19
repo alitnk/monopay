@@ -1,8 +1,14 @@
 ![polypay.js](https://github.com/alitnk/polypay.js/raw/graphics/github-readme-logo.png)
 
-# polypay.js
+# polypay - پُلی‌پِی
+![NPM Version](https://img.shields.io/npm/v/polypay?style=for-the-badge)
+![NPM Downloads](https://img.shields.io/npm/dm/polypay?style=for-the-badge)
+![License](https://img.shields.io/npm/l/polypay?style=for-the-badge)
+![Last Comit](https://img.shields.io/github/last-commit/alitnk/polypay.js?style=for-the-badge)
 
 A node.js package for making payment transactions with different Iranian IPGs with one single API.
+
+> در صورتی که از پکیج خوشتون اومده، بهش استار بدید تا بیشتر دیده بشه و مشکلاتش زودتر برطرف بشن. 🙏
 
 ## 📖 Documentation
 
@@ -29,7 +35,7 @@ yarn add polypay
 
 ## ⚒ Examples
 
-### Getting a payment driver
+### 1️⃣ Getting a payment driver
 
 ```javascript
 const driver = getPaymentDriver('zibal', {
@@ -38,7 +44,7 @@ const driver = getPaymentDriver('zibal', {
 });
 ```
 
-### Requesting for payment
+### 2️⃣ Requesting for payment
 
 ```javascript
 const paymentInfo = await driver.requestPayment({
@@ -47,7 +53,7 @@ const paymentInfo = await driver.requestPayment({
 });
 ```
 
-### Verifying the payment in callback
+### 3️⃣ Verifying the payment in callback
 ```javascript
 app.all('/callback', async (req, res) => {
   const receipt = await driver.verifyPayment({
