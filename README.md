@@ -1,6 +1,6 @@
 ![polypay.js](https://github.com/alitnk/polypay.js/raw/graphics/github-readme-logo.png)
 
-# polypay - پُلی‌پِی
+# PolyPay - پُلی‌پِی
 ![Intended Runtime Environment: Node.js](https://img.shields.io/badge/Node.js-43853D?style=for-the-badge&logo=node.js&logoColor=white)
 ![NPM Version](https://img.shields.io/npm/v/polypay?style=for-the-badge)
 ![NPM Downloads](https://img.shields.io/npm/dm/polypay?style=for-the-badge)
