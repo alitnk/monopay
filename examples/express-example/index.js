@@ -1,13 +1,13 @@
 require('dotenv').config()
 const express = require('express')
-const { getPaymentDriver } = require('polypay')
+const { getPaymentDriver } = require('monopay')
 
 const app = express()
 app.use(express.urlencoded({ extended: true }));
 const port = 3000
 
-/** @type {import('polypay').ConfigObject} */
-const polypayConfiguration = {
+/** @type {import('monopay').ConfigObject} */
+const monopayConfiguration = {
     zibal: {
         merchantId: 'your-merchant-id',
         sandbox: true,
@@ -30,7 +30,7 @@ const polypayConfiguration = {
     }
 }
 
-/** @type {import('polypay').DriverName} */
+/** @type {import('monopay').DriverName} */
 const chosenDriver = 'nextpay'
 
 /**
@@ -38,7 +38,7 @@ const chosenDriver = 'nextpay'
  */
 app.get('/purchase', async (req, res) => {
     try {
-        const driver = getPaymentDriver(chosenDriver, polypayConfiguration[chosenDriver]);
+        const driver = getPaymentDriver(chosenDriver, monopayConfiguration[chosenDriver]);
 
         const paymentInfo = await driver.requestPayment({
             amount: 20000,
@@ -63,7 +63,7 @@ app.get('/purchase', async (req, res) => {
  */
 app.all('/callback', async (req, res) => {
     try {
-        const driver = getPaymentDriver(chosenDriver, polypayConfiguration[chosenDriver])
+        const driver = getPaymentDriver(chosenDriver, monopayConfiguration[chosenDriver])
 
         // Get the payment info from database //
 

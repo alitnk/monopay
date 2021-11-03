@@ -19,10 +19,10 @@
     "size": "size-limit",
     "analyze": "size-limit --why"
   },
-  "homepage": "https://alitnk.github.io/polypay.js",
+  "homepage": "https://alitnk.github.io/monopay",
   "repository": {
     "type": "git",
-    "url": "https://github.com/alitnk/polypay.js.git"
+    "url": "https://github.com/alitnk/monopay.git"
   },
   "husky": {
     "hooks": {
@@ -35,7 +35,7 @@
     "singleQuote": true,
     "trailingComma": "es5"
   },
-  "name": "polypay",
+  "name": "monopay",
   "description": "A node.js package for making payment transactions with different Iranian IPGs",
   "keywords": [
     "payment",
@@ -51,14 +51,14 @@
     "name": "Ali",
     "email": "alirezazamani2922@gmail.com"
   },
-  "module": "dist/polypay.esm.js",
+  "module": "dist/monopay.esm.js",
   "size-limit": [
     {
-      "path": "dist/polypay.cjs.production.min.js",
+      "path": "dist/monopay.cjs.production.min.js",
       "limit": "10 KB"
     },
     {
-      "path": "dist/polypay.esm.js",
+      "path": "dist/monopay.esm.js",
       "limit": "10 KB"
     }
   ],

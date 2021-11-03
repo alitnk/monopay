@@ -1,14 +1,14 @@
-export class PolypayException extends Error {
+export class BasePaymentException extends Error {
   constructor(message?: string) {
     super(message);
-    Object.setPrototypeOf(this, PolypayException.prototype);
+    Object.setPrototypeOf(this, BasePaymentException.prototype);
   }
 }
 
 /**
  * Error in the requesting stage
  */
-export class RequestException extends PolypayException {
+export class RequestException extends BasePaymentException {
   constructor(message?: string) {
     super(message);
     Object.setPrototypeOf(this, RequestException.prototype);
@@ -20,7 +20,7 @@ export class RequestException extends PolypayException {
  *
  * You can show this error message to your end user
  */
-export class PaymentException extends PolypayException {
+export class PaymentException extends BasePaymentException {
   constructor(message?: string) {
     super(message);
     Object.setPrototypeOf(this, PaymentException.prototype);
@@ -30,7 +30,7 @@ export class PaymentException extends PolypayException {
 /**
  * Error in the verification stage
  */
-export class VerificationException extends PolypayException {
+export class VerificationException extends BasePaymentException {
   constructor(message?: string) {
     super(message);
     Object.setPrototypeOf(this, VerificationException.prototype);
@@ -40,7 +40,7 @@ export class VerificationException extends PolypayException {
 /**
  * Error when the configuration has problems
  */
-export class BadConfigException extends PolypayException {
+export class BadConfigException extends BasePaymentException {
   constructor(errors: string[]) {
     super(errors.join(',\n'));
     Object.setPrototypeOf(this, BadConfigException.prototype);
