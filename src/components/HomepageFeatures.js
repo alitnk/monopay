@@ -9,7 +9,7 @@ const FeatureList = [
     Svg: require('../../static/img/undraw_docusaurus_mountain.svg').default,
     description: (
       <Translate id="features.1.description">
-        Polypay gives you a single API to communicate with different payment services.
+        Monopay gives you a single API to communicate with different payment services.
       </Translate>
     ),
   },

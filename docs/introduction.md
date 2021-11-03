@@ -3,7 +3,7 @@ sidebar_position: 1
 title: Introduction
 ---
 
-Polypay abstracts away all the different payment gateways' API's and gives you one simple way for making payment transactions with different payment services.
+Monopay abstracts away all the different payment gateways' API's and gives you one simple way for making payment transactions with different payment services.
 
 ## Payment Procedure
 

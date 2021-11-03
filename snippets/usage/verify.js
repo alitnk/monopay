@@ -1,4 +1,4 @@
-import { getPaymentDriver } from "polypay";
+import { getPaymentDriver } from "monopay";
 
 const driver = getPaymentDriver("zarinpal", {
   merchantId: "zarinpal-merchant",

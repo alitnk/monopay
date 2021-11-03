@@ -1,5 +1,5 @@
-/** @type {import("polypay.js").ConfigObject} */
-export const polypayConfig = {
+/** @type {import("monopay").ConfigObject} */
+export const monopayConfig = {
     zarinpal: {
         merchantId: "zarinpal-merchant",
         sandbox: true,

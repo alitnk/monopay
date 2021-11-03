@@ -6,11 +6,11 @@ title: Installation
 if you use npm:
 
 ```
-npm install polypay
+npm install monopay
 ```
 
 if you use yarn:
 
 ```
-yarn add polypay
+yarn add monopay
 ```

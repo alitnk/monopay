@@ -6,15 +6,15 @@ const darkCodeTheme = require('prism-react-renderer/themes/dracula');
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
-  title: 'Polypay.js',
+  title: 'Monopay',
   tagline: 'A node.js package for making payment transactions with different Iranian IPGs',
   url: 'https://alitnk.github.io',
-  baseUrl: '/polypay.js/',
+  baseUrl: '/monopay/',
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
   favicon: 'img/favicon.ico',
   organizationName: 'alitnk', // Usually your GitHub org/user name.
-  projectName: 'polypay.js', // Usually your repo name.
+  projectName: 'monopay', // Usually your repo name.
 
   i18n: {
     defaultLocale: 'en',
@@ -28,12 +28,12 @@ const config = {
       ({
         docs: {
           sidebarPath: require.resolve('./sidebars.js'),
-          editUrl: 'https://github.com/alitnk/polypay.js/edit/documentation/',
+          editUrl: 'https://github.com/alitnk/monopay/edit/documentation/',
         },
         // blog: {
         //   showReadingTime: true,
         //   editUrl:
-        //     'https://github.com/alitnk/polypay.js/edit/documentation/blog/',
+        //     'https://github.com/alitnk/monopay/edit/documentation/blog/',
         // },
         theme: {
           customCss: require.resolve('./src/css/custom.css'),
@@ -50,15 +50,15 @@ const config = {
       // announcementBar: {
       //   id: 'github_start_announcement',
       //   content:
-      //     'If you like polypay, please <a target="_blank" rel="noopener noreferrer" href="https://github.com/alitnk/polypay.js">give it a star on GitHub.</a>',
+      //     'If you like monopay, please <a target="_blank" rel="noopener noreferrer" href="https://github.com/alitnk/monopay">give it a star on GitHub.</a>',
       //   backgroundColor: '#fafbfc',
       //   textColor: '#091E42',
       //   isCloseable: false,
       // },
       navbar: {
-        title: 'Polypay.js',
+        title: 'Monopay',
         logo: {
-          alt: 'Polypay Logo',
+          alt: 'Monopay Logo',
           src: 'img/logo.svg',
         },
         items: [
@@ -69,12 +69,12 @@ const config = {
             label: 'Documentation',
           },
           {
-            href: 'https://github.com/alitnk/polypay.js/issues/new',
+            href: 'https://github.com/alitnk/monopay/issues/new',
             label: 'Submit An Issue',
             position: 'left',
           },
           {
-            href: 'https://github.com/alitnk/polypay.js',
+            href: 'https://github.com/alitnk/monopay',
             label: 'GitHub',
             position: 'right',
           },
@@ -100,12 +100,12 @@ const config = {
       //   //       },
       //   //       {
       //   //         label: 'GitHub',
-      //   //         href: 'https://github.com/alitnk/polypay.js',
+      //   //         href: 'https://github.com/alitnk/monopay',
       //   //       },
       //   //     ],
       //   //   },
       //   // ],
-      //   copyright: `Copyright © ${new Date().getFullYear()} Polypay.js`,
+      //   copyright: `Copyright © ${new Date().getFullYear()} Monopay`,
       // },
       prism: {
         theme: lightCodeTheme,
