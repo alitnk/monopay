@@ -1,16 +1,16 @@
-![monopay](https://github.com/alitnk/monopay/raw/graphics/github-readme-logo.png)
+# Monopay - مونو‌پِی
 
-# Monopay - مونوپِی
+![monopay](https://github.com/alitnk/monopay/raw/graphics/github-readme-logo.png)
 
 ![Intended Runtime Environment: Node.js](https://img.shields.io/badge/Node.js-43853D?style=for-the-badge&logo=node.js&logoColor=white)
 ![NPM Version](https://img.shields.io/npm/v/monopay?style=for-the-badge)
-![NPM Downloads](https://img.shields.io/npm/dm/monopay?style=for-the-badge)
 ![License](https://img.shields.io/npm/l/monopay?style=for-the-badge)
 ![Last Comit](https://img.shields.io/github/last-commit/alitnk/monopay?style=for-the-badge)
+<!-- ![NPM Downloads](https://img.shields.io/npm/dm/monopay?style=for-the-badge) -->
 
-A node.js package for making payment transactions with different Iranian IPGs with one single API.
+A node.js package for making payment transactions with different Iranian IPGs with one single API. (Previously known as "Polypay")
 
-مونوپِی یک پکیج نود جی اس برای انجام تراکنش‌های آنلاین با سرویس های درگاه پرداخت مختلف با یک رابط واحد است.
+مونو‌پِی یک پکیج نود جی اس برای انجام تراکنش‌های آنلاین با سرویس های درگاه پرداخت مختلف با یک رابط واحد است.
 
 > در صورتی که از پکیج خوشتون اومده، بهش استار بدید تا بیشتر دیده بشه و مشکلاتش زودتر برطرف بشن. 🙏
 
@@ -80,6 +80,12 @@ app.all('/callback', async (req, res) => {
 ```
 
 A full example with express can be found [here](examples/express-example)
+
+## 📜 TODO List
+
+- [ ] Support for all the drivers
+- [ ] Add NestJS module integration
+- [ ] Examples for Koa, Fastify and NestJS
 
 ## 🤝 Contribution
 
