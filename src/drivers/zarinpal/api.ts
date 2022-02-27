@@ -21,22 +21,22 @@ export const links: LinksObject = {
 
 export interface RequestPaymentReq {
   /**
-   * 	بله	كد 36 كاراكتري اختصاصي پذيرنده
+   * 		كد 36 كاراكتري اختصاصي پذيرنده
    */
   merchant_id: string;
 
   /**
-   * 	بله	مبلغ تراكنش به (ریال)
+   * 		مبلغ تراكنش به (ریال)
    */
   amount: number;
 
   /**
-   * 	بله	توضیحات مربوط به تراکنش
+   * 		توضیحات مربوط به تراکنش
    */
   description?: string;
 
   /**
-   * 	بله	صفحه بازگشت مشتري، پس از انجام عمل پرداخت
+   * 		صفحه بازگشت مشتري، پس از انجام عمل پرداخت
    */
   callback_url: string;
 
@@ -45,12 +45,12 @@ export interface RequestPaymentReq {
    */
   metadata: {
     /**
-     * 	خیر	شماره تماس خریدار
+     * 		شماره تماس خریدار
      */
     mobile?: string;
 
     /**
-     * 	خیر	ایمیل خریدار
+     * 		ایمیل خریدار
      */
     email?: string;
   };
