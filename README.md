@@ -6,6 +6,7 @@
 ![NPM Version](https://img.shields.io/npm/v/monopay?style=for-the-badge)
 ![License](https://img.shields.io/npm/l/monopay?style=for-the-badge)
 ![Last Comit](https://img.shields.io/github/last-commit/alitnk/monopay?style=for-the-badge)
+
 <!-- ![NPM Downloads](https://img.shields.io/npm/dm/monopay?style=for-the-badge) -->
 
 A node.js package for making payment transactions with different Iranian IPGs with one single API. (Previously known as "Polypay")
@@ -13,7 +14,6 @@ A node.js package for making payment transactions with different Iranian IPGs wi
 مونو‌پِی یک پکیج نود جی اس برای انجام تراکنش‌های آنلاین با سرویس های درگاه پرداخت مختلف با یک رابط واحد است.
 
 در صورتی که از پکیج خوشتون اومده، بهش استار بدید تا بیشتر دیده بشه و مشکلاتش زودتر برطرف بشن. 🙏
-
 
 > لطفا قبل از استفاده در پروداکشن،‌ از پایدار بودن درایور مطمئن شوید. - [جدول پشتیبانی درایور ها](https://alitnk.github.io/monopay/fa/docs/supported-drivers)
 
@@ -89,6 +89,7 @@ A full example with express can be found [here](examples/express-example)
 - [ ] Support for all the drivers
 - [ ] Add NestJS module integration
 - [ ] Examples for Koa, Fastify and NestJS
+- [ ] "Re-brand" (Logo and banner)
 
 ## 🤝 Contribution
 
