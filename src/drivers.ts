@@ -15,6 +15,8 @@ import { Sadad } from './drivers/sadad';
 import * as SadadAPI from './drivers/sadad/api';
 import { Saman } from './drivers/saman';
 import * as SamanAPI from './drivers/saman/api';
+import { Vandar } from './drivers/vandar';
+import * as VandarAPI from './drivers/vandar/api';
 import { Zarinpal } from './drivers/zarinpal';
 import * as ZarinpalAPI from './drivers/zarinpal/api';
 import { Zibal } from './drivers/zibal';
@@ -28,6 +30,7 @@ export { Payir } from './drivers/payir';
 export { PayPing } from './drivers/payping';
 export { Sadad } from './drivers/sadad';
 export { Saman } from './drivers/saman';
+export { Vandar } from './drivers/vandar';
 export { Zarinpal } from './drivers/zarinpal';
 export { Zibal } from './drivers/zibal';
 interface ConfigMap {
@@ -39,6 +42,7 @@ interface ConfigMap {
   payping: PayPingAPI.Config;
   sadad: SadadAPI.Config;
   saman: SamanAPI.Config;
+  vandar: VandarAPI.Config;
   zarinpal: ZarinpalAPI.Config;
   zibal: ZibalAPI.Config;
 }
@@ -56,6 +60,7 @@ const drivers = {
   payping: PayPing,
   sadad: Sadad,
   saman: Saman,
+  vandar: Vandar,
   zarinpal: Zarinpal,
   zibal: Zibal,
 };
