@@ -4,36 +4,26 @@
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
   "files": [
-    "dist",
-    "src"
+    "dist"
   ],
   "engines": {
-    "node": ">=12"
+    "node": ">=14.0.0"
   },
   "scripts": {
-    "start": "tsdx watch",
-    "build": "tsdx build",
-    "test": "tsdx test",
-    "lint": "tsdx lint",
-    "prepare": "tsdx build",
-    "size": "size-limit",
-    "analyze": "size-limit --why"
+    "prebuild": "rimraf dist",
+    "build": "tsc --build ./tsconfig.build.json",
+    "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
+    "lint": "eslint \"{src,test}/**/*.ts\" --fix",
+    "test": "jest --runInBand",
+    "test:cov": "jest --coverage --runInBand"
   },
   "homepage": "https://alitnk.github.io/monopay",
   "repository": {
     "type": "git",
     "url": "https://github.com/alitnk/monopay.git"
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "tsdx lint"
-    }
-  },
-  "prettier": {
-    "printWidth": 120,
-    "semi": true,
-    "singleQuote": true,
-    "trailingComma": "es5"
+  "bugs": {
+    "url": "https://github.com/alitnk/monopay/issues"
   },
   "name": "monopay",
   "description": "A node.js package for making payment transactions with different Iranian IPGs",
@@ -51,30 +41,19 @@
     "name": "Ali",
     "email": "alirezazamani2922@gmail.com"
   },
-  "module": "dist/monopay.esm.js",
-  "size-limit": [
-    {
-      "path": "dist/monopay.cjs.production.min.js",
-      "limit": "10 KB"
-    },
-    {
-      "path": "dist/monopay.esm.js",
-      "limit": "10 KB"
-    }
-  ],
   "devDependencies": {
-    "@size-limit/preset-small-lib": "^7.0.8",
     "@types/crypto-js": "^4.1.1",
     "@types/jest": "^27.4.1",
     "@types/node": "^17.0.23",
-    "@types/uuid": "^8.3.4",
-    "husky": "^7.0.4",
+    "@typescript-eslint/eslint-plugin": "^5.17.0",
+    "@typescript-eslint/parser": "^5.17.0",
+    "eslint": "^8.12.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-prettier": "^4.0.0",
     "jest": "^27.5.1",
-    "np": "^7.6.1",
-    "size-limit": "^7.0.8",
+    "prettier": "^2.6.1",
     "ts-jest": "^27.1.4",
-    "tsdx": "^0.14.1",
-    "tslib": "^2.3.1",
+    "ts-node": "^10.7.0",
     "typescript": "^4.6.3"
   },
   "dependencies": {
@@ -85,8 +64,7 @@
     "global": "^4.4.0",
     "io-ts": "^2.2.16",
     "io-ts-reporters": "^2.0.1",
-    "soap": "^0.43.0",
-    "ts-node": "^10.7.0",
-    "uuid": "^8.3.2"
+    "rimraf": "^3.0.2",
+    "soap": "^0.43.0"
   }
 }

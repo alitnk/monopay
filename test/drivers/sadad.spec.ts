@@ -30,7 +30,7 @@ describe('Sadad Driver', () => {
           callbackUrl: 'https://callback.url/',
           mobile: '09120000000',
         })
-      ).url
+      ).url,
     ).toBe('string');
   });
 
@@ -55,7 +55,7 @@ describe('Sadad Driver', () => {
           amount: 20000,
           callbackUrl: 'https://callback.url/',
           mobile: '09120000000',
-        })
+        }),
     ).rejects.toThrow(RequestException);
   });
 
@@ -87,7 +87,7 @@ describe('Sadad Driver', () => {
     });
 
     expect((await driver.verifyPayment({ amount: 10000 }, callbackParams)).transactionId).toBe(
-      expectedResult.transactionId
+      expectedResult.transactionId,
     );
   });
 });

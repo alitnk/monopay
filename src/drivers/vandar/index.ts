@@ -16,7 +16,7 @@ export class Vandar extends Driver<API.Config> {
     const { amount, callbackUrl, ...otherOptions } = options;
     const { api_key } = this.config;
 
-    let response = await axios.post<API.RequestPaymentReq, { data: API.RequestPaymentRes }>(this.getLinks().REQUEST, {
+    const response = await axios.post<API.RequestPaymentReq, { data: API.RequestPaymentRes }>(this.getLinks().REQUEST, {
       api_key,
       amount: amount,
       callback_url: callbackUrl,
@@ -52,7 +52,7 @@ export class Vandar extends Driver<API.Config> {
         api_key,
         token,
       },
-      {}
+      {},
     );
     const { errors } = response.data;
 

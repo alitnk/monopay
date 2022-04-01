@@ -16,7 +16,7 @@ export class Zarinpal extends Driver<API.Config> {
     const { amount, callbackUrl, mobile, email, ...otherOptions } = options;
     const { merchantId } = this.config;
 
-    let response = await axios.post<API.RequestPaymentReq, { data: API.RequestPaymentRes }>(this.getLinks().REQUEST, {
+    const response = await axios.post<API.RequestPaymentReq, { data: API.RequestPaymentRes }>(this.getLinks().REQUEST, {
       merchant_id: merchantId,
       amount: amount,
       callback_url: callbackUrl,
@@ -56,7 +56,7 @@ export class Zarinpal extends Driver<API.Config> {
         merchant_id: merchantId,
         amount: amount,
       },
-      {}
+      {},
     );
     const { data, errors } = response.data;
 

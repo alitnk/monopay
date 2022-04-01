@@ -20,7 +20,7 @@ describe('Zibal Driver', () => {
     const driver = getPaymentDriver<Zibal>('zibal', { merchantId: '2134' });
 
     expect(
-      typeof (await driver.requestPayment({ callbackUrl: 'https://path.to/callback-url', amount: 20000 })).url
+      typeof (await driver.requestPayment({ callbackUrl: 'https://path.to/callback-url', amount: 20000 })).url,
     ).toBe('string');
   });
 
@@ -36,7 +36,7 @@ describe('Zibal Driver', () => {
     const driver = getPaymentDriver<Zibal>('zibal', { merchantId: '2134' });
 
     await expect(async () => await driver.requestPayment({ amount: 2000, callbackUrl: 'asd' })).rejects.toThrow(
-      RequestException
+      RequestException,
     );
   });
 
@@ -59,7 +59,7 @@ describe('Zibal Driver', () => {
     const driver = getPaymentDriver<Zibal>('zibal', { merchantId: '2134' });
 
     expect(
-      (await driver.verifyPayment({ amount: 2000 }, { trackId: '12345', status: '1', success: '1' })).transactionId
+      (await driver.verifyPayment({ amount: 2000 }, { trackId: '12345', status: '1', success: '1' })).transactionId,
     ).toEqual(expectedResult.transactionId);
   });
 });

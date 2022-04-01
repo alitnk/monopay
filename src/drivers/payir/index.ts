@@ -13,7 +13,7 @@ export class Payir extends Driver<API.Config> {
   requestPayment = async (options: API.RequestOptions) => {
     options = this.getParsedData(options, API.tRequestOptions);
 
-    let { amount, callbackUrl, description, mobile, nationalCode, validCardNumber } = options;
+    const { amount, callbackUrl, description, mobile, nationalCode, validCardNumber } = options;
 
     const response = await axios.post<API.RequestPaymentReq, { data: API.RequestPaymentRes }>(this.getLinks().REQUEST, {
       api: this.getApiKey(),
@@ -48,7 +48,7 @@ export class Payir extends Driver<API.Config> {
       {
         api: this.getApiKey(),
         token,
-      }
+      },
     );
 
     const verifyStatus = response.data.status;

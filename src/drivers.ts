@@ -67,7 +67,7 @@ const drivers = {
 
 export const getPaymentDriver = <Driver extends BaseDriver>(
   driverName: DriverName,
-  config: Parameters<Driver['setConfig']>[0]
+  config: Parameters<Driver['setConfig']>[0],
 ): Driver => {
   if (!drivers[driverName]) {
     throw Error(`This driver is not supported, supported drivers: ${Object.keys(drivers).join(', ')}`);
@@ -75,5 +75,5 @@ export const getPaymentDriver = <Driver extends BaseDriver>(
 
   const driver = drivers[driverName];
 
-  return (new driver(config) as unknown) as Driver;
+  return new driver(config) as unknown as Driver;
 };

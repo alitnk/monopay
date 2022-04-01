@@ -1,4 +1,4 @@
-import soap from 'soap';
+import * as soap from 'soap';
 import { Driver } from '../../driver';
 import { PaymentException, RequestException, VerificationException } from '../../exceptions';
 import * as API from './api';

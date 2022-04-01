@@ -27,7 +27,7 @@ describe('Behpardakht Driver', () => {
           amount: 20000,
           callbackUrl: 'https://mysite.com/callback',
         })
-      ).url
+      ).url,
     ).toBe('string');
   });
 
@@ -47,7 +47,7 @@ describe('Behpardakht Driver', () => {
         await driver.requestPayment({
           amount: 20000,
           callbackUrl: 'https://mysite.com/callback',
-        })
+        }),
     ).rejects.toThrow(RequestException);
   });
 
@@ -73,7 +73,7 @@ describe('Behpardakht Driver', () => {
     });
 
     expect(await (await driver.verifyPayment({ amount: 2000 }, callbackParams)).transactionId).toBe(
-      expectedResult.transactionId
+      expectedResult.transactionId,
     );
   });
 });

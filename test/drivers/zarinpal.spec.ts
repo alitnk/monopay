@@ -32,7 +32,7 @@ describe('Zarinpal Driver', () => {
     const driver = getPaymentDriver<Zarinpal>('zarinpal', { merchantId: '2134' });
 
     await expect(async () => await driver.requestPayment({ amount: 2000, callbackUrl: 'asd' })).rejects.toThrow(
-      RequestException
+      RequestException,
     );
   });
 
@@ -56,7 +56,7 @@ describe('Zarinpal Driver', () => {
     const driver = getPaymentDriver<Zarinpal>('zarinpal', { merchantId: '2134' });
 
     expect((await driver.verifyPayment({ amount: 2000 }, { Authority: '2000', Status: 'OK' })).transactionId).toBe(
-      expectedResult.transactionId
+      expectedResult.transactionId,
     );
   });
 });

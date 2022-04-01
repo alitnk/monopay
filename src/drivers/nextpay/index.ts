@@ -13,7 +13,7 @@ export class NextPay extends Driver<API.Config> {
   requestPayment = async (options: API.RequestOptions) => {
     options = this.getParsedData(options, API.tRequestOptions);
 
-    let { amount, callbackUrl, mobile, customFields } = options;
+    const { amount, callbackUrl, mobile, customFields } = options;
 
     const response = await axios.post<API.RequestPaymentReq, { data: API.RequestPaymentRes }>(this.getLinks().REQUEST, {
       api_key: this.config.apiKey,
@@ -46,7 +46,7 @@ export class NextPay extends Driver<API.Config> {
         amount: +amount * 10,
         trans_id,
         api_key: this.config.apiKey,
-      }
+      },
     );
 
     const { Shaparak_Ref_Id, code, card_holder } = response.data;
