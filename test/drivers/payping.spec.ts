@@ -18,7 +18,7 @@ describe('PayPing Driver', () => {
     const driver = getPaymentDriver<PayPing>('payping', { apiKey: '2134' });
 
     expect(
-      typeof (await driver.requestPayment({ callbackUrl: 'https://path.to/callback-url', amount: 20000 })).url
+      typeof (await driver.requestPayment({ callbackUrl: 'https://path.to/callback-url', amount: 20000 })).url,
     ).toBe('string');
   });
 
@@ -29,7 +29,7 @@ describe('PayPing Driver', () => {
     const driver = getPaymentDriver<PayPing>('payping', { apiKey: '2134' });
 
     await expect(async () => await driver.requestPayment({ amount: 2000, callbackUrl: 'asd' })).rejects.toThrow(
-      RequestException
+      RequestException,
     );
   });
 
@@ -55,9 +55,9 @@ describe('PayPing Driver', () => {
             clientrefid: 'clientrefid',
             cardnumber: '1234-****-****-1234',
             refid: '1234',
-          }
+          },
         )
-      ).transactionId
+      ).transactionId,
     ).toEqual(expectedResult.transactionId);
   });
 });

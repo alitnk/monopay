@@ -32,7 +32,7 @@ describe('Vandar Driver', () => {
     const driver = getPaymentDriver<Vandar>('vandar', { api_key: '2134' });
 
     await expect(
-      async () => await driver.requestPayment({ amount: 2000, callbackUrl: 'https://example.com' })
+      async () => await driver.requestPayment({ amount: 2000, callbackUrl: 'https://example.com' }),
     ).rejects.toThrow(RequestException);
   });
 
@@ -49,7 +49,7 @@ describe('Vandar Driver', () => {
     const driver = getPaymentDriver<Vandar>('vandar', { api_key: '2134' });
 
     expect((await driver.verifyPayment({ amount: 2000 }, { token: '2000', payment_status: 'OK' })).transactionId).toBe(
-      expectedResult.transactionId
+      expectedResult.transactionId,
     );
   });
 });

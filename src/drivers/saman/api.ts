@@ -119,7 +119,7 @@ export const callbackErrors: ErrorList = {
   '12': 'شماره ترمینال ارسال شده یافت نشد.',
 };
 
-export interface VerifyPaymentReq {}
+// export interface VerifyPaymentReq {}
 
 export type VerifyPaymentRes = number;
 

@@ -14,7 +14,7 @@ export class PayPing extends Driver<API.Config> {
   requestPayment = async (options: API.RequestOptions) => {
     options = this.getParsedData(options, API.tRequestOptions);
 
-    let { amount, callbackUrl, mobile, email, name, description } = options;
+    const { amount, callbackUrl, mobile, email, name, description } = options;
     let response;
 
     try {

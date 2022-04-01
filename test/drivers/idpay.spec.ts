@@ -19,7 +19,7 @@ describe('IdPay Driver', () => {
     const driver = getPaymentDriver<IdPay>('idpay', { apiKey: '2134' });
 
     expect(
-      typeof (await driver.requestPayment({ callbackUrl: 'https://path.to/callback-url', amount: 20000 })).url
+      typeof (await driver.requestPayment({ callbackUrl: 'https://path.to/callback-url', amount: 20000 })).url,
     ).toBe('string');
   });
 
@@ -34,7 +34,7 @@ describe('IdPay Driver', () => {
     const driver = getPaymentDriver<IdPay>('idpay', { apiKey: '2134' });
 
     await expect(async () => await driver.requestPayment({ amount: 2000, callbackUrl: 'asd' })).rejects.toThrow(
-      RequestException
+      RequestException,
     );
   });
 
@@ -65,7 +65,7 @@ describe('IdPay Driver', () => {
 
     expect(
       (await driver.verifyPayment({ amount: 2000 }, { status: '200', track_id: '1234', id: '123', order_id: '321' }))
-        .transactionId
+        .transactionId,
     ).toEqual(expectedResult.transactionId);
   });
 });

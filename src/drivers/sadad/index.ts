@@ -1,5 +1,5 @@
 import axios from 'axios';
-import CryptoJS from 'crypto-js';
+import * as CryptoJS from 'crypto-js';
 import { Driver } from '../../driver';
 import { PaymentException, RequestException, VerificationException } from '../../exceptions';
 import * as API from './api';
@@ -53,7 +53,7 @@ export class Sadad extends Driver<API.Config> {
       {
         SignData: signData(Token, terminalKey),
         Token,
-      }
+      },
     );
 
     const { ResCode: verificationResCode, SystemTraceNo } = response.data;

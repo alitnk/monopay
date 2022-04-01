@@ -28,7 +28,7 @@ describe('Parsian Driver', () => {
           amount: 20000,
           callbackUrl: 'https://mysite.com/callback',
         })
-      ).url
+      ).url,
     ).toBe('string');
   });
 
@@ -48,7 +48,7 @@ describe('Parsian Driver', () => {
         await driver.requestPayment({
           amount: 20000,
           callbackUrl: 'https://mysite.com/callback',
-        })
+        }),
     ).rejects.toThrow(RequestException);
   });
 
@@ -79,7 +79,7 @@ describe('Parsian Driver', () => {
     });
 
     expect(await (await driver.verifyPayment({ amount: 2000 }, callbackParams)).transactionId).toBe(
-      expectedResult.transactionId
+      expectedResult.transactionId,
     );
   });
 });

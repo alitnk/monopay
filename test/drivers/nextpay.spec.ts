@@ -19,7 +19,7 @@ describe('NextPay Driver', () => {
     const driver = getPaymentDriver<NextPay>('nextpay', { apiKey: '1234' });
 
     expect(
-      typeof (await driver.requestPayment({ callbackUrl: 'https://path.to/callback-url', amount: 20000 })).url
+      typeof (await driver.requestPayment({ callbackUrl: 'https://path.to/callback-url', amount: 20000 })).url,
     ).toBe('string');
   });
 
@@ -34,7 +34,7 @@ describe('NextPay Driver', () => {
     const driver = getPaymentDriver<NextPay>('nextpay', { apiKey: '1234' });
 
     await expect(async () => await driver.requestPayment({ amount: 2000, callbackUrl: 'asd' })).rejects.toThrow(
-      RequestException
+      RequestException,
     );
   });
 
@@ -55,7 +55,7 @@ describe('NextPay Driver', () => {
 
     expect(
       (await driver.verifyPayment({ amount: 2000 }, { trans_id: '12345', order_id: '1234', amount: 20000 }))
-        .transactionId
+        .transactionId,
     ).toEqual(expectedResult.transactionId);
   });
 });

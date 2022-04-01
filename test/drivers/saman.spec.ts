@@ -31,7 +31,7 @@ describe('Saman Driver', () => {
           callbackUrl: 'https://mysite.com/callback',
           mobile: '09120000000',
         })
-      ).url
+      ).url,
     ).toBe('string');
   });
 
@@ -51,7 +51,7 @@ describe('Saman Driver', () => {
           amount: 20000,
           callbackUrl: 'https://mysite.com/callback',
           mobile: '09120000000',
-        })
+        }),
     ).rejects.toThrow(RequestException);
   });
 
@@ -76,7 +76,7 @@ describe('Saman Driver', () => {
     const driver = getPaymentDriver<Saman>('saman', { merchantId: '1234' });
 
     expect(await (await driver.verifyPayment({ amount: 2000 }, callbackParams)).transactionId).toBe(
-      expectedResult.transactionId
+      expectedResult.transactionId,
     );
   });
 });
