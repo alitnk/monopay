@@ -63,30 +63,30 @@
     }
   ],
   "devDependencies": {
-    "@size-limit/preset-small-lib": "^5.0.5",
-    "@types/crypto-js": "^4.0.2",
-    "@types/jest": "^27.0.2",
-    "@types/node": "^16.10.3",
-    "@types/uuid": "^8.3.1",
-    "husky": "^7.0.2",
-    "jest": "^27.2.5",
-    "np": "^7.5.0",
-    "size-limit": "^5.0.5",
-    "ts-jest": "^27.0.7",
+    "@size-limit/preset-small-lib": "^7.0.8",
+    "@types/crypto-js": "^4.1.1",
+    "@types/jest": "^27.4.1",
+    "@types/node": "^17.0.23",
+    "@types/uuid": "^8.3.4",
+    "husky": "^7.0.4",
+    "jest": "^27.5.1",
+    "np": "^7.6.1",
+    "size-limit": "^7.0.8",
+    "ts-jest": "^27.1.4",
     "tsdx": "^0.14.1",
     "tslib": "^2.3.1",
-    "typescript": "^4.4.4"
+    "typescript": "^4.6.3"
   },
   "dependencies": {
-    "axios": "^0.22.0",
-    "crc-32": "^1.2.0",
+    "axios": "^0.26.1",
+    "crc-32": "^1.2.1",
     "crypto-js": "^4.1.1",
-    "fp-ts": "^2.11.4",
+    "fp-ts": "^2.11.9",
     "global": "^4.4.0",
     "io-ts": "^2.2.16",
-    "io-ts-reporters": "^2.0.0",
-    "soap": "^0.42.0",
-    "ts-node": "^10.2.1",
+    "io-ts-reporters": "^2.0.1",
+    "soap": "^0.43.0",
+    "ts-node": "^10.7.0",
     "uuid": "^8.3.2"
   }
 }
