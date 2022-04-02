@@ -16,30 +16,31 @@ export class Vandar extends Driver<API.Config> {
     const { amount, callbackUrl, ...otherOptions } = options;
     const { api_key } = this.config;
 
-    const response = await axios.post<API.RequestPaymentReq, { data: API.RequestPaymentRes }>(this.getLinks().REQUEST, {
-      api_key,
-      amount: amount,
-      callback_url: callbackUrl,
-      ...otherOptions,
-    });
-    const { token, errors } = response.data;
-
-    if (token?.length) {
-      return this.makeRequestInfo(token, 'GET', this.getLinks().PAYMENT + response.data.token);
-    }
+    const response = await axios.post<API.RequestPaymentReq, { data: API.RequestPaymentRes }>(
+      this.getLinks().REQUEST,
+      {
+        api_key,
+        amount: amount,
+        callback_url: callbackUrl,
+        ...otherOptions,
+      },
+      {
+        validateStatus: () => true,
+      },
+    );
+    const { errors, token } = response.data;
 
     if (errors?.length) {
       throw new RequestException(errors.join('\n'));
     }
 
-    throw new RequestException();
+    return this.makeRequestInfo(token, 'GET', this.getLinks().PAYMENT + response.data.token);
   };
 
   verifyPayment = async (options: API.VerifyOptions, params: API.CallbackParams): Promise<API.Receipt> => {
     options = this.getParsedData(options, API.tVerifyOptions);
 
     const { token, payment_status } = params;
-    // const { amount } = options;
     const { api_key } = this.config;
 
     if (payment_status !== 'OK') {
@@ -52,27 +53,24 @@ export class Vandar extends Driver<API.Config> {
         api_key,
         token,
       },
-      {},
+      {
+        validateStatus: () => true,
+      },
     );
-    const { errors } = response.data;
-
-    if ([0, 1].includes(response.data.status) && response.data.transId !== undefined) {
-      return {
-        transactionId: response.data.transId,
-        cardPan: response.data.cardNumber,
-        raw: {
-          token,
-          payment_status,
-        },
-      };
-    }
+    const { errors, transId, cardNumber } = response.data;
 
     if (errors?.length) {
-      // There are errors (`errors` is an object)
       throw new VerificationException(errors.join('\n'));
     }
 
-    throw new VerificationException();
+    return {
+      transactionId: transId,
+      cardPan: cardNumber,
+      raw: {
+        token,
+        payment_status,
+      },
+    };
   };
 
   protected getLinks() {
