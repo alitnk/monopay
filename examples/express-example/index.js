@@ -6,6 +6,14 @@ const app = express();
 app.use(express.urlencoded({ extended: true }));
 const port = 3000;
 
+/**
+ * A mock database for storing a payment
+ */
+const db = {
+  paymentID,
+  amount,
+};
+
 /** @type {import('monopay').ConfigObject} */
 const monopayConfiguration = {
   zibal: {
@@ -45,7 +53,9 @@ app.get('/purchase', async (req, res) => {
       callbackUrl: process.env.APP_URL + '/callback',
     });
 
-    // Store the payment info in a database //
+    // Save the payment info in database
+    db.paymentID = paymentInfo.referenceId;
+    db.amount = 2000;
 
     res.send(`<html>
         <body>
@@ -65,12 +75,10 @@ app.all('/callback', async (req, res) => {
   try {
     const driver = getPaymentDriver(chosenDriver, monopayConfiguration[chosenDriver]);
 
-    // Get the payment info from database //
-
     const receipt = await driver.verifyPayment(
       {
-        amount: 2000, // from database
-        referenceId: 1234, // from database
+        amount: db.amount, // from database
+        referenceId: db.paymentID, // from database
       },
       { ...req.query, ...req.body },
     ); // support both GET and POST
