@@ -84,7 +84,7 @@ app.all('/callback', async (req, res) => {
     ); // support both GET and POST
 
     res.json({
-      referenceId: receipt.referenceId, // Is probably null if you're using sandbox
+      transactionId: receipt.transactionId, // Is probably null if you're using sandbox
       success: true,
     });
   } catch (e) {
