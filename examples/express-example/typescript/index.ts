@@ -1,21 +1,18 @@
-require('dotenv').config();
-const express = require('express');
-const { getPaymentDriver } = require('monopay');
-
+import { getPaymentDriver, ConfigObject, DriverName } from 'monopay';
+import { config } from 'dotenv';
+import express from 'express';
+config();
 const app = express();
-app.use(express.urlencoded({ extended: true }));
 const port = 3000;
+
+app.use(express.urlencoded({ extended: true }));
 
 /**
  * A mock database for storing a payment
  */
-const db = {
-  paymentID,
-  amount,
-};
+const db: { paymentID?: number | string; amount?: number } = {};
 
-/** @type {import('monopay').ConfigObject} */
-const monopayConfiguration = {
+const monopayConfiguration: ConfigObject = {
   zibal: {
     merchantId: 'your-merchant-id',
     sandbox: true,
@@ -38,8 +35,7 @@ const monopayConfiguration = {
   },
 };
 
-/** @type {import('monopay').DriverName} */
-const chosenDriver = 'nextpay';
+const chosenDriver: DriverName = 'nextpay';
 
 /**
  * The purchase route that will redirect the user to the payment gateway
@@ -55,14 +51,14 @@ app.get('/purchase', async (req, res) => {
 
     // Save the payment info in database
     db.paymentID = paymentInfo.referenceId;
-    db.amount = 2000;
+    db.amount = 20000;
 
     res.send(`<html>
-        <body>
-            <h1> We're redirecting you to the payment gateway... </h1>
-            <script>${paymentInfo.getScript()}</script>
-        </body>
-        </html>`);
+    <body>
+        <h1> We're redirecting you to the payment gateway... </h1>
+        <script>${paymentInfo.getScript()}</script>
+    </body>
+    </html>`);
   } catch (e) {
     console.log(e.message);
   }
@@ -84,7 +80,7 @@ app.all('/callback', async (req, res) => {
     ); // support both GET and POST
 
     res.json({
-      referenceId: receipt.referenceId, // Is probably null if you're using sandbox
+      transactionId: receipt.transactionId, // Is probably null if you're using sandbox
       success: true,
     });
   } catch (e) {
