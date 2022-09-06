@@ -11,7 +11,7 @@ export class Pasargad extends Driver<API.Config> {
     return this.makeRequestInfo(12, 'GET', this.getLinks().PAYMENT, { n: '' });
   };
   verifyPayment = async (_options: API.VerifyOptions, params: API.CallbackParams): Promise<API.Receipt> => {
-    const { amount, invoiceDate, invoiceNumber } = params;
+    const { amount, invoiceDate, invoiceNumber, TransactionReferenceID } = params;
     const response = await axios.post<API.VerifyPaymentReq, { data: API.VerifyPaymentRes }>(
       this.getLinks().VERIFICATION,
       {
@@ -28,7 +28,7 @@ export class Pasargad extends Driver<API.Config> {
     );
     return {
       raw: response.data,
-      transactionId: 'problem',
+      transactionId: TransactionReferenceID,
       cardPan: response.data.MaskedCardNumber,
     };
   };

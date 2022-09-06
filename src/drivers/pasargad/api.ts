@@ -13,6 +13,7 @@ export interface CallbackParams {
   invoiceNumber: string;
   invoiceDate: string;
   amount: number;
+  TransactionReferenceID: string;
 }
 
 export interface VerifyPaymentReq {
