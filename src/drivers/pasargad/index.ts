@@ -3,6 +3,9 @@ import { Driver } from 'driver';
 import { VerificationException } from 'exceptions';
 import { LinksObject } from 'types';
 import * as API from './api';
+import fs from 'fs/promises';
+import crypto from 'crypto';
+import * as RsaXml from 'rsa-xml';
 export class Pasargad extends Driver<API.Config> {
   constructor(config: API.Config) {
     super(config, API.tConfig);
@@ -13,18 +16,21 @@ export class Pasargad extends Driver<API.Config> {
   };
   verifyPayment = async (_options: API.VerifyOptions, params: API.CallbackParams): Promise<API.Receipt> => {
     const { amount, invoiceDate, invoiceNumber, TransactionReferenceID } = params;
+    const data: API.VerifyPaymentReq = {
+      Amount: amount,
+      InvoiceDate: invoiceDate,
+      InvoiceNumber: invoiceNumber,
+      Timestamp: this.getCurrentTimestamp(),
+      TerminalCode: this.config.terminalId,
+      MerchantCode: this.config.merchantId,
+    };
     const response = await axios.post<API.VerifyPaymentReq, { data: API.VerifyPaymentRes }>(
       this.getLinks().VERIFICATION,
+      data,
       {
-        Amount: amount,
-        InvoiceDate: invoiceDate,
-        InvoiceNumber: invoiceNumber,
-        Timestamp: this.getCurrentTimestamp(),
-        TerminalCode: this.config.terminalId,
-        MerchantCode: this.config.merchantId,
-      },
-      {
-        headers: {},
+        headers: {
+          Sign: await this.signData(this.config.certificate_file, data),
+        },
       },
     );
     if (!response.data?.IsSuccess) throw new VerificationException('عملیات با خطا مواجه شد');
@@ -38,5 +44,15 @@ export class Pasargad extends Driver<API.Config> {
   private getCurrentTimestamp = (): string => {
     const currentDateISO = new Date().toISOString();
     return currentDateISO.replace(/-/g, '/').replace('T', ' ').replace('Z', '').split('.')[0];
+  };
+
+  private signData = async (certificate_file: string, data: unknown): Promise<string> => {
+    const xmlKey = (await fs.readFile(certificate_file)).toString('base64');
+    const sign = crypto.createSign('SHA1');
+    const pemkey = new RsaXml().exportPemKey(xmlKey);
+    sign.write(JSON.stringify(data));
+    sign.end();
+    const signedData = sign.sign(Buffer.from(pemkey), 'base64');
+    return signedData;
   };
 }
