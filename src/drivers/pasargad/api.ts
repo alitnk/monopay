@@ -9,6 +9,69 @@ export const links: LinksObject = {
   },
 };
 
+export interface RequestPaymentReq {
+  /**
+   * شماره فاکتور که برای هر خرید باید متفاوت باشد
+   */
+  InvoiceNumber: string;
+  /**
+   * تاریخ فاکتور خرید به فرمت دلخواه.
+   * لازم به ذکر است که تاریخ باید به گونه ای باشد که با شماره فاکتور یک شناسه اختصاصی ساخته
+   * تا همیشه بتوان از آن به عنوان شناسه یکتای خرید استفاده کرد
+   */
+  InvoiceDate: string;
+  /**
+   * شماره شناسایی ترمینال
+   */
+  TerminalCode: string;
+  /**
+   * شماره شناسایی پذیرنده
+   */
+  MerchantCode: string;
+  /**
+   * مبلغ فاکتور
+   */
+  Amount: number;
+  /**
+   * آدرس بازگشت
+   */
+  RedirectAddress: string;
+  /**
+   * زمان ارسال درخواست
+   * @description فرمت: `YYYY/MM/DD HH:MM:SS`
+   * @example 2019/01/27 17:57:06
+   */
+  Timestamp: string;
+  /**
+   * نوع عملیات که برای خرید ۱۰۰۳ میباشد
+   */
+  Action: 1003;
+  /**
+   * شماره موبایل خریدار
+   * @description اختیاری
+   */
+  Mobile?: string;
+  /**
+   * ایمیل خریدار
+   * @description اختیاری
+   */
+  Email?: string;
+  /**
+   * نام پذیرنده
+   * @description تنها در صورت داشتن مجوز ارسال شود در غیر این صورت درخواست با خطا مواجه خواهد شد
+   */
+  MerchantName?: string;
+  /**
+   * شناسه خرید مورد نظر پذیرنده است که در صورت نیاز باید ارسال شود
+   * @description جهت اطلاعات بیشتر در مورد شناسه پرداخت داکیومنت پاسارگاد را مطالعه کنید
+   *
+   * {@link https://www.pep.co.ir/wp-content/uploads/2019/06/1-__PEP_IPG_REST-13971020.Ver3_.00.pdf دانلود مستندات درگاه پاسارگاد}
+   *
+   * {@link https://github.com/pepco-api گیت هاب درگاه پاسارگاد شامل ماژول ها}
+   */
+  PIDN?: string;
+}
+
 export interface CallbackParams {
   invoiceNumber: string;
   invoiceDate: string;
