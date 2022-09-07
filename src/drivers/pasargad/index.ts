@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { Driver } from 'driver';
+import { VerificationException } from 'exceptions';
 import { LinksObject } from 'types';
 import * as API from './api';
 export class Pasargad extends Driver<API.Config> {
@@ -26,6 +27,7 @@ export class Pasargad extends Driver<API.Config> {
         headers: {},
       },
     );
+    if (!response.data?.IsSuccess) throw new VerificationException('عملیات با خطا مواجه شد');
     return {
       raw: response.data,
       transactionId: TransactionReferenceID,
