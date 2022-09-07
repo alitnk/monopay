@@ -13,7 +13,7 @@ export interface CallbackParams {
   invoiceNumber: string;
   invoiceDate: string;
   amount: number;
-  TransactionReferenceID: string;
+  transactionReferenceID: string;
 }
 
 export interface VerifyPaymentReq {
@@ -92,7 +92,7 @@ export const tRequestOptions = t.intersection([
 export type RequestOptions = t.TypeOf<typeof tRequestOptions>;
 
 export const tConfig = t.interface({
-  certificate_file: t.string,
+  certificateFilePath: t.string,
   merchantId: t.string,
   terminalId: t.string,
 });

@@ -15,7 +15,7 @@ export class Pasargad extends Driver<API.Config> {
     return this.makeRequestInfo(12, 'GET', this.getLinks().PAYMENT, { n: '' });
   };
   verifyPayment = async (_options: API.VerifyOptions, params: API.CallbackParams): Promise<API.Receipt> => {
-    const { amount, invoiceDate, invoiceNumber, TransactionReferenceID } = params;
+    const { amount, invoiceDate, invoiceNumber, transactionReferenceID } = params;
     const data: API.VerifyPaymentReq = {
       Amount: amount,
       InvoiceDate: invoiceDate,
@@ -29,14 +29,14 @@ export class Pasargad extends Driver<API.Config> {
       data,
       {
         headers: {
-          Sign: await this.signData(this.config.certificate_file, data),
+          Sign: await this.signData(this.config.certificateFilePath, data),
         },
       },
     );
     if (!response.data?.IsSuccess) throw new VerificationException('عملیات با خطا مواجه شد');
     return {
       raw: response.data,
-      transactionId: TransactionReferenceID,
+      transactionId: transactionReferenceID,
       cardPan: response.data.MaskedCardNumber,
     };
   };
@@ -46,13 +46,13 @@ export class Pasargad extends Driver<API.Config> {
     return currentDateISO.replace(/-/g, '/').replace('T', ' ').replace('Z', '').split('.')[0];
   };
 
-  private signData = async (certificate_file: string, data: unknown): Promise<string> => {
-    const xmlKey = (await fs.readFile(certificate_file)).toString('base64');
+  private signData = async (certificateFilePath: string, data: unknown): Promise<string> => {
+    const xmlKey = (await fs.readFile(certificateFilePath)).toString('base64');
     const sign = crypto.createSign('SHA1');
-    const pemkey = new RsaXml().exportPemKey(xmlKey);
+    const pemKey = new RsaXml().exportPemKey(xmlKey);
     sign.write(JSON.stringify(data));
     sign.end();
-    const signedData = sign.sign(Buffer.from(pemkey), 'base64');
+    const signedData = sign.sign(Buffer.from(pemKey), 'base64');
     return signedData;
   };
 }
