@@ -72,6 +72,24 @@ export interface RequestPaymentReq {
   PIDN?: string;
 }
 
+export interface RequestPaymentRes {
+  /**
+   * نشان دهنده موفقیت آمیز بودن و یا شکست عملیات
+   * @example true
+   */
+  IsSuccess: boolean;
+  /**
+   * پیام بانک
+   * @example عملیات با موفقیت انجام شد
+   */
+  Message: string;
+  /**
+   * توکن
+   * @example 02302dasd15a1f121fasd2asda
+   */
+  Token: string;
+}
+
 export interface CallbackParams {
   invoiceNumber: string;
   invoiceDate: string;
