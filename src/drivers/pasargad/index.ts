@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { Driver } from 'driver';
-import { VerificationException } from 'exceptions';
+import { RequestException, VerificationException } from 'exceptions';
 import { LinksObject } from 'types';
 import * as API from './api';
 import fs from 'fs/promises';
@@ -12,7 +12,37 @@ export class Pasargad extends Driver<API.Config> {
   }
   protected links: LinksObject = API.links;
   requestPayment = async (options: API.RequestOptions) => {
-    return this.makeRequestInfo(12, 'GET', this.getLinks().PAYMENT, { n: '' });
+    options = this.getParsedData(options, API.tRequestOptions);
+    const { amount, callbackUrl, invoiceDate, invoiceNumber, email, PIDN, mobile, name } = options;
+    const { merchantId, terminalId } = this.config;
+
+    const data: API.RequestPaymentReq = {
+      MerchantCode: merchantId,
+      TerminalCode: terminalId,
+      Action: 1003,
+      Amount: amount,
+      InvoiceDate: invoiceDate,
+      InvoiceNumber: invoiceNumber,
+      RedirectAddress: callbackUrl,
+      Timestamp: this.getCurrentTimestamp(),
+    };
+    const optionalParams = Object.entries({ email, PIDN, mobile, name });
+    for (const param of optionalParams) if (param[1]) data[param[0]] = param[1];
+
+    const response = await axios.post<API.RequestPaymentReq, { data: API.RequestPaymentRes }>(
+      this.getLinks().REQUEST,
+      data,
+      {
+        headers: {
+          Sign: await this.signData(this.config.certificateFilePath, data),
+        },
+      },
+    );
+
+    if (!response.data?.IsSuccess) {
+      throw new RequestException('عملیات با خطا مواجه شد');
+    }
+    return this.makeRequestInfo(response.data.Token, 'GET', this.getLinks().PAYMENT, { n: response.data.Token });
   };
   verifyPayment = async (_options: API.VerifyOptions, params: API.CallbackParams): Promise<API.Receipt> => {
     const { amount, invoiceDate, invoiceNumber, transactionReferenceID } = params;
