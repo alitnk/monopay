@@ -77,7 +77,6 @@ export interface VerifyPaymentRes {
 
 export const tRequestOptions = t.intersection([
   t.type({
-    certificate_file: t.string,
     invoiceNumber: t.string,
     invoiceDate: t.string,
   }),
@@ -93,6 +92,7 @@ export const tRequestOptions = t.intersection([
 export type RequestOptions = t.TypeOf<typeof tRequestOptions>;
 
 export const tConfig = t.interface({
+  certificate_file: t.string,
   merchantId: t.string,
   terminalId: t.string,
 });
