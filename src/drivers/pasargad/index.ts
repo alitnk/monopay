@@ -26,7 +26,6 @@ export class Pasargad extends Driver<API.Config> {
     };
     const optionalParams = Object.entries({ Email: email, Mobile: mobile });
     for (const param of optionalParams) if (param[1]) data[param[0]] = param[1];
-    console.log(`params`, data);
     const response = await axios.post<API.RequestPaymentReq, { data: API.RequestPaymentRes }>(
       this.getLinks().REQUEST,
       data,
