@@ -24,9 +24,8 @@ export class Pasargad extends Driver<API.Config> {
       RedirectAddress: callbackUrl,
       Timestamp: this.getCurrentTimestamp(),
     };
-    const optionalParams = Object.entries({ email, PIDN, mobile, name });
+    const optionalParams = Object.entries({ Email: email, PIDN, Mobile: mobile, MerchantName: name });
     for (const param of optionalParams) if (param[1]) data[param[0]] = param[1];
-
     const response = await axios.post<API.RequestPaymentReq, { data: API.RequestPaymentRes }>(
       this.getLinks().REQUEST,
       data,

@@ -37,6 +37,8 @@ describe('Pasargad', () => {
           callbackUrl: 'https://test.com/callback',
           invoiceDate: new Date().toISOString(),
           invoiceNumber: '12',
+          email: 'someone@something.some', // optional property
+          mobile: '09100000000',
         })
       ).url,
     ).toBe('string');
