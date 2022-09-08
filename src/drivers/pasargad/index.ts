@@ -40,7 +40,7 @@ export class Pasargad extends Driver<API.Config> {
     );
 
     if (!response.data?.IsSuccess) {
-      throw new RequestException('عملیات با خطا مواجه شد');
+      throw new RequestException(API.errorMessage);
     }
     return this.makeRequestInfo(response.data.Token, 'GET', this.getLinks().PAYMENT, { n: response.data.Token });
   };
@@ -63,7 +63,7 @@ export class Pasargad extends Driver<API.Config> {
         },
       },
     );
-    if (!response.data?.IsSuccess) throw new VerificationException('عملیات با خطا مواجه شد');
+    if (!response.data?.IsSuccess) throw new VerificationException(API.errorMessage);
     return {
       raw: response.data,
       transactionId: transactionReferenceID,

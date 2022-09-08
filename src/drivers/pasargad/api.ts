@@ -156,6 +156,8 @@ export interface VerifyPaymentRes {
   ShaparakRefNumber: string;
 }
 
+export const errorMessage = 'عملیات با خطا مواجه شد';
+
 export const tRequestOptions = t.intersection([
   t.type({
     invoiceNumber: t.string,
