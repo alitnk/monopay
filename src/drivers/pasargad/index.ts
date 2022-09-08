@@ -11,7 +11,7 @@ export class Pasargad extends Driver<API.Config> {
   protected links: LinksObject = API.links;
   requestPayment = async (options: API.RequestOptions) => {
     options = this.getParsedData(options, API.tRequestOptions);
-    const { amount, callbackUrl, invoiceDate, invoiceNumber, email, PIDN, mobile, name } = options;
+    const { amount, callbackUrl, invoiceDate, invoiceNumber, email, mobile } = options;
     const { merchantId, terminalId } = this.config;
 
     const data: API.RequestPaymentReq = {
@@ -24,8 +24,9 @@ export class Pasargad extends Driver<API.Config> {
       RedirectAddress: callbackUrl,
       Timestamp: this.getCurrentTimestamp(),
     };
-    const optionalParams = Object.entries({ Email: email, PIDN, Mobile: mobile, MerchantName: name });
+    const optionalParams = Object.entries({ Email: email, Mobile: mobile });
     for (const param of optionalParams) if (param[1]) data[param[0]] = param[1];
+    console.log(`params`, data);
     const response = await axios.post<API.RequestPaymentReq, { data: API.RequestPaymentRes }>(
       this.getLinks().REQUEST,
       data,

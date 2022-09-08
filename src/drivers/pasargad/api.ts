@@ -174,8 +174,6 @@ export const tRequestOptions = t.intersection([
   t.partial({
     mobile: t.string,
     email: t.string,
-    name: t.string,
-    PIDN: t.string,
   }),
   tBaseRequestOptions,
 ]);
