@@ -3,9 +3,7 @@ import { Driver } from '../../driver';
 import { RequestException, VerificationException } from '../../exceptions';
 import { LinksObject } from '../../types';
 import * as API from './api';
-import * as fs from 'fs/promises';
 import * as crypto from 'crypto';
-import * as RsaXml from 'rsa-xml';
 export class Pasargad extends Driver<API.Config> {
   constructor(config: API.Config) {
     super(config, API.tConfig);
@@ -34,7 +32,7 @@ export class Pasargad extends Driver<API.Config> {
       data,
       {
         headers: {
-          Sign: await this.signData(this.config.certificateFilePath, data),
+          Sign: await this.signData(this.config.privateKey, data),
         },
       },
     );
@@ -59,7 +57,7 @@ export class Pasargad extends Driver<API.Config> {
       data,
       {
         headers: {
-          Sign: await this.signData(this.config.certificateFilePath, data),
+          Sign: await this.signData(this.config.privateKey, data),
         },
       },
     );
@@ -76,13 +74,11 @@ export class Pasargad extends Driver<API.Config> {
     return currentDateISO.replace(/-/g, '/').replace('T', ' ').replace('Z', '').split('.')[0];
   };
 
-  private signData = async (certificateFilePath: string, data: unknown): Promise<string> => {
-    const xmlKey = (await fs.readFile(certificateFilePath)).toString('base64');
+  private signData = async (privateKey: string, data: unknown): Promise<string> => {
     const sign = crypto.createSign('SHA1');
-    const pemKey = new RsaXml().exportPemKey(xmlKey);
     sign.write(JSON.stringify(data));
     sign.end();
-    const signedData = sign.sign(Buffer.from(pemKey), 'base64');
+    const signedData = sign.sign(Buffer.from(privateKey), 'base64');
     return signedData;
   };
 }

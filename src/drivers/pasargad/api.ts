@@ -175,7 +175,7 @@ export const tRequestOptions = t.intersection([
 export type RequestOptions = t.TypeOf<typeof tRequestOptions>;
 
 export const tConfig = t.interface({
-  certificateFilePath: t.string,
+  privateKey: t.string,
   merchantId: t.string,
   terminalId: t.string,
 });
