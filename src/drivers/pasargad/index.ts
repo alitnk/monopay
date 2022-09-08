@@ -43,11 +43,12 @@ export class Pasargad extends Driver<API.Config> {
     return this.makeRequestInfo(response.data.Token, 'GET', this.getLinks().PAYMENT, { n: response.data.Token });
   };
   verifyPayment = async (_options: API.VerifyOptions, params: API.CallbackParams): Promise<API.Receipt> => {
-    const { amount, invoiceDate, invoiceNumber, transactionReferenceID } = params;
+    const { amount } = _options;
+    const { iD, iN, tref } = params;
     const data: API.VerifyPaymentReq = {
       Amount: amount,
-      InvoiceDate: invoiceDate,
-      InvoiceNumber: invoiceNumber,
+      InvoiceDate: iD,
+      InvoiceNumber: iN,
       Timestamp: this.getCurrentTimestamp(),
       TerminalCode: this.config.terminalId,
       MerchantCode: this.config.merchantId,
@@ -64,7 +65,7 @@ export class Pasargad extends Driver<API.Config> {
     if (!response.data?.IsSuccess) throw new VerificationException(API.errorMessage);
     return {
       raw: response.data,
-      transactionId: transactionReferenceID,
+      transactionId: tref,
       cardPan: response.data.MaskedCardNumber,
     };
   };

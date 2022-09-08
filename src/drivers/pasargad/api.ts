@@ -91,10 +91,18 @@ export interface RequestPaymentRes {
 }
 
 export interface CallbackParams {
-  invoiceNumber: string;
-  invoiceDate: string;
-  amount: number;
-  transactionReferenceID: string;
+  /**
+   * Invoice Number
+   */
+  iN: string;
+  /**
+   * Invoice Date
+   */
+  iD: string;
+  /**
+   * Transaction refrence ID
+   */
+  tref: string;
 }
 
 export interface VerifyPaymentReq {
