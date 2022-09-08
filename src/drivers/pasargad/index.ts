@@ -1,10 +1,10 @@
 import axios from 'axios';
-import { Driver } from 'driver';
-import { RequestException, VerificationException } from 'exceptions';
-import { LinksObject } from 'types';
+import { Driver } from '../../driver';
+import { RequestException, VerificationException } from '../../exceptions';
+import { LinksObject } from '../../types';
 import * as API from './api';
-import fs from 'fs/promises';
-import crypto from 'crypto';
+import * as fs from 'fs/promises';
+import * as crypto from 'crypto';
 import * as RsaXml from 'rsa-xml';
 export class Pasargad extends Driver<API.Config> {
   constructor(config: API.Config) {
