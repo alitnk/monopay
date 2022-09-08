@@ -181,6 +181,18 @@ export const tRequestOptions = t.intersection([
 export type RequestOptions = t.TypeOf<typeof tRequestOptions>;
 
 export const tConfig = t.interface({
+  /**
+   * This is your **RSA private key** in `pem` format.
+   *
+   * You are likely to have an `xml` version of your key due to Pasargad providing a `certificate.xml` file.
+   * In order to use this method you must convert it to `pem` format and provide the private key as pem for this field.
+   *
+   * To convert xml into pem you may use an rsa-xml to rsa-pem library or use {@link https://github.com/pepco-api pasargad sdk's code} for it
+   *
+   * You can turn to online convertors as well if it's not a matter of security
+   *
+   * - Make sure you have the correct key (by converting it to xml again and comparing the results with the actual xml version)
+   */
   privateKey: t.string,
   merchantId: t.string,
   terminalId: t.string,
