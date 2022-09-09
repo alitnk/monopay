@@ -7,6 +7,8 @@ import { NextPay } from './drivers/nextpay';
 import * as NextPayAPI from './drivers/nextpay/api';
 import { Parsian } from './drivers/parsian';
 import * as ParsianAPI from './drivers/parsian/api';
+import { Pasargad } from './drivers/pasargad';
+import * as PasargadAPI from './drivers/pasargad/api';
 import { Payir } from './drivers/payir';
 import * as PayirAPI from './drivers/payir/api';
 import { PayPing } from './drivers/payping';
@@ -26,6 +28,7 @@ export { Behpardakht } from './drivers/behpardakht';
 export { IdPay } from './drivers/idpay';
 export { NextPay } from './drivers/nextpay';
 export { Parsian } from './drivers/parsian';
+export { Pasargad } from './drivers/pasargad';
 export { Payir } from './drivers/payir';
 export { PayPing } from './drivers/payping';
 export { Sadad } from './drivers/sadad';
@@ -39,6 +42,7 @@ interface ConfigMap {
   nextpay: NextPayAPI.Config;
   payir: PayirAPI.Config;
   parsian: ParsianAPI.Config;
+  pasargad: PasargadAPI.Config;
   payping: PayPingAPI.Config;
   sadad: SadadAPI.Config;
   saman: SamanAPI.Config;
@@ -57,6 +61,7 @@ const drivers = {
   nextpay: NextPay,
   payir: Payir,
   parsian: Parsian,
+  pasargad: Pasargad,
   payping: PayPing,
   sadad: Sadad,
   saman: Saman,
