@@ -1,8 +1,8 @@
 import axios from 'axios';
-import { getPaymentDriver } from '../../src/drivers';
-import { Payir } from '../../src/drivers/payir';
-import * as API from '../../src/drivers/payir/api';
-import { RequestException } from '../../src/exceptions';
+import { getPaymentDriver } from '../../drivers';
+import { RequestException } from '../../exceptions';
+import * as API from './api';
+import { Payir } from './payir';
 
 jest.mock('axios');
 

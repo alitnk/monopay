@@ -1,9 +1,9 @@
 import axios from 'axios';
 import * as crypto from 'crypto';
-import { RequestException, VerificationException } from '../../src/exceptions';
-import { getPaymentDriver } from '../../src/drivers';
-import { Pasargad } from '../../src/drivers/pasargad';
-import * as API from '../../src/drivers/pasargad/api';
+import { getPaymentDriver } from '../../drivers';
+import { RequestException, VerificationException } from '../../exceptions';
+import * as API from './api';
+import { Pasargad } from './pasargad';
 
 jest.mock('axios');
 

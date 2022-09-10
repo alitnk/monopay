@@ -1,4 +1,4 @@
-import { PaymentInfo } from '../src/payment-info';
+import { PaymentInfo } from './payment-info';
 
 describe('Payment Info Class', () => {
   it('has certain fields on it', () => {

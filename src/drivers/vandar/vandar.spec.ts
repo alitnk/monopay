@@ -1,9 +1,9 @@
 import axios from 'axios';
-import { PaymentException, VerificationException } from '../../src/';
-import { getPaymentDriver } from '../../src/drivers';
-import { Vandar } from '../../src/drivers/vandar';
-import * as API from '../../src/drivers/vandar/api';
-import { RequestException } from '../../src/exceptions';
+import { PaymentException, VerificationException } from '../..';
+import { getPaymentDriver } from '../../drivers';
+import { RequestException } from '../../exceptions';
+import * as API from './api';
+import { Vandar } from './vandar';
 
 jest.mock('axios');
 
