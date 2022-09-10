@@ -1,5 +1,12 @@
-import * as t from 'io-ts';
-import { BaseReceipt, ErrorList, LinksObject, tBaseRequestOptions, tBaseVerifyOptions } from '../../types';
+import { z } from 'zod';
+import {
+  baseConfigSchema,
+  BaseReceipt,
+  baseRequestSchema,
+  baseVerifySchema,
+  ErrorList,
+  LinksObject,
+} from '../../types';
 
 /*
  * IDPay's API
@@ -287,30 +294,23 @@ export const errors: ErrorList = {
  * Package's API
  */
 
-export const tConfig = t.intersection([
-  t.partial({
-    sandbox: t.boolean,
-  }),
-  t.interface({
-    apiKey: t.string,
-  }),
-]);
+export const configSchema = baseConfigSchema.extend({
+  sandbox: z.boolean().nullish(),
+  apiKey: z.string(),
+});
 
-export type Config = t.TypeOf<typeof tConfig>;
+export type Config = z.infer<typeof configSchema>;
 
-export const tRequestOptions = t.intersection([
-  t.partial({
-    mobile: t.string,
-    email: t.string,
-    name: t.string,
-  }),
-  tBaseRequestOptions,
-]);
+export const requestSchema = baseRequestSchema.extend({
+  mobile: z.string().optional(),
+  email: z.string().optional(),
+  name: z.string().optional(),
+});
 
-export type RequestOptions = t.TypeOf<typeof tRequestOptions>;
+export type RequestOptions = z.infer<typeof requestSchema>;
 
-export const tVerifyOptions = t.intersection([t.interface({}), tBaseVerifyOptions]);
+export const verifySchema = baseVerifySchema;
 
-export type VerifyOptions = t.TypeOf<typeof tVerifyOptions>;
+export type VerifyOptions = z.TypeOf<typeof verifySchema>;
 
 export type Receipt = BaseReceipt<Exclude<VerifyPaymentRes, any[]>>;

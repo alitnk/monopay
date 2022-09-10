@@ -1,5 +1,5 @@
-import * as t from 'io-ts';
-import { BaseReceipt, LinksObject, tBaseRequestOptions, tBaseVerifyOptions } from '../../types';
+import { z } from 'zod';
+import { baseConfigSchema, BaseReceipt, baseRequestSchema, baseVerifySchema, LinksObject } from '../../types';
 
 /*
  * Parsian's API
@@ -12,7 +12,7 @@ export const links: LinksObject = {
   default: {
     REQUEST: 'https://pec.shaparak.ir/NewIPGServices/Sale/SaleService.asmx?wsdl',
     VERIFICATION: 'https://pec.shaparak.ir/NewIPGServices/Confirm/ConfirmService.asmx?wsdl',
-    PAYMENT: '‫‪https://pec.shaparak.ir/NewIPG/',
+    PAYMENT: 'https://pec.shaparak.ir/NewIPG/',
   },
 };
 
@@ -165,18 +165,18 @@ export interface ReversalPaymentRes {
  * Package's API
  */
 
-export const tConfig = t.interface({
-  merchantId: t.string,
+export const configSchema = baseConfigSchema.extend({
+  merchantId: z.string(),
 });
 
-export type Config = t.TypeOf<typeof tConfig>;
+export type Config = z.infer<typeof configSchema>;
 
-export const tRequestOptions = t.intersection([t.partial({}), tBaseRequestOptions]);
+export const requestSchema = baseRequestSchema;
 
-export type RequestOptions = t.TypeOf<typeof tRequestOptions>;
+export type RequestOptions = z.infer<typeof requestSchema>;
 
-export const tVerifyOptions = t.intersection([t.interface({}), tBaseVerifyOptions]);
+export const verifySchema = baseVerifySchema;
 
-export type VerifyOptions = t.TypeOf<typeof tVerifyOptions>;
+export type VerifyOptions = z.infer<typeof verifySchema>;
 
 export type Receipt = BaseReceipt<VerifyPaymentRes>;

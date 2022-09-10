@@ -1,5 +1,5 @@
-import * as t from 'io-ts';
-import { BaseReceipt, ErrorList, LinksObject, tBaseRequestOptions, tBaseVerifyOptions } from '../../types';
+import { z } from 'zod';
+import { BaseReceipt, baseRequestSchema, baseVerifySchema, ErrorList, LinksObject } from '../../types';
 
 /*
  * Sadad's API
@@ -97,32 +97,32 @@ export interface RequestPaymentRes {
   Description: string;
 }
 
-export const tMultiplexingRow = t.interface({
+export const multiplexingRowSchema = z.object({
   /**
    * رديف يا شماره شبا حساب
    */
-  IbanNumber: t.number,
+  IbanNumber: z.number(),
 
   /**
    * مبلغ یا درصد
    */
-  Value: t.number,
+  Value: z.number(),
 });
 
-export type MultiplexingRow = t.TypeOf<typeof tMultiplexingRow>;
+export type MultiplexingRow = z.infer<typeof multiplexingRowSchema>;
 
-export const tMultiplexingObject = t.interface({
+export const multiplexingObjectSchema = z.object({
   /**
    * ریز مبالغ و ردیف (یا شماره شبا) حساب های متناظر می بایست ارسال گردد)
    */
-  Type: t.union([t.literal('Percentage'), t.literal('Amount')]),
+  Type: z.union([z.literal('Percentage'), z.literal('Amount')]),
 
   /**
    * درصد مورد نظر جهت واریز و ردیف یا شماره شبا حساب های مورد نظر می بایست ارسال گردد
    */
-  MultiplexingRows: t.array(tMultiplexingRow),
+  MultiplexingRows: z.array(multiplexingRowSchema),
 });
-export type MultiplexingObject = t.TypeOf<typeof tMultiplexingObject>;
+export type MultiplexingObject = z.infer<typeof multiplexingObjectSchema>;
 
 export interface CallbackParams {
   OrderId: number | string;
@@ -245,27 +245,24 @@ export const verifyErrors: ErrorList = {
  * Package's API
  */
 
-export const tConfig = t.interface({
-  merchantId: t.string,
-  terminalId: t.string,
-  terminalKey: t.string,
+export const tConfig = z.object({
+  merchantId: z.string(),
+  terminalId: z.string(),
+  terminalKey: z.string(),
 });
 
-export type Config = t.TypeOf<typeof tConfig>;
+export type Config = z.infer<typeof tConfig>;
 
-export const tRequestOptions = t.intersection([
-  tBaseRequestOptions,
-  t.partial({
-    mobile: t.string,
-    multiplexingData: tMultiplexingObject,
-    appName: t.string,
-  }),
-]);
+export const requestSchema = baseRequestSchema.extend({
+  mobile: z.string().optional(),
+  multiplexingData: multiplexingObjectSchema.optional(),
+  appName: z.string().optional(),
+});
 
-export type RequestOptions = t.TypeOf<typeof tRequestOptions>;
+export type RequestOptions = z.infer<typeof requestSchema>;
 
-export const tVerifyOptions = t.intersection([t.interface({}), tBaseVerifyOptions]);
+export const verifySchema = baseVerifySchema;
 
-export type VerifyOptions = t.TypeOf<typeof tVerifyOptions>;
+export type VerifyOptions = z.infer<typeof verifySchema>;
 
 export type Receipt = BaseReceipt<CallbackParams>;

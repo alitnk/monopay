@@ -1,5 +1,5 @@
-import * as t from 'io-ts';
-import { BaseReceipt, LinksObject, tBaseRequestOptions, tBaseVerifyOptions } from '../../types';
+import { z } from 'zod';
+import { baseConfigSchema, BaseReceipt, baseRequestSchema, baseVerifySchema, LinksObject } from '../../types';
 
 /*
  * Vandar's API
@@ -138,47 +138,38 @@ export interface VerifyPaymentRes {
  * Package's API
  */
 
-export const tConfig = t.intersection([
-  t.partial({}),
-  t.interface({
-    api_key: t.string,
-  }),
-]);
+export const tConfig = baseConfigSchema.extend({
+  api_key: z.string(),
+});
 
-export type Config = t.TypeOf<typeof tConfig>;
+export type Config = z.infer<typeof tConfig>;
 
-export const tRequestOptions = t.intersection([
-  t.partial({
-    mobile_number: t.string,
-    factorNumber: t.string,
-    description: t.string,
-    valid_card_number: t.string,
-    comment: t.string,
-  }),
-  tBaseRequestOptions,
-]);
+export const requestSchema = baseRequestSchema.extend({
+  mobile_number: z.string().optional(),
+  factorNumber: z.string().optional(),
+  description: z.string().optional(),
+  valid_card_number: z.string().optional(),
+  comment: z.string().optional(),
+});
 
-export type RequestOptions = t.TypeOf<typeof tRequestOptions>;
+export type RequestOptions = z.infer<typeof requestSchema>;
 
-export const tVerifyOptions = t.intersection([
-  t.partial({
-    status: t.number,
-    // amount: t.string,
-    realAmount: t.number,
-    wage: t.string,
-    transId: t.number,
-    factorNumber: t.string,
-    mobile: t.string,
-    description: t.string,
-    cardNumber: t.string,
-    paymentDate: t.string,
-    cid: t.string,
-    message: t.string,
-    errors: t.array(t.string),
-  }),
-  tBaseVerifyOptions,
-]);
+export const verifySchema = baseVerifySchema.extend({
+  status: z.number().optional(),
+  // amount: z.string().optional(),
+  realAmount: z.number().optional(),
+  wage: z.string().optional(),
+  transId: z.number().optional(),
+  factorNumber: z.string().optional(),
+  mobile: z.string().optional(),
+  description: z.string().optional(),
+  cardNumber: z.string().optional(),
+  paymentDate: z.string().optional(),
+  cid: z.string().optional(),
+  message: z.string().optional(),
+  errors: z.array(z.string()).optional(),
+});
 
-export type VerifyOptions = t.TypeOf<typeof tVerifyOptions>;
+export type VerifyOptions = z.infer<typeof verifySchema>;
 
 export type Receipt = BaseReceipt<CallbackParams>;

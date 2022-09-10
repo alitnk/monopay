@@ -1,4 +1,5 @@
 import * as t from 'io-ts';
+import { z } from 'zod';
 
 export const tBaseRequestOptions = t.intersection([
   t.interface({
@@ -9,13 +10,28 @@ export const tBaseRequestOptions = t.intersection([
     description: t.string,
   }),
 ]);
-export type BaseRequestOptions = t.TypeOf<typeof tBaseRequestOptions>;
+
+export const baseConfigSchema = z.object({});
+
+export type BaseConfigOptions = z.infer<typeof baseConfigSchema>;
+
+export const baseRequestSchema = z.object({
+  callbackUrl: z.string(),
+  amount: z.number(),
+  description: z.string().optional(),
+});
+
+export type BaseRequestOptions = z.infer<typeof baseRequestSchema>;
 
 export const tBaseVerifyOptions = t.interface({
   amount: t.number,
 });
 
-export type BaseVerifyOptions = t.Type<typeof tBaseVerifyOptions>;
+export const baseVerifySchema = z.object({
+  amount: z.number(),
+});
+
+export type BaseVerifyOptions = z.infer<typeof baseVerifySchema>;
 
 export interface BaseReceipt<RawReceipt = any> {
   transactionId: string | number;

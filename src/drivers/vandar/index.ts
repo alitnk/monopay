@@ -11,7 +11,7 @@ export class Vandar extends Driver<API.Config> {
   protected links = API.links;
 
   requestPayment = async (options: API.RequestOptions) => {
-    options = this.getParsedData(options, API.tRequestOptions);
+    options = this.getParsedData(options, API.requestSchema);
 
     const { amount, callbackUrl, ...otherOptions } = options;
     const { api_key } = this.config;
@@ -34,11 +34,14 @@ export class Vandar extends Driver<API.Config> {
       throw new RequestException(errors.join('\n'));
     }
 
+    // TODO: Throw an approperiate error here
+    if (!token) throw Error('No token provided');
+
     return this.makeRequestInfo(token, 'GET', this.getLinks().PAYMENT + response.data.token);
   };
 
   verifyPayment = async (options: API.VerifyOptions, params: API.CallbackParams): Promise<API.Receipt> => {
-    options = this.getParsedData(options, API.tVerifyOptions);
+    options = this.getParsedData(options, API.verifySchema);
 
     const { token, payment_status } = params;
     const { api_key } = this.config;
@@ -61,6 +64,11 @@ export class Vandar extends Driver<API.Config> {
 
     if (errors?.length) {
       throw new VerificationException(errors.join('\n'));
+    }
+
+    // TODO: Throw an approperiate error here
+    if (typeof transId === 'undefined') {
+      throw Error('No transaction ID provided');
     }
 
     return {

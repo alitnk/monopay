@@ -5,13 +5,13 @@ import * as API from './api';
 
 export class NextPay extends Driver<API.Config> {
   constructor(config: API.Config) {
-    super(config, API.tConfig);
+    super(config, API.configSchema);
   }
 
   protected links = API.links;
 
   requestPayment = async (options: API.RequestOptions) => {
-    options = this.getParsedData(options, API.tRequestOptions);
+    options = this.getParsedData(options, API.requestSchema);
 
     const { amount, callbackUrl, mobile, customFields } = options;
 

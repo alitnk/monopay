@@ -1,5 +1,12 @@
-import * as t from 'io-ts';
-import { BaseReceipt, ErrorList, LinksObject, tBaseRequestOptions, tBaseVerifyOptions } from '../../types';
+import { z } from 'zod';
+import {
+  baseConfigSchema,
+  BaseReceipt,
+  baseRequestSchema,
+  baseVerifySchema,
+  ErrorList,
+  LinksObject,
+} from '../../types';
 
 /*
  * Behpardakht's API
@@ -206,25 +213,22 @@ export const errors: ErrorList = {
  * Package's API
  */
 
-export const tConfig = t.interface({
-  terminalId: t.number,
-  username: t.string,
-  password: t.string,
+export const configSchema = baseConfigSchema.extend({
+  terminalId: z.number(),
+  username: z.string(),
+  password: z.string(),
 });
 
-export type Config = t.TypeOf<typeof tConfig>;
+export type Config = z.infer<typeof configSchema>;
 
-export const tRequestOptions = t.intersection([
-  t.partial({
-    payerId: t.number,
-  }),
-  tBaseRequestOptions,
-]);
+export const requestSchema = baseRequestSchema.extend({
+  payerId: z.number().optional(),
+});
 
-export type RequestOptions = t.TypeOf<typeof tRequestOptions>;
+export type RequestOptions = z.infer<typeof requestSchema>;
 
-export const tVerifyOptions = t.intersection([t.interface({}), tBaseVerifyOptions]);
+export const verifySchema = baseVerifySchema;
 
-export type VerifyOptions = t.TypeOf<typeof tVerifyOptions>;
+export type VerifyOptions = z.infer<typeof verifySchema>;
 
 export type Receipt = BaseReceipt<CallbackParams>;

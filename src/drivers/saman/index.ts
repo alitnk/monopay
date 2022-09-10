@@ -6,13 +6,13 @@ import * as API from './api';
 
 export class Saman extends Driver<API.Config> {
   constructor(config: API.Config) {
-    super(config, API.tConfig);
+    super(config, API.configSchema);
   }
 
   protected links = API.links;
 
   requestPayment = async (options: API.RequestOptions) => {
-    options = this.getParsedData(options, API.tRequestOptions);
+    options = this.getParsedData(options, API.requestSchema);
 
     const { amount, callbackUrl, mobile, wage } = options;
     const { merchantId } = this.config;

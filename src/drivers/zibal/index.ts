@@ -5,7 +5,7 @@ import * as API from './api';
 
 export class Zibal extends Driver<API.Config> {
   constructor(config: API.Config) {
-    super(config, API.tConfig);
+    super(config, API.configSchema);
   }
 
   protected links = API.links;

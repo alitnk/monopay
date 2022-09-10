@@ -1,5 +1,5 @@
-import * as t from 'io-ts';
-import { BaseReceipt, LinksObject, tBaseRequestOptions, tBaseVerifyOptions } from '../../types';
+import { z } from 'zod';
+import { baseConfigSchema, BaseReceipt, baseRequestSchema, baseVerifySchema, LinksObject } from '../../types';
 
 export const links: LinksObject = {
   default: {
@@ -166,21 +166,16 @@ export interface VerifyPaymentRes {
 
 export const errorMessage = 'عملیات با خطا مواجه شد';
 
-export const tRequestOptions = t.intersection([
-  t.type({
-    invoiceNumber: t.string,
-    invoiceDate: t.string,
-  }),
-  t.partial({
-    mobile: t.string,
-    email: t.string,
-  }),
-  tBaseRequestOptions,
-]);
+export const requestSchema = baseRequestSchema.extend({
+  invoiceNumber: z.string(),
+  invoiceDate: z.string(),
+  mobile: z.string().optional(),
+  email: z.string().optional(),
+});
 
-export type RequestOptions = t.TypeOf<typeof tRequestOptions>;
+export type RequestOptions = z.infer<typeof requestSchema>;
 
-export const tConfig = t.interface({
+export const configSchema = baseConfigSchema.extend({
   /**
    * This is your **RSA private key** in `pem` format.
    *
@@ -193,15 +188,15 @@ export const tConfig = t.interface({
    *
    * - Make sure you have the correct key (by converting it to xml again and comparing the results with the actual xml version)
    */
-  privateKey: t.string,
-  merchantId: t.string,
-  terminalId: t.string,
+  privateKey: z.string(),
+  merchantId: z.string(),
+  terminalId: z.string(),
 });
 
-export type Config = t.TypeOf<typeof tConfig>;
+export type Config = z.infer<typeof configSchema>;
 
-export const tVerifyOptions = t.intersection([t.interface({}), tBaseVerifyOptions]);
+export const verifySchema = baseVerifySchema;
 
-export type VerifyOptions = t.TypeOf<typeof tVerifyOptions>;
+export type VerifyOptions = z.infer<typeof verifySchema>;
 
 export type Receipt = BaseReceipt<VerifyPaymentRes>;

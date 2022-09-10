@@ -6,11 +6,11 @@ import * as API from './api';
 import * as crypto from 'crypto';
 export class Pasargad extends Driver<API.Config> {
   constructor(config: API.Config) {
-    super(config, API.tConfig);
+    super(config, API.configSchema);
   }
   protected links: LinksObject = API.links;
   requestPayment = async (options: API.RequestOptions) => {
-    options = this.getParsedData(options, API.tRequestOptions);
+    options = this.getParsedData(options, API.requestSchema);
     const { amount, callbackUrl, invoiceDate, invoiceNumber, email, mobile } = options;
     const { merchantId, terminalId } = this.config;
 
@@ -25,7 +25,7 @@ export class Pasargad extends Driver<API.Config> {
       Timestamp: this.getCurrentTimestamp(),
     };
     const optionalParams = Object.entries({ Email: email, Mobile: mobile });
-    for (const param of optionalParams) if (param[1]) data[param[0]] = param[1];
+    for (const param of optionalParams) if (param[1]) data[param[0] as 'Email' | 'Mobile'] = param[1];
     const response = await axios.post<API.RequestPaymentReq, { data: API.RequestPaymentRes }>(
       this.getLinks().REQUEST,
       data,

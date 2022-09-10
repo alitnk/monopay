@@ -12,7 +12,7 @@ export class Sadad extends Driver<API.Config> {
   protected links = API.links;
 
   requestPayment = async (options: API.RequestOptions) => {
-    options = this.getParsedData(options, API.tRequestOptions);
+    options = this.getParsedData(options, API.requestSchema);
 
     const { amount, callbackUrl, mobile, multiplexingData, appName } = options;
     const { merchantId, terminalId, terminalKey } = this.config;

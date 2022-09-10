@@ -17,20 +17,17 @@ describe('PayPing Driver', () => {
 
     const driver = getPaymentDriver<PayPing>('payping', { apiKey: '2134' });
 
-    expect(
-      typeof (await driver.requestPayment({ callbackUrl: 'https://path.to/callback-url', amount: 20000 })).url,
-    ).toBe('string');
+    const res = await driver.requestPayment({ callbackUrl: 'https://path.to/callback-url', amount: 20000 });
+    expect(typeof res.url).toBe('string');
   });
 
-  it('throws payment errors accordingly', async () => {
+  it('throws payment errors accordingly', () => {
     // mockedAxios.post.mockRejectedValueOnce({ response: { status: 401 } });
     mockedAxios.post.mockReturnValueOnce(Promise.reject({ response: { status: 401 } }));
 
     const driver = getPaymentDriver<PayPing>('payping', { apiKey: '2134' });
 
-    await expect(async () => await driver.requestPayment({ amount: 2000, callbackUrl: 'asd' })).rejects.toThrow(
-      RequestException,
-    );
+    expect(driver.requestPayment({ amount: 2000, callbackUrl: 'asd' })).rejects.toThrow(RequestException);
   });
 
   it('verifies the purchase correctly', async () => {
@@ -45,19 +42,17 @@ describe('PayPing Driver', () => {
 
     const driver = getPaymentDriver<PayPing>('payping', { apiKey: '2134' });
 
-    expect(
-      (
-        await driver.verifyPayment(
-          { amount: 2000 },
-          {
-            code: '1234',
-            cardhashpan: 'hash',
-            clientrefid: 'clientrefid',
-            cardnumber: '1234-****-****-1234',
-            refid: '1234',
-          },
-        )
-      ).transactionId,
-    ).toEqual(expectedResult.transactionId);
+    const res = await driver.verifyPayment(
+      { amount: 2000 },
+      {
+        code: '1234',
+        cardhashpan: 'hash',
+        clientrefid: 'clientrefid',
+        cardnumber: '1234-****-****-1234',
+        refid: '1234',
+      },
+    );
+
+    expect(res.transactionId).toEqual(expectedResult.transactionId);
   });
 });

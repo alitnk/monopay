@@ -1,5 +1,12 @@
-import * as t from 'io-ts';
-import { BaseReceipt, ErrorList, LinksObject, tBaseRequestOptions, tBaseVerifyOptions } from '../../types';
+import { z } from 'zod';
+import {
+  baseConfigSchema,
+  BaseReceipt,
+  baseRequestSchema,
+  baseVerifySchema,
+  ErrorList,
+  LinksObject,
+} from '../../types';
 
 /*
  * Zibal's API
@@ -17,36 +24,36 @@ export const links: LinksObject = {
 /**
  * @link https://docs.zibal.ir/IPG/API#MultiplexingInfo-object
  */
-export const tMultiplexingObject = t.interface({
+export const multiplexingObjectSchema = z.object({
   /**
    * 	شماره شبای ذی نفع
    */
-  bankAccount: t.string,
+  bankAccount: z.string(),
 
   /**
    * 	شناسه ذی نفع
    */
-  subMerchantId: t.string,
+  subMerchantId: z.string(),
 
   /**
    * 	شناسه کیف پول در پرداختیاری پشتیبانی نمی شود
    */
-  walletID: t.string,
+  walletID: z.string(),
 
   /**
    * 	مبلغ یا درصد
    */
-  amount: t.number,
+  amount: z.number(),
 
   /**
    * 	کارمزد از این آیتم گرفته شود؟
    * فقط در صورتیکه `feeMode: 0` موثر است.
    * اگر مشخص نشود از ذی نفع اصلی با `id: self` کارمزد اخذ میگردد.
    */
-  wagePayer: t.boolean,
+  wagePayer: z.boolean(),
 });
 
-export type MultiplexingObject = t.TypeOf<typeof tMultiplexingObject>;
+export type MultiplexingObject = z.infer<typeof multiplexingObjectSchema>;
 
 export interface RequestPaymentReq {
   /**
@@ -245,35 +252,28 @@ export const verifyErrors: ErrorList = {
  * Package's API
  */
 
-export const tConfig = t.intersection([
-  t.partial({
-    sandbox: t.boolean,
-  }),
-  t.interface({
-    merchantId: t.string,
-  }),
-]);
+export const configSchema = baseConfigSchema.extend({
+  sandbox: z.boolean().optional(),
+  merchantId: z.string(),
+});
 
-export type Config = t.TypeOf<typeof tConfig>;
+export type Config = z.infer<typeof configSchema>;
 
-export const tRequestOptions = t.intersection([
-  t.partial({
-    mobile: t.string,
-    orderId: t.string,
-    allowedCards: t.array(t.string),
-    linkToPay: t.boolean,
-    sms: t.boolean,
-    percentMode: t.union([t.literal(0), t.literal(1)]),
-    feeMode: t.union([t.literal(0), t.literal(1), t.literal(2)]),
-    multiplexingInfos: t.array(tMultiplexingObject),
-  }),
-  tBaseRequestOptions,
-]);
+export const tRequestOptions = baseRequestSchema.extend({
+  mobile: z.string().optional(),
+  orderId: z.string().optional(),
+  allowedCards: z.array(z.string()).optional(),
+  linkToPay: z.boolean().optional(),
+  sms: z.boolean().optional(),
+  percentMode: z.union([z.literal(0), z.literal(1)]).optional(),
+  feeMode: z.union([z.literal(0), z.literal(1), z.literal(2)]).optional(),
+  multiplexingInfos: z.array(multiplexingObjectSchema).optional(),
+});
 
-export type RequestOptions = t.TypeOf<typeof tRequestOptions>;
+export type RequestOptions = z.infer<typeof tRequestOptions>;
 
-export const tVerifyOptions = t.intersection([t.partial({}), tBaseVerifyOptions]);
+export const verifySchema = baseVerifySchema;
 
-export type VerifyOptions = t.TypeOf<typeof tVerifyOptions>;
+export type VerifyOptions = z.infer<typeof verifySchema>;
 
 export type Receipt = BaseReceipt<VerifyPaymentRes>;

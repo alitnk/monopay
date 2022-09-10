@@ -1,5 +1,12 @@
-import * as t from 'io-ts';
-import { BaseReceipt, ErrorList, LinksObject, tBaseRequestOptions, tBaseVerifyOptions } from '../../types';
+import { z } from 'zod';
+import {
+  baseConfigSchema,
+  BaseReceipt,
+  baseRequestSchema,
+  baseVerifySchema,
+  ErrorList,
+  LinksObject,
+} from '../../types';
 
 /*
  * NextPay's API
@@ -254,27 +261,21 @@ export const errors: ErrorList = {
  * Package's API
  */
 
-export const tConfig = t.intersection([
-  t.partial({}),
-  t.interface({
-    apiKey: t.string,
-  }),
-]);
+export const configSchema = baseConfigSchema.extend({
+  apiKey: z.string().optional(),
+});
 
-export type Config = t.TypeOf<typeof tConfig>;
+export type Config = z.infer<typeof configSchema>;
 
-export const tRequestOptions = t.intersection([
-  t.partial({
-    mobile: t.string,
-    customFields: t.record(t.string, t.string),
-  }),
-  tBaseRequestOptions,
-]);
+export const requestSchema = baseRequestSchema.extend({
+  mobile: z.string().optional(),
+  customFields: z.record(z.string()).optional(),
+});
 
-export type RequestOptions = t.TypeOf<typeof tRequestOptions>;
+export type RequestOptions = z.infer<typeof requestSchema>;
 
-export const tVerifyOptions = t.intersection([t.interface({}), tBaseVerifyOptions]);
+export const verifySchema = baseVerifySchema;
 
-export type VerifyOptions = t.TypeOf<typeof tVerifyOptions>;
+export type VerifyOptions = z.infer<typeof verifySchema>;
 
 export type Receipt = BaseReceipt<VerifyPaymentRes>;
