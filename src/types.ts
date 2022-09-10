@@ -1,15 +1,4 @@
-import * as t from 'io-ts';
 import { z } from 'zod';
-
-export const tBaseRequestOptions = t.intersection([
-  t.interface({
-    callbackUrl: t.string,
-    amount: t.number,
-  }),
-  t.partial({
-    description: t.string,
-  }),
-]);
 
 export const baseConfigSchema = z.object({});
 
@@ -22,10 +11,6 @@ export const baseRequestSchema = z.object({
 });
 
 export type BaseRequestOptions = z.infer<typeof baseRequestSchema>;
-
-export const tBaseVerifyOptions = t.interface({
-  amount: t.number,
-});
 
 export const baseVerifySchema = z.object({
   amount: z.number(),
