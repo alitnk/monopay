@@ -177,18 +177,10 @@ export type RequestOptions = z.infer<typeof requestSchema>;
 
 export const configSchema = baseConfigSchema.extend({
   /**
-   * This is your **RSA private key** in `pem` format.
-   *
-   * You are likely to have an `xml` version of your key due to Pasargad providing a `certificate.xml` file.
-   * In order to use this method you must convert it to `pem` format and provide the private key as pem for this field.
-   *
-   * To convert xml into pem you may use an rsa-xml to rsa-pem library or use {@link https://github.com/pepco-api pasargad sdk's code} for it
-   *
-   * You can turn to online convertors as well if it's not a matter of security
-   *
-   * - Make sure you have the correct key (by converting it to xml again and comparing the results with the actual xml version)
+   * Your **RSA** Private key file path.
+   * File must be in `XML` format
    */
-  privateKey: z.string(),
+  privateKeyXMLFile: z.string(),
   merchantId: z.string(),
   terminalId: z.string(),
 });
