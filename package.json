@@ -57,6 +57,7 @@
     "typescript": "^4.8.3"
   },
   "dependencies": {
+    "@keivan.sf/rsa-xml": "^0.1.1",
     "axios": "^0.27.2",
     "crc-32": "^1.2.2",
     "crypto-js": "^4.1.1",
