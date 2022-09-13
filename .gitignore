@@ -24,4 +24,7 @@ yarn-error.log*
 *.log
 
 # Coverage files
-/coverage
+coverage
+
+# Turborepo
+.turbo

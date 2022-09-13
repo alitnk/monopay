@@ -75,7 +75,7 @@ export const createVandarDriver = defineDriver({
       url: links.payment + response.data.token,
     };
   },
-  verify: async ({ ctx, options, params }) => {
+  verify: async ({ ctx, params }) => {
     const { token, payment_status } = params;
     const { api_key, links } = ctx;
 
