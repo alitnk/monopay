@@ -1,3 +1,4 @@
+import { buildRedirectScript } from './utils/buildRedirectScript';
 import { z, ZodSchema } from 'zod';
 
 interface IPaymentInfo {
@@ -58,17 +59,7 @@ export const defineDriver = <
       const paymentInfo = await request({ ctx, options });
       return {
         ...paymentInfo,
-        getScript: () => {
-          const { method, params = {}, url } = paymentInfo;
-          let script = `var form = document.createElement("form");form.setAttribute("method", "${method}");form.setAttribute("action", "${url}");form.setAttribute("target", "_self");`;
-          Object.keys(params).forEach((key) => {
-            const value = params[key];
-            script += `var monopay_hidden_field__${key} = document.createElement("input");monopay_hidden_field__${key}.setAttribute("name", ${key});monopay_hidden_field__${key}.setAttribute("value", ${value});form.appendChild(monopay_hidden_field__${key});`;
-          });
-
-          script += `document.body.appendChild(form);form.submit();document.body.removeChild(form);`;
-          return script;
-        },
+        getScript: () => buildRedirectScript(paymentInfo.method, paymentInfo.url, paymentInfo.params),
       };
     };
 
