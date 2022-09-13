@@ -1,18 +1,7 @@
-import { z } from 'zod';
-import { baseConfigSchema, BaseReceipt, baseRequestSchema, baseVerifySchema, LinksObject } from '../../types';
-
 /*
  * Vandar's API
  * Currency: IRR
  */
-
-export const links: LinksObject = {
-  default: {
-    REQUEST: 'https://ipg.vandar.io/api/v3/send',
-    VERIFICATION: 'https://ipg.vandar.io/api/v3/verify',
-    PAYMENT: 'https://ipg.vandar.io/v3/',
-  },
-};
 
 export interface RequestPaymentReq {
   /**
@@ -133,43 +122,3 @@ export interface VerifyPaymentRes {
 
   errors?: string[];
 }
-
-/*
- * Package's API
- */
-
-export const tConfig = baseConfigSchema.extend({
-  api_key: z.string(),
-});
-
-export type Config = z.infer<typeof tConfig>;
-
-export const requestSchema = baseRequestSchema.extend({
-  mobile_number: z.string().optional(),
-  factorNumber: z.string().optional(),
-  description: z.string().optional(),
-  valid_card_number: z.string().optional(),
-  comment: z.string().optional(),
-});
-
-export type RequestOptions = z.infer<typeof requestSchema>;
-
-export const verifySchema = baseVerifySchema.extend({
-  status: z.number().optional(),
-  // amount: z.string().optional(),
-  realAmount: z.number().optional(),
-  wage: z.string().optional(),
-  transId: z.number().optional(),
-  factorNumber: z.string().optional(),
-  mobile: z.string().optional(),
-  description: z.string().optional(),
-  cardNumber: z.string().optional(),
-  paymentDate: z.string().optional(),
-  cid: z.string().optional(),
-  message: z.string().optional(),
-  errors: z.array(z.string()).optional(),
-});
-
-export type VerifyOptions = z.infer<typeof verifySchema>;
-
-export type Receipt = BaseReceipt<CallbackParams>;

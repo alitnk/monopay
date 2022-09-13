@@ -47,7 +47,7 @@ yarn add monopay
 ### Getting a payment driver
 
 ```javascript
-const driver = getPaymentDriver('zibal', {
+const driver = getPaymentDriver('zibal')({
   merchantId: 'merchant-id',
   sandbox: true,
 });
@@ -56,7 +56,7 @@ const driver = getPaymentDriver('zibal', {
 ### Requesting for payment
 
 ```javascript
-const paymentInfo = await driver.requestPayment({
+const paymentInfo = await driver.request({
   amount: 200000, // IRR
   callbackUrl: 'mysite.com/callback',
 });
@@ -66,12 +66,12 @@ const paymentInfo = await driver.requestPayment({
 
 ```javascript
 app.all('/callback', async (req, res) => {
-  const receipt = await driver.verifyPayment(
+  const receipt = await driver.verify(
     {
       amount: 200000, // IRR
       referenceId: 1234,
     },
-    { ...req.query, ...req.body }
+    { ...req.query, ...req.body },
   );
 
   res.json({

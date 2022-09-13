@@ -1,22 +1,47 @@
 import axios from 'axios';
-import { Driver } from '../../driver';
+import { z } from 'zod';
+import { defineDriver } from '../../driver';
 import { PaymentException, RequestException, VerificationException } from '../../exceptions';
 import * as API from './api';
 
-export class Zibal extends Driver<API.Config> {
-  constructor(config: API.Config) {
-    super(config, API.configSchema);
-  }
+const getMerchantId = (merchantId: string, sandbox: boolean) => (sandbox ? 'zibal' : merchantId);
 
-  protected links = API.links;
-
-  requestPayment = async (options: API.RequestOptions) => {
-    options = this.getParsedData(options, API.tRequestOptions);
-
+export const createZibalDriver = defineDriver({
+  schema: {
+    config: z.object({
+      links: z.object({
+        request: z.string(),
+        verify: z.string(),
+        payment: z.string(),
+      }),
+      sandbox: z.boolean().optional(),
+      merchantId: z.string(),
+    }),
+    request: z.object({
+      mobile: z.string().optional(),
+      orderId: z.string().optional(),
+      allowedCards: z.array(z.string()).optional(),
+      linkToPay: z.boolean().optional(),
+      sms: z.boolean().optional(),
+      percentMode: z.union([z.literal(0), z.literal(1)]).optional(),
+      feeMode: z.union([z.literal(0), z.literal(1), z.literal(2)]).optional(),
+      multiplexingInfos: z.array(API.multiplexingObjectSchema).optional(),
+    }),
+    verify: z.object({}),
+  },
+  defaultConfig: {
+    links: {
+      request: 'https://gateway.zibal.ir/v1/request',
+      verify: 'https://gateway.zibal.ir/v1/verify',
+      payment: 'https://gateway.zibal.ir/start/',
+    },
+  },
+  request: async ({ ctx, options }) => {
     const { amount, ...otherOptions } = options;
+    const { merchantId, sandbox, links } = ctx;
 
-    const response = await axios.post<API.RequestPaymentReq, { data: API.RequestPaymentRes }>(this.getLinks().REQUEST, {
-      merchant: this.getMerchantId(),
+    const response = await axios.post<API.RequestPaymentReq, { data: API.RequestPaymentRes }>(links.request, {
+      merchant: getMerchantId(merchantId, sandbox ?? false),
       amount: amount,
       ...otherOptions,
     });
@@ -26,23 +51,24 @@ export class Zibal extends Driver<API.Config> {
       throw new RequestException(API.purchaseErrors[result.toString()]);
     }
 
-    return this.makeRequestInfo(trackId, 'GET', this.getLinks().PAYMENT + trackId);
-  };
-
-  verifyPayment = async (_options: API.VerifyOptions, params: API.CallbackParams): Promise<API.Receipt> => {
+    return {
+      method: 'GET',
+      referenceId: trackId,
+      url: links.payment + trackId,
+    };
+  },
+  verify: async ({ ctx, params }) => {
     const { status, success, trackId } = params;
+    const { merchantId, sandbox, links } = ctx;
 
     if (success.toString() === '0') {
       throw new PaymentException(API.callbackErrors[status]);
     }
 
-    const response = await axios.post<API.VerifyPaymentReq, { data: API.VerifyPaymentRes }>(
-      this.getLinks().VERIFICATION,
-      {
-        merchant: this.getMerchantId(),
-        trackId: +trackId,
-      },
-    );
+    const response = await axios.post<API.VerifyPaymentReq, { data: API.VerifyPaymentRes }>(links.verify, {
+      merchant: getMerchantId(merchantId, sandbox ?? false),
+      trackId: +trackId,
+    });
 
     const { result } = response.data;
 
@@ -55,9 +81,7 @@ export class Zibal extends Driver<API.Config> {
       transactionId: response.data.refNumber,
       cardPan: response.data.cardNumber,
     };
-  };
+  },
+});
 
-  protected getMerchantId() {
-    return this.config.sandbox ? 'zibal' : this.config.merchantId;
-  }
-}
+export type ZibalDriver = ReturnType<typeof createZibalDriver>;

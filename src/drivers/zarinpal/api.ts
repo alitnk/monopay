@@ -1,30 +1,7 @@
-import { z } from 'zod';
-import {
-  baseConfigSchema,
-  BaseReceipt,
-  baseRequestSchema,
-  baseVerifySchema,
-  ErrorList,
-  LinksObject,
-} from '../../types';
-
 /*
  * Zarinpal's API
  * Currency: IRR
  */
-
-export const links: LinksObject = {
-  default: {
-    REQUEST: 'https://api.zarinpal.com/pg/v4/payment/request.json',
-    VERIFICATION: 'https://api.zarinpal.com/pg/v4/payment/verify.json',
-    PAYMENT: 'https://www.zarinpal.com/pg/StartPay/',
-  },
-  sandbox: {
-    REQUEST: 'https://sandbox.zarinpal.com/pg/v4/payment/request.json',
-    VERIFICATION: 'https://sandbox.zarinpal.com/pg/v4/payment/verify.json',
-    PAYMENT: 'https://sandbox.zarinpal.com/pg/StartPay/',
-  },
-};
 
 export interface RequestPaymentReq {
   /**
@@ -140,7 +117,7 @@ export interface VerifyPaymentRes {
 /**
  * @link https://docs.zarinpal.com/paymentGateway/error.html
  */
-export const verifyErrors: ErrorList = {
+export const verifyErrors: Record<string, string> = {
   '-50': 'مبلغ پرداخت شده با مقدار مبلغ در تایید شده متفاوت است.',
   '-51': 'پرداخت ناموفق',
   '-52': 'خطای غیر منتظره با پشتیبانی تماس بگیرید.',
@@ -148,27 +125,3 @@ export const verifyErrors: ErrorList = {
   '-54': 'اتوریتی نامعتبر است.',
   '101': 'تراکنش قبلا یک بار تایید شده است.',
 };
-
-/*
- * Package's API
- */
-
-export const configSchema = baseConfigSchema.extend({
-  sandbox: z.boolean().optional(),
-  merchantId: z.string(),
-});
-
-export type Config = z.infer<typeof configSchema>;
-
-export const requestSchema = baseRequestSchema.extend({
-  mobile: z.string().optional(),
-  email: z.string().optional(),
-});
-
-export type RequestOptions = z.infer<typeof requestSchema>;
-
-export const verifySchema = baseVerifySchema;
-
-export type VerifyOptions = z.infer<typeof verifySchema>;
-
-export type Receipt = BaseReceipt<Exclude<VerifyPaymentRes['data'], any[]>>;

@@ -1,20 +1,9 @@
-import { z } from 'zod';
-import { baseConfigSchema, BaseReceipt, baseRequestSchema, baseVerifySchema, LinksObject } from '../../types';
-
 /*
  * Parsian's API
  * Currency: IRR
  *
  * Docs: https://miladworkshop.ir/blog/19-parsian-gateway-sample-code.html
  */
-
-export const links: LinksObject = {
-  default: {
-    REQUEST: 'https://pec.shaparak.ir/NewIPGServices/Sale/SaleService.asmx?wsdl',
-    VERIFICATION: 'https://pec.shaparak.ir/NewIPGServices/Confirm/ConfirmService.asmx?wsdl',
-    PAYMENT: 'https://pec.shaparak.ir/NewIPG/',
-  },
-};
 
 /**
  * Request of `SalePaymentRequest`
@@ -134,7 +123,7 @@ export interface ReversalPaymentRes {
   Token: number | string;
 }
 
-// export const errors: ErrorList = {
+// export const errors: Record<string, string> = {
 //   // UnkownError
 //   '-32768': 'خطای ناشناخته رخ داده است',
 //   // Payment RequestIsNotEligibleToReversal
@@ -160,23 +149,3 @@ export interface ReversalPaymentRes {
 //   // there's like 6 more pages of these errors
 //   // TODO import the errors?
 // };
-
-/*
- * Package's API
- */
-
-export const configSchema = baseConfigSchema.extend({
-  merchantId: z.string(),
-});
-
-export type Config = z.infer<typeof configSchema>;
-
-export const requestSchema = baseRequestSchema;
-
-export type RequestOptions = z.infer<typeof requestSchema>;
-
-export const verifySchema = baseVerifySchema;
-
-export type VerifyOptions = z.infer<typeof verifySchema>;
-
-export type Receipt = BaseReceipt<VerifyPaymentRes>;

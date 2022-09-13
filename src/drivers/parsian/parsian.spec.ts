@@ -1,15 +1,20 @@
-import { getPaymentDriver } from '../../drivers';
+import { Receipt } from '../../driver';
 import { RequestException } from '../../exceptions';
 import * as API from './api';
-import { Parsian } from './parsian';
+import { createParsianDriver, ParsianDriver } from './parsian';
 
 const mockSoapClient: any = {};
 jest.mock('soap', () => ({
   createClientAsync: async () => mockSoapClient,
 }));
 
-// const mockedSoap = soap as jest.Mocked<typeof soap>;
 describe('Parsian Driver', () => {
+  let driver: ParsianDriver;
+
+  beforeAll(() => {
+    driver = createParsianDriver({ merchantId: 'merchant-id' });
+  });
+
   it('returns the correct payment url', async () => {
     const serverResponse: API.RequestPaymentRes = {
       Token: 123,
@@ -18,13 +23,9 @@ describe('Parsian Driver', () => {
 
     mockSoapClient.SalePaymentRequest = () => serverResponse;
 
-    const driver = getPaymentDriver<Parsian>('parsian', {
-      merchantId: 'merchant-id',
-    });
-
     expect(
       typeof (
-        await driver.requestPayment({
+        await driver.request({
           amount: 20000,
           callbackUrl: 'https://mysite.com/callback',
         })
@@ -39,13 +40,9 @@ describe('Parsian Driver', () => {
 
     mockSoapClient.SalePaymentRequest = () => serverResponse;
 
-    const driver = getPaymentDriver<Parsian>('parsian', {
-      merchantId: 'merchant-id',
-    });
-
     await expect(
       async () =>
-        await driver.requestPayment({
+        await driver.request({
           amount: 20000,
           callbackUrl: 'https://mysite.com/callback',
         }),
@@ -69,16 +66,12 @@ describe('Parsian Driver', () => {
       status: 0,
     };
 
-    const expectedResult: API.Receipt = { transactionId: 123456789, raw: serverResponse };
+    const expectedResult: Receipt = { transactionId: 123456789, raw: serverResponse };
 
     mockSoapClient.ConfirmPayment = () => serverResponse;
     mockSoapClient.ReversalRequest = () => serverResponse;
 
-    const driver = getPaymentDriver<Parsian>('parsian', {
-      merchantId: 'merchant-id',
-    });
-
-    expect(await (await driver.verifyPayment({ amount: 2000 }, callbackParams)).transactionId).toBe(
+    expect(await (await driver.verify({ amount: 2000 }, callbackParams)).transactionId).toBe(
       expectedResult.transactionId,
     );
   });

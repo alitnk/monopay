@@ -1,24 +1,53 @@
 import axios from 'axios';
 import * as CryptoJS from 'crypto-js';
-import { Driver } from '../../driver';
+import { z } from 'zod';
+import { defineDriver } from '../../driver';
 import { PaymentException, RequestException, VerificationException } from '../../exceptions';
+import { generateId } from '../../utils/generateId';
 import * as API from './api';
 
-export class Sadad extends Driver<API.Config> {
-  constructor(config: API.Config) {
-    super(config, API.tConfig);
-  }
+const signData = (message: string, key: string): string => {
+  const keyHex = CryptoJS.enc.Utf8.parse(key);
+  const encrypted = CryptoJS.DES.encrypt(message, keyHex, {
+    mode: CryptoJS.mode.ECB,
+    padding: CryptoJS.pad.Pkcs7,
+  });
 
-  protected links = API.links;
+  return encrypted.toString();
+};
 
-  requestPayment = async (options: API.RequestOptions) => {
-    options = this.getParsedData(options, API.requestSchema);
-
+export const createSadadDriver = defineDriver({
+  schema: {
+    config: z.object({
+      links: z.object({
+        request: z.string(),
+        verify: z.string(),
+        payment: z.string(),
+      }),
+      merchantId: z.string(),
+      terminalId: z.string(),
+      terminalKey: z.string(),
+    }),
+    request: z.object({
+      mobile: z.string().optional(),
+      multiplexingData: API.multiplexingObjectSchema.optional(),
+      appName: z.string().optional(),
+    }),
+    verify: z.object({}),
+  },
+  defaultConfig: {
+    links: {
+      request: 'https://sadad.shaparak.ir/api/v0/Request/PaymentRequest',
+      verify: 'https://sadad.shaparak.ir/api/v0/Advice/Verify',
+      payment: 'https://sadad.shaparak.ir/Purchase',
+    },
+  },
+  request: async ({ ctx, options }) => {
     const { amount, callbackUrl, mobile, multiplexingData, appName } = options;
-    const { merchantId, terminalId, terminalKey } = this.config;
+    const { merchantId, terminalId, terminalKey, links } = ctx;
 
-    const orderId = this.generateId();
-    const response = await axios.post<API.RequestPaymentReq, { data: API.RequestPaymentRes }>(this.getLinks().REQUEST, {
+    const orderId = generateId();
+    const response = await axios.post<API.RequestPaymentReq, { data: API.RequestPaymentRes }>(links.request, {
       Amount: amount,
       LocalDateTime: new Date().toISOString(),
       MerchantId: merchantId,
@@ -35,26 +64,27 @@ export class Sadad extends Driver<API.Config> {
       throw new RequestException(API.requestErrors[response.data.ResCode.toString()]);
     }
 
-    return this.makeRequestInfo(response.data.Token, 'GET', this.getLinks().PAYMENT, {
-      Token: response.data.Token,
-    });
-  };
-
-  verifyPayment = async (_options: API.VerifyOptions, params: API.CallbackParams): Promise<API.Receipt> => {
+    return {
+      method: 'GET',
+      referenceId: response.data.Token,
+      url: links.payment,
+      params: {
+        Token: response.data.Token,
+      },
+    };
+  },
+  verify: async ({ ctx, params }) => {
     const { HashedCardNo, ResCode, Token } = params;
-    const { terminalKey } = this.config;
+    const { terminalKey, links } = ctx;
 
     if (ResCode !== 0) {
       throw new PaymentException('تراکنش توسط کاربر لغو شد.');
     }
 
-    const response = await axios.post<API.VerifyPaymentReq, { data: API.VerifyPaymentRes }>(
-      this.getLinks().VERIFICATION,
-      {
-        SignData: signData(Token, terminalKey),
-        Token,
-      },
-    );
+    const response = await axios.post<API.VerifyPaymentReq, { data: API.VerifyPaymentRes }>(links.verify, {
+      SignData: signData(Token, terminalKey),
+      Token,
+    });
 
     const { ResCode: verificationResCode, SystemTraceNo } = response.data;
 
@@ -67,15 +97,7 @@ export class Sadad extends Driver<API.Config> {
       cardPan: HashedCardNo,
       raw: params,
     };
-  };
-}
+  },
+});
 
-const signData = (message: string, key: string): string => {
-  const keyHex = CryptoJS.enc.Utf8.parse(key);
-  const encrypted = CryptoJS.DES.encrypt(message, keyHex, {
-    mode: CryptoJS.mode.ECB,
-    padding: CryptoJS.pad.Pkcs7,
-  });
-
-  return encrypted.toString();
-};
+export type SadadDriver = ReturnType<typeof createSadadDriver>;

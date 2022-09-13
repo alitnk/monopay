@@ -1,13 +1,21 @@
 import axios from 'axios';
-import { getPaymentDriver } from '../../drivers';
+import { Receipt } from '../../driver';
 import { RequestException } from '../../exceptions';
 import * as API from './api';
-import { PayPing } from './payping';
+import { createPaypingDriver, PaypingDriver } from './payping';
 
 jest.mock('axios');
 
 const mockedAxios = axios as jest.Mocked<typeof axios>;
 describe('PayPing Driver', () => {
+  let driver: PaypingDriver;
+
+  beforeAll(() => {
+    driver = createPaypingDriver({
+      apiKey: '1234',
+    });
+  });
+
   it('returns the correct payment url', async () => {
     const serverResponse: API.RequestPaymentRes = {
       code: '1234',
@@ -15,9 +23,7 @@ describe('PayPing Driver', () => {
 
     mockedAxios.post.mockResolvedValueOnce({ data: serverResponse });
 
-    const driver = getPaymentDriver<PayPing>('payping', { apiKey: '2134' });
-
-    const res = await driver.requestPayment({ callbackUrl: 'https://path.to/callback-url', amount: 20000 });
+    const res = await driver.request({ callbackUrl: 'https://path.to/callback-url', amount: 20000 });
     expect(typeof res.url).toBe('string');
   });
 
@@ -25,9 +31,7 @@ describe('PayPing Driver', () => {
     // mockedAxios.post.mockRejectedValueOnce({ response: { status: 401 } });
     mockedAxios.post.mockReturnValueOnce(Promise.reject({ response: { status: 401 } }));
 
-    const driver = getPaymentDriver<PayPing>('payping', { apiKey: '2134' });
-
-    expect(driver.requestPayment({ amount: 2000, callbackUrl: 'asd' })).rejects.toThrow(RequestException);
+    expect(driver.request({ amount: 2000, callbackUrl: 'asd' })).rejects.toThrow(RequestException);
   });
 
   it('verifies the purchase correctly', async () => {
@@ -36,13 +40,11 @@ describe('PayPing Driver', () => {
       cardHashPan: 'hash',
       cardNumber: '1234-****-****-1234',
     };
-    const expectedResult: API.Receipt = { transactionId: '1234', raw: serverResponse };
+    const expectedResult: Receipt = { transactionId: '1234', raw: serverResponse };
 
     mockedAxios.post.mockResolvedValueOnce({ data: serverResponse });
 
-    const driver = getPaymentDriver<PayPing>('payping', { apiKey: '2134' });
-
-    const res = await driver.verifyPayment(
+    const res = await driver.verify(
       { amount: 2000 },
       {
         code: '1234',

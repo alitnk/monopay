@@ -1,25 +1,7 @@
-import { z } from 'zod';
-import {
-  baseConfigSchema,
-  BaseReceipt,
-  baseRequestSchema,
-  baseVerifySchema,
-  ErrorList,
-  LinksObject,
-} from '../../types';
-
 /*
  * NextPay's API
  * Currency: IRT
  */
-
-export const links: LinksObject = {
-  default: {
-    REQUEST: 'https://nextpay.org/nx/gateway/token',
-    VERIFICATION: 'https://nextpay.org/nx/gateway/verify',
-    PAYMENT: 'https://nextpay.org/nx/gateway/payment/',
-  },
-};
 
 export interface RequestPaymentReq {
   /**
@@ -197,7 +179,7 @@ export type RefundPaymentRes = Omit<VerifyPaymentRes, 'Shaparak_Ref_Id'>;
 /**
  * @link https://nextpay.org/nx/docs
  */
-export const errors: ErrorList = {
+export const errors: Record<string, string> = {
   '0': 'پرداخت تکمیل و با موفقیت انجام شده است',
   '-1': 'منتظر ارسال تراکنش و ادامه پرداخت',
   '-2': 'پرداخت رد شده توسط کاربر یا بانک',
@@ -256,26 +238,3 @@ export const errors: ErrorList = {
   '-93': 'موجودی صندوق کاربری برای بازگشت مبلغ کافی نیست',
   '-94': 'کلید بازگشت مبلغ یافت نشد',
 };
-
-/*
- * Package's API
- */
-
-export const configSchema = baseConfigSchema.extend({
-  apiKey: z.string().optional(),
-});
-
-export type Config = z.infer<typeof configSchema>;
-
-export const requestSchema = baseRequestSchema.extend({
-  mobile: z.string().optional(),
-  customFields: z.record(z.string()).optional(),
-});
-
-export type RequestOptions = z.infer<typeof requestSchema>;
-
-export const verifySchema = baseVerifySchema;
-
-export type VerifyOptions = z.infer<typeof verifySchema>;
-
-export type Receipt = BaseReceipt<VerifyPaymentRes>;

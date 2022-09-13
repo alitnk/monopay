@@ -1,19 +1,10 @@
 import { z } from 'zod';
-import { BaseReceipt, baseRequestSchema, baseVerifySchema, ErrorList, LinksObject } from '../../types';
 
 /*
  * Sadad's API
  * Currency: IRR
  * link: https://sadadpsp.ir/file/attach/202002/654.pdf
  */
-
-export const links: LinksObject = {
-  default: {
-    REQUEST: 'https://sadad.shaparak.ir/api/v0/Request/PaymentRequest',
-    PAYMENT: 'https://sadad.shaparak.ir/Purchase',
-    VERIFICATION: 'https://sadad.shaparak.ir/api/v0/Advice/Verify',
-  },
-};
 
 export interface RequestPaymentReq {
   /**
@@ -182,7 +173,7 @@ export interface VerifyPaymentRes {
   OrderId: number;
 }
 
-export const requestErrors: ErrorList = {
+export const requestErrors: Record<string, string> = {
   '3': 'پذیرنده کارت فعال نیست لطفا با بخش امور پذيرندگان، تماس حاصل فرمائید',
   '23': 'پذيرنده کارت نامعتبر است لطفا با بخش امور پذيرندگان، تماس حاصل فرمائید',
   '58': 'انجام تراکنش مربوطه توسط پايانه ی انجام دهنده مجاز نمی باشد',
@@ -236,33 +227,7 @@ export const requestErrors: ErrorList = {
   '1105': 'تراکنش بازگشت داده شده است)مهلت زمانی به پايان رسیده است(',
 };
 
-export const verifyErrors: ErrorList = {
+export const verifyErrors: Record<string, string> = {
   '-1': 'پارامترهای ارسالی صحیح نیست و يا تراکنش در سیستم وجود ندارد',
   '101': 'مهلت ارسال تراکنش به پايان رسیده است',
 };
-
-/*
- * Package's API
- */
-
-export const tConfig = z.object({
-  merchantId: z.string(),
-  terminalId: z.string(),
-  terminalKey: z.string(),
-});
-
-export type Config = z.infer<typeof tConfig>;
-
-export const requestSchema = baseRequestSchema.extend({
-  mobile: z.string().optional(),
-  multiplexingData: multiplexingObjectSchema.optional(),
-  appName: z.string().optional(),
-});
-
-export type RequestOptions = z.infer<typeof requestSchema>;
-
-export const verifySchema = baseVerifySchema;
-
-export type VerifyOptions = z.infer<typeof verifySchema>;
-
-export type Receipt = BaseReceipt<CallbackParams>;

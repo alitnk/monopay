@@ -1,13 +1,21 @@
 import axios from 'axios';
-import { getPaymentDriver } from '../../drivers';
+import { Receipt } from '../../driver';
 import { RequestException } from '../../exceptions';
 import * as API from './api';
-import { Zibal } from './zibal';
+import { createZibalDriver, ZibalDriver } from './zibal';
 
 jest.mock('axios');
 
 const mockedAxios = axios as jest.Mocked<typeof axios>;
 describe('Zibal Driver', () => {
+  let driver: ZibalDriver;
+
+  beforeAll(() => {
+    driver = createZibalDriver({
+      merchantId: '1234',
+    });
+  });
+
   it('returns the correct payment url', async () => {
     const serverResponse: API.RequestPaymentRes = {
       message: 'hello',
@@ -17,11 +25,9 @@ describe('Zibal Driver', () => {
 
     mockedAxios.post.mockResolvedValueOnce({ data: serverResponse });
 
-    const driver = getPaymentDriver<Zibal>('zibal', { merchantId: '2134' });
-
-    expect(
-      typeof (await driver.requestPayment({ callbackUrl: 'https://path.to/callback-url', amount: 20000 })).url,
-    ).toBe('string');
+    expect(typeof (await driver.request({ callbackUrl: 'https://path.to/callback-url', amount: 20000 })).url).toBe(
+      'string',
+    );
   });
 
   it('throws payment errors accordingly', async () => {
@@ -33,11 +39,7 @@ describe('Zibal Driver', () => {
 
     mockedAxios.post.mockResolvedValueOnce({ data: serverResponse });
 
-    const driver = getPaymentDriver<Zibal>('zibal', { merchantId: '2134' });
-
-    await expect(async () => await driver.requestPayment({ amount: 2000, callbackUrl: 'asd' })).rejects.toThrow(
-      RequestException,
-    );
+    await expect(driver.request({ amount: 2000, callbackUrl: 'asd' })).rejects.toThrow(RequestException);
   });
 
   it('verifies the purchase correctly', async () => {
@@ -52,14 +54,12 @@ describe('Zibal Driver', () => {
       orderId: '2211',
       message: 'success',
     };
-    const expectedResult: API.Receipt = { transactionId: 1234, raw: serverResponse };
+    const expectedResult: Receipt = { transactionId: 1234, raw: serverResponse };
 
     mockedAxios.post.mockResolvedValueOnce({ data: serverResponse });
 
-    const driver = getPaymentDriver<Zibal>('zibal', { merchantId: '2134' });
-
     expect(
-      (await driver.verifyPayment({ amount: 2000 }, { trackId: '12345', status: '1', success: '1' })).transactionId,
+      (await driver.verify({ amount: 2000 }, { trackId: '12345', status: '1', success: '1' })).transactionId,
     ).toEqual(expectedResult.transactionId);
   });
 });

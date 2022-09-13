@@ -1,27 +1,9 @@
-import { z } from 'zod';
-import {
-  baseConfigSchema,
-  BaseReceipt,
-  baseRequestSchema,
-  baseVerifySchema,
-  ErrorList,
-  LinksObject,
-} from '../../types';
-
 /*
  * Behpardakht's API
  * Currency: IRR
  *
  * Docs: https://vrgl.ir/WgLQh
  */
-
-export const links: LinksObject = {
-  default: {
-    REQUEST: 'https://bpm.shaparak.ir/pgwchannel/services/pgw?wsdl',
-    VERIFICATION: 'https://bpm.shaparak.ir/pgwchannel/services/pgw?wsdl',
-    PAYMENT: 'https://bpm.shaparak.ir/pgwchannel/startpay.mellat',
-  },
-};
 
 /**
  * Request of `bpPayRequest`
@@ -162,7 +144,7 @@ export interface VerifyPaymentReq {
  */
 export type VerifyPaymentRes = string;
 
-export const errors: ErrorList = {
+export const errors: Record<string, string> = {
   '11': 'است نامعتبر كارت شماره',
   '12': 'نيست كافي موجودي',
   '13': 'است نادرست رمز',
@@ -208,27 +190,3 @@ export const errors: ErrorList = {
   '55': 'است نامعتبر تراكنش',
   '61': 'واريز در خطا',
 };
-
-/*
- * Package's API
- */
-
-export const configSchema = baseConfigSchema.extend({
-  terminalId: z.number(),
-  username: z.string(),
-  password: z.string(),
-});
-
-export type Config = z.infer<typeof configSchema>;
-
-export const requestSchema = baseRequestSchema.extend({
-  payerId: z.number().optional(),
-});
-
-export type RequestOptions = z.infer<typeof requestSchema>;
-
-export const verifySchema = baseVerifySchema;
-
-export type VerifyOptions = z.infer<typeof verifySchema>;
-
-export type Receipt = BaseReceipt<CallbackParams>;

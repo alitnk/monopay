@@ -1,29 +1,32 @@
-import { getPaymentDriver } from '../../drivers';
+import { Receipt } from '../../driver';
 import { RequestException } from '../../exceptions';
 import * as API from './api';
-import { Behpardakht } from './behpardakht';
+import { BehpardakhtDriver, createBehpardakhtDriver } from './behpardakht';
 
 const mockSoapClient: any = {};
 jest.mock('soap', () => ({
   createClientAsync: async () => mockSoapClient,
 }));
 
-// const mockedSoap = soap as jest.Mocked<typeof soap>;
 describe('Behpardakht Driver', () => {
+  let driver: BehpardakhtDriver;
+
+  beforeAll(() => {
+    driver = createBehpardakhtDriver({
+      terminalId: 1234,
+      username: 'username',
+      password: 'password',
+    });
+  });
+
   it('returns the correct payment url', async () => {
     const serverResponse: API.RequestPaymentRes = '0, some-hash-from-api';
 
     mockSoapClient.bpPayRequest = () => serverResponse;
 
-    const driver = getPaymentDriver<Behpardakht>('behpardakht', {
-      terminalId: 1234,
-      username: 'username',
-      password: 'password',
-    });
-
     expect(
       typeof (
-        await driver.requestPayment({
+        await driver.request({
           amount: 20000,
           callbackUrl: 'https://mysite.com/callback',
         })
@@ -36,15 +39,9 @@ describe('Behpardakht Driver', () => {
 
     mockSoapClient.bpPayRequest = () => serverResponse;
 
-    const driver = getPaymentDriver<Behpardakht>('behpardakht', {
-      terminalId: 1234,
-      username: 'username',
-      password: 'password',
-    });
-
     await expect(
       async () =>
-        await driver.requestPayment({
+        await driver.request({
           amount: 20000,
           callbackUrl: 'https://mysite.com/callback',
         }),
@@ -61,18 +58,12 @@ describe('Behpardakht Driver', () => {
       saleOrderId: 4321,
     };
 
-    const expectedResult: API.Receipt = { transactionId: '111111', raw: callbackParams };
+    const expectedResult: Receipt = { transactionId: '111111', raw: callbackParams };
 
     mockSoapClient.bpVerifyRequest = () => serverResponse;
     mockSoapClient.bpSettleRequest = () => serverResponse;
 
-    const driver = getPaymentDriver<Behpardakht>('behpardakht', {
-      terminalId: 1234,
-      username: 'username',
-      password: 'password',
-    });
-
-    expect(await (await driver.verifyPayment({ amount: 2000 }, callbackParams)).transactionId).toBe(
+    expect(await (await driver.verify({ amount: 2000 }, callbackParams)).transactionId).toBe(
       expectedResult.transactionId,
     );
   });

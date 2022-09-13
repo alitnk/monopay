@@ -1,25 +1,9 @@
 import { z } from 'zod';
-import {
-  baseConfigSchema,
-  BaseReceipt,
-  baseRequestSchema,
-  baseVerifySchema,
-  ErrorList,
-  LinksObject,
-} from '../../types';
 
 /*
  * Zibal's API
  * Currency: IRR
  */
-
-export const links: LinksObject = {
-  default: {
-    REQUEST: 'https://gateway.zibal.ir/v1/request',
-    VERIFICATION: 'https://gateway.zibal.ir/v1/verify',
-    PAYMENT: 'https://gateway.zibal.ir/start/',
-  },
-};
 
 /**
  * @link https://docs.zibal.ir/IPG/API#MultiplexingInfo-object
@@ -134,7 +118,7 @@ export interface RequestPaymentRes {
 /**
  * @link https://docs.zibal.ir/IPG/API#requestResultCode
  */
-export const purchaseErrors: ErrorList = {
+export const purchaseErrors: Record<string, string> = {
   '102': 'merchant یافت نشد.',
   '103': 'merchant غیرفعال',
   '104': 'merchant نامعتبر',
@@ -167,7 +151,7 @@ export interface CallbackParams {
   status: '-1' | '-2' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' | '10' | '11' | '12';
 }
 
-export const callbackErrors: ErrorList = {
+export const callbackErrors: Record<string, string> = {
   '-1': 'در انتظار پردخت',
   '-2': 'خطای داخلی',
   '1': 'پرداخت شده - تاییدشده',
@@ -238,7 +222,7 @@ export interface VerifyPaymentRes {
 /**
  * @link https://docs.zibal.ir/IPG/API#verifyResultTable
  */
-export const verifyErrors: ErrorList = {
+export const verifyErrors: Record<string, string> = {
   '102': 'merchant یافت نشد.',
   '103': 'merchant غیرفعال',
   '104': 'merchant نامعتبر',
@@ -247,33 +231,3 @@ export const verifyErrors: ErrorList = {
   '202': 'سفارش پرداخت نشده یا ناموفق بوده است. جهت اطلاعات بیشتر جدول وضعیت‌ها را مطالعه کنید.',
   '203': 'trackId نامعتبر می‌باشد.',
 };
-
-/*
- * Package's API
- */
-
-export const configSchema = baseConfigSchema.extend({
-  sandbox: z.boolean().optional(),
-  merchantId: z.string(),
-});
-
-export type Config = z.infer<typeof configSchema>;
-
-export const tRequestOptions = baseRequestSchema.extend({
-  mobile: z.string().optional(),
-  orderId: z.string().optional(),
-  allowedCards: z.array(z.string()).optional(),
-  linkToPay: z.boolean().optional(),
-  sms: z.boolean().optional(),
-  percentMode: z.union([z.literal(0), z.literal(1)]).optional(),
-  feeMode: z.union([z.literal(0), z.literal(1), z.literal(2)]).optional(),
-  multiplexingInfos: z.array(multiplexingObjectSchema).optional(),
-});
-
-export type RequestOptions = z.infer<typeof tRequestOptions>;
-
-export const verifySchema = baseVerifySchema;
-
-export type VerifyOptions = z.infer<typeof verifySchema>;
-
-export type Receipt = BaseReceipt<VerifyPaymentRes>;

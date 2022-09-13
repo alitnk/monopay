@@ -1,22 +1,68 @@
+import RSAXML from '@keivan.sf/rsa-xml';
 import axios from 'axios';
-import { Driver } from '../../driver';
-import { RequestException, VerificationException } from '../../exceptions';
-import { LinksObject } from '../../types';
-import * as API from './api';
 import * as crypto from 'crypto';
 import * as fs from 'fs/promises';
-import RSAXML from '@keivan.sf/rsa-xml';
+import { z } from 'zod';
+import { defineDriver } from '../../driver';
+import { RequestException, VerificationException } from '../../exceptions';
+import * as API from './api';
 
-export class Pasargad extends Driver<API.Config> {
-  private privatePemKey: string | null = null;
-  constructor(config: API.Config) {
-    super(config, API.configSchema);
-  }
-  protected links: LinksObject = API.links;
-  requestPayment = async (options: API.RequestOptions) => {
-    options = this.getParsedData(options, API.requestSchema);
+const getCurrentTimestamp = (): string => {
+  const currentDateISO = new Date().toISOString();
+  return currentDateISO.replace(/-/g, '/').replace('T', ' ').replace('Z', '').split('.')[0];
+};
+
+const signData = async (data: unknown, privateKeyXMLFile: string): Promise<string> => {
+  const sign = crypto.createSign('SHA1');
+  sign.write(JSON.stringify(data));
+  sign.end();
+  const pemKey = await convertXmlToPemKey(privateKeyXMLFile);
+  const signedData = sign.sign(Buffer.from(pemKey), 'base64');
+  return signedData;
+};
+
+const convertXmlToPemKey = async (xmlFilePath: string): Promise<string> => {
+  const xmlKey = (await fs.readFile(xmlFilePath)).toString();
+  const rsa = RSAXML();
+  return rsa.exportPemKey(xmlKey);
+};
+
+export const errorMessage = 'عملیات با خطا مواجه شد';
+
+export const createPasargadDriver = defineDriver({
+  schema: {
+    config: z.object({
+      /**
+       * Your **RSA** Private key file path.
+       * File must be in `XML` format
+       */
+      privateKeyXMLFile: z.string(),
+      merchantId: z.string(),
+      terminalId: z.string(),
+      links: z.object({
+        request: z.string(),
+        verify: z.string(),
+        payment: z.string(),
+      }),
+    }),
+    request: z.object({
+      invoiceNumber: z.string(),
+      invoiceDate: z.string(),
+      mobile: z.string().optional(),
+      email: z.string().optional(),
+    }),
+    verify: z.object({}),
+  },
+  defaultConfig: {
+    links: {
+      request: 'https://pep.shaparak.ir/Api/v1/Payment/GetToken',
+      verify: 'https://pep.shaparak.ir/Api/v1/Payment/VerifyPayment',
+      payment: 'https://pep.shaparak.ir/payment.aspx',
+    },
+  },
+  request: async ({ ctx, options }) => {
     const { amount, callbackUrl, invoiceDate, invoiceNumber, email, mobile } = options;
-    const { merchantId, terminalId } = this.config;
+    const { merchantId, terminalId, privateKeyXMLFile, links } = ctx;
 
     const data: API.RequestPaymentReq = {
       MerchantCode: merchantId,
@@ -26,72 +72,52 @@ export class Pasargad extends Driver<API.Config> {
       InvoiceDate: invoiceDate,
       InvoiceNumber: invoiceNumber,
       RedirectAddress: callbackUrl,
-      Timestamp: this.getCurrentTimestamp(),
+      Timestamp: getCurrentTimestamp(),
     };
     const optionalParams = Object.entries({ Email: email, Mobile: mobile });
     for (const param of optionalParams) if (param[1]) data[param[0] as 'Email' | 'Mobile'] = param[1];
-    const response = await axios.post<API.RequestPaymentReq, { data: API.RequestPaymentRes }>(
-      this.getLinks().REQUEST,
-      data,
-      {
-        headers: {
-          Sign: await this.signData(data),
-        },
+    const response = await axios.post<API.RequestPaymentReq, { data: API.RequestPaymentRes }>(links.request, data, {
+      headers: {
+        Sign: await signData(data, privateKeyXMLFile),
       },
-    );
+    });
 
     if (!response.data?.IsSuccess) {
-      throw new RequestException(API.errorMessage);
+      throw new RequestException(errorMessage);
     }
-    return this.makeRequestInfo(response.data.Token, 'GET', this.getLinks().PAYMENT, { n: response.data.Token });
-  };
-  verifyPayment = async (_options: API.VerifyOptions, params: API.CallbackParams): Promise<API.Receipt> => {
-    const { amount } = _options;
+    return {
+      method: 'GET',
+      referenceId: response.data.Token,
+      url: links.payment,
+      params: {
+        n: response.data.Token,
+      },
+    };
+  },
+  verify: async ({ ctx, options, params }) => {
+    const { amount } = options;
     const { iD, iN, tref } = params;
+    const { terminalId, merchantId, privateKeyXMLFile, links } = ctx;
     const data: API.VerifyPaymentReq = {
       Amount: amount,
       InvoiceDate: iD,
       InvoiceNumber: iN,
-      Timestamp: this.getCurrentTimestamp(),
-      TerminalCode: this.config.terminalId,
-      MerchantCode: this.config.merchantId,
+      Timestamp: getCurrentTimestamp(),
+      TerminalCode: terminalId,
+      MerchantCode: merchantId,
     };
-    const response = await axios.post<API.VerifyPaymentReq, { data: API.VerifyPaymentRes }>(
-      this.getLinks().VERIFICATION,
-      data,
-      {
-        headers: {
-          Sign: await this.signData(data),
-        },
+    const response = await axios.post<API.VerifyPaymentReq, { data: API.VerifyPaymentRes }>(links.verify, data, {
+      headers: {
+        Sign: await signData(data, privateKeyXMLFile),
       },
-    );
-    if (!response.data?.IsSuccess) throw new VerificationException(API.errorMessage);
+    });
+    if (!response.data?.IsSuccess) throw new VerificationException(errorMessage);
     return {
       raw: response.data,
       transactionId: tref,
       cardPan: response.data.MaskedCardNumber,
     };
-  };
+  },
+});
 
-  private getCurrentTimestamp = (): string => {
-    const currentDateISO = new Date().toISOString();
-    return currentDateISO.replace(/-/g, '/').replace('T', ' ').replace('Z', '').split('.')[0];
-  };
-
-  private signData = async (data: unknown): Promise<string> => {
-    const sign = crypto.createSign('SHA1');
-    sign.write(JSON.stringify(data));
-    sign.end();
-    const pemKey = await this.convertXmlToPemKey(this.config.privateKeyXMLFile);
-    const signedData = sign.sign(Buffer.from(pemKey), 'base64');
-    return signedData;
-  };
-
-  private convertXmlToPemKey = async (xmlFilePath: string): Promise<string> => {
-    if (this.privatePemKey) return this.privatePemKey;
-    const xmlKey = (await fs.readFile(xmlFilePath)).toString();
-    const rsa = RSAXML();
-    this.privatePemKey = rsa.exportPemKey(xmlKey);
-    return this.privatePemKey;
-  };
-}
+export type PasargadDriver = ReturnType<typeof createPasargadDriver>;

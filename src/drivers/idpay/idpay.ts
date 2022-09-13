@@ -1,33 +1,55 @@
 import axios from 'axios';
-import { Driver } from '../../driver';
+import { z } from 'zod';
+import { defineDriver } from '../../driver';
 import { PaymentException, RequestException, VerificationException } from '../../exceptions';
+import { generateUuid } from '../../utils/generateUuid';
 import * as API from './api';
 
-export class IdPay extends Driver<API.Config> {
-  constructor(config: API.Config) {
-    super(config, API.configSchema);
-  }
+const getHeaders = (apiKey: string, sandbox: boolean) => ({
+  'X-SANDBOX': sandbox ? '1' : '0',
+  'X-API-KEY': apiKey,
+});
 
-  protected links = API.links;
-
-  requestPayment = async (options: API.RequestOptions) => {
-    options = this.getParsedData(options, API.requestSchema);
-
+export const createIdpayDriver = defineDriver({
+  schema: {
+    config: z.object({
+      links: z.object({
+        request: z.string(),
+        verify: z.string(),
+      }),
+      sandbox: z.boolean().nullish(),
+      apiKey: z.string(),
+    }),
+    request: z.object({
+      mobile: z.string().optional(),
+      email: z.string().optional(),
+      name: z.string().optional(),
+    }),
+    verify: z.object({}),
+  },
+  defaultConfig: {
+    links: {
+      request: 'https://api.idpay.ir/v1.1/payment',
+      verify: 'https://api.idpay.ir/v1.1/payment/verify',
+    },
+  },
+  request: async ({ ctx, options }) => {
     const { amount, callbackUrl, mobile, email, description, name } = options;
+    const { apiKey, sandbox, links } = ctx;
 
     const response = await axios.post<API.RequestPaymentReq, { data: API.RequestPaymentRes }>(
-      this.getLinks().REQUEST,
+      links.request,
       {
         amount: amount,
         callback: callbackUrl,
         mail: email,
         phone: mobile,
-        order_id: this.generateUuid(),
+        order_id: generateUuid(),
         name,
         desc: description,
       },
       {
-        headers: this.getHeaders(),
+        headers: getHeaders(apiKey, sandbox ?? false),
       },
     );
 
@@ -35,14 +57,14 @@ export class IdPay extends Driver<API.Config> {
       const error = response.data as API.RequestPaymentRes_Failed;
       throw new RequestException(API.errors[error.error_code.toString()]);
     }
-
-    return this.makeRequestInfo(response.data.id, 'GET', response.data.link);
-  };
-
-  verifyPayment = async (
-    _options: API.VerifyOptions,
-    params: API.CallbackParams_GET | API.CallbackParams_POST,
-  ): Promise<API.Receipt> => {
+    return {
+      method: 'GET',
+      referenceId: response.data.id,
+      url: links.verify,
+    };
+  },
+  verify: async ({ ctx, params }) => {
+    const { apiKey, links, sandbox } = ctx;
     const { id, order_id, status } = params;
 
     if (status.toString() !== '200') {
@@ -50,13 +72,13 @@ export class IdPay extends Driver<API.Config> {
     }
 
     const response = await axios.post<API.VerifyPaymentReq, { data: API.VerifyPaymentRes }>(
-      this.getLinks().VERIFICATION,
+      links.verify,
       {
         order_id,
         id,
       },
       {
-        headers: this.getHeaders(),
+        headers: getHeaders(apiKey, sandbox ?? false),
       },
     );
 
@@ -69,12 +91,7 @@ export class IdPay extends Driver<API.Config> {
       cardPan: response.data.payment.card_no,
       raw: response.data,
     };
-  };
+  },
+});
 
-  protected getHeaders() {
-    return {
-      'X-SANDBOX': this.config.sandbox ? '1' : '0',
-      'X-API-KEY': this.config.apiKey,
-    };
-  }
-}
+export type IdpayDriver = ReturnType<typeof createIdpayDriver>;

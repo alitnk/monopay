@@ -1,24 +1,19 @@
 import axios from 'axios';
 import { PaymentException, VerificationException } from '../..';
-import { getPaymentDriver } from '../../drivers';
+import { Receipt } from '../../driver';
 import { RequestException } from '../../exceptions';
 import * as API from './api';
-import { Vandar } from './vandar';
+import { createVandarDriver, VandarDriver } from './vandar';
 
 jest.mock('axios');
 
 const mockedAxios = axios as jest.Mocked<typeof axios>;
 
 describe('Vandar Driver', () => {
-  let driver: Vandar;
+  let driver: VandarDriver;
 
   beforeAll(() => {
-    driver = getPaymentDriver('vandar', { api_key: '123' });
-  });
-
-  it('should get the driver', async () => {
-    const driver = getPaymentDriver('vandar', { api_key: '123' });
-    expect(driver).toBeInstanceOf(Vandar);
+    driver = createVandarDriver({ api_key: '123' });
   });
 
   it('should return the correct payment URL', async () => {
@@ -29,9 +24,8 @@ describe('Vandar Driver', () => {
 
     mockedAxios.post.mockResolvedValueOnce({ data: serverResponse });
 
-    expect(driver.requestPayment({ amount: 2000, callbackUrl: 'asd' })).resolves.toMatchObject({
+    expect(driver.request({ amount: 2000, callbackUrl: 'asd' })).resolves.toMatchObject({
       method: 'GET',
-      params: {},
       referenceId: '123',
       url: 'https://ipg.vandar.io/v3/123',
     });
@@ -45,9 +39,7 @@ describe('Vandar Driver', () => {
 
     mockedAxios.post.mockResolvedValueOnce({ data: serverResponse });
 
-    expect(driver.requestPayment({ amount: 2000, callbackUrl: 'https://example.com' })).rejects.toThrow(
-      RequestException,
-    );
+    expect(driver.request({ amount: 2000, callbackUrl: 'https://example.com' })).rejects.toThrow(RequestException);
   });
 
   it('should verify the purchase', async () => {
@@ -60,7 +52,7 @@ describe('Vandar Driver', () => {
     const token = '123';
     const amount = 2000;
 
-    const expectedResult: API.Receipt = {
+    const expectedResult: Receipt = {
       transactionId: 201,
       raw: {
         payment_status,
@@ -70,7 +62,7 @@ describe('Vandar Driver', () => {
 
     mockedAxios.post.mockResolvedValueOnce({ data: providerResponse });
 
-    expect(driver.verifyPayment({ amount }, { token, payment_status })).resolves.toMatchObject(expectedResult);
+    expect(driver.verify({ amount }, { token, payment_status })).resolves.toMatchObject(expectedResult);
   });
 
   it('should throw payment error when payment_status is not OK', async () => {
@@ -85,7 +77,7 @@ describe('Vandar Driver', () => {
     const payment_status = 'NOK'; // Not documented!
     const amount = 2000;
 
-    expect(driver.verifyPayment({ amount }, { token, payment_status })).rejects.toThrow(PaymentException);
+    expect(driver.verify({ amount }, { token, payment_status })).rejects.toThrow(PaymentException);
   });
 
   it('should throw payment error', async () => {
@@ -100,6 +92,6 @@ describe('Vandar Driver', () => {
     const payment_status = 'OK';
     const amount = 2000;
 
-    expect(driver.verifyPayment({ amount }, { token, payment_status })).rejects.toThrow(VerificationException);
+    expect(driver.verify({ amount }, { token, payment_status })).rejects.toThrow(VerificationException);
   });
 });

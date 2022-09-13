@@ -1,25 +1,7 @@
-import { z } from 'zod';
-import {
-  baseConfigSchema,
-  BaseReceipt,
-  baseRequestSchema,
-  baseVerifySchema,
-  ErrorList,
-  LinksObject,
-} from '../../types';
-
 /*
  * Saman's API
  * Currency: IRR
  */
-
-export const links: LinksObject = {
-  default: {
-    REQUEST: 'https://sep.shaparak.ir/Payments/InitPayment.asmx?WSDL',
-    VERIFICATION: 'https://sep.shaparak.ir/payments/referencepayment.asmx?WSDL',
-    PAYMENT: 'https://sep.shaparak.ir/payment.aspx',
-  },
-};
 
 export interface RequestPaymentReq {
   Amount: number;
@@ -86,7 +68,7 @@ export interface CallbackParams {
   SecurePan: string;
 }
 
-export const purchaseErrors: ErrorList = {
+export const purchaseErrors: Record<string, string> = {
   '-1': 'خطای در پردازش اطالعات ارسالی. )مشکل در یکی از ورودیها و ناموفق بودن فراخوانی متد برگشت تراکنش(',
   '-3': 'ورودیها حاوی کارکترهای غیرمجاز میباشند.',
   '-4': 'Failed Authentication Merchant (کلمه عبور یا کد فروشنده اشتباه است(',
@@ -105,7 +87,7 @@ export const purchaseErrors: ErrorList = {
   '-18': 'Address IP فروشنده نا معتبر است',
 };
 
-export const callbackErrors: ErrorList = {
+export const callbackErrors: Record<string, string> = {
   // CanceledByUser
   '1': 'کاربر انصراف داده است',
   // OK
@@ -129,26 +111,3 @@ export const callbackErrors: ErrorList = {
 // export interface VerifyPaymentReq {}
 
 export type VerifyPaymentRes = number;
-
-/*
- * Package's API
- */
-
-export const configSchema = baseConfigSchema.extend({
-  merchantId: z.string(),
-});
-
-export type Config = z.infer<typeof configSchema>;
-
-export const requestSchema = baseRequestSchema.extend({
-  mobile: z.string().optional(),
-  wage: z.number().optional(),
-});
-
-export type RequestOptions = z.infer<typeof requestSchema>;
-
-export const verifySchema = baseVerifySchema;
-
-export type VerifyOptions = z.infer<typeof verifySchema>;
-
-export type Receipt = BaseReceipt<CallbackParams>;
