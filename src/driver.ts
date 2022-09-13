@@ -53,32 +53,44 @@ export const defineDriver = <
   return (config: Omit<IConfig, keyof DefaultConfig> & Partial<DefaultConfig>) => {
     const ctx: IConfig = schema.config.parse({ ...defaultConfig, ...config });
 
-    return {
-      request: async (options: Parameters<typeof request>['0']['options']) => {
-        options = schema.request.parse(options);
-        const paymentInfo = await request({ ctx, options });
-        return {
-          ...paymentInfo,
-          getScript: () => {
-            const { method, params = {}, url } = paymentInfo;
-            let script = `var form = document.createElement("form");form.setAttribute("method", "${method}");form.setAttribute("action", "${url}");form.setAttribute("target", "_self");`;
-            Object.keys(params).forEach((key) => {
-              const value = params[key];
-              script += `var monopay_hidden_field__${key} = document.createElement("input");monopay_hidden_field__${key}.setAttribute("name", ${key});monopay_hidden_field__${key}.setAttribute("value", ${value});form.appendChild(monopay_hidden_field__${key});`;
-            });
+    const requestPayment = async (options: Parameters<typeof request>['0']['options']) => {
+      options = schema.request.parse(options);
+      const paymentInfo = await request({ ctx, options });
+      return {
+        ...paymentInfo,
+        getScript: () => {
+          const { method, params = {}, url } = paymentInfo;
+          let script = `var form = document.createElement("form");form.setAttribute("method", "${method}");form.setAttribute("action", "${url}");form.setAttribute("target", "_self");`;
+          Object.keys(params).forEach((key) => {
+            const value = params[key];
+            script += `var monopay_hidden_field__${key} = document.createElement("input");monopay_hidden_field__${key}.setAttribute("name", ${key});monopay_hidden_field__${key}.setAttribute("value", ${value});form.appendChild(monopay_hidden_field__${key});`;
+          });
 
-            script += `document.body.appendChild(form);form.submit();document.body.removeChild(form);`;
-            return script;
-          },
-        };
-      },
-      verify: (
-        options: Parameters<typeof verify>['0']['options'],
-        params: Parameters<typeof verify>['0']['params'],
-      ) => {
-        options = schema.verify.parse(options);
-        return verify({ ctx, options, params });
-      },
+          script += `document.body.appendChild(form);form.submit();document.body.removeChild(form);`;
+          return script;
+        },
+      };
+    };
+
+    const verifyPayment = (
+      options: Parameters<typeof verify>['0']['options'],
+      params: Parameters<typeof verify>['0']['params'],
+    ) => {
+      options = schema.verify.parse(options);
+      return verify({ ctx, options, params });
+    };
+
+    return {
+      request: requestPayment,
+      verify: verifyPayment,
+      /**
+       * @deprecated Please use request()
+       */
+      requestPayment,
+      /**
+       * @deprecated Please use verify()
+       */
+      verifyPayment,
     };
   };
 };
