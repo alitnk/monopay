@@ -1,13 +1,23 @@
 import axios from 'axios';
 import { BaseReceipt } from '../../driver';
-import { getPaymentDriver } from '../../drivers';
 import { RequestException } from '../../exceptions';
 import * as API from './api';
+import { createSadadDriver, SadadDriver } from './sadad';
 
 jest.mock('axios');
 
 const mockedAxios = axios as jest.Mocked<typeof axios>;
 describe('Sadad Driver', () => {
+  let driver: SadadDriver;
+
+  beforeAll(() => {
+    driver = createSadadDriver({
+      merchantId: 'asd',
+      terminalKey: 'NTkwNDQ3M2NhM2RhOTRkMWM5MWFhMjcw',
+      terminalId: 'H3AHMXaS',
+    });
+  });
+
   it('returns the correct payment url', async () => {
     const serverResponse: API.RequestPaymentRes = {
       Token: 'some-token',
@@ -16,12 +26,6 @@ describe('Sadad Driver', () => {
     };
 
     mockedAxios.post.mockResolvedValueOnce({ data: serverResponse });
-
-    const driver = getPaymentDriver('sadad')({
-      merchantId: 'asd',
-      terminalKey: 'NTkwNDQ3M2NhM2RhOTRkMWM5MWFhMjcw',
-      terminalId: 'H3AHMXaS',
-    });
 
     expect(
       typeof (
@@ -42,12 +46,6 @@ describe('Sadad Driver', () => {
     };
 
     mockedAxios.post.mockResolvedValueOnce({ data: serverResponse });
-
-    const driver = getPaymentDriver('sadad')({
-      merchantId: 'asd',
-      terminalKey: 'NTkwNDQ3M2NhM2RhOTRkMWM5MWFhMjcw',
-      terminalId: 'H3AHMXaS',
-    });
 
     await expect(
       async () =>
@@ -79,12 +77,6 @@ describe('Sadad Driver', () => {
     const expectedResult: BaseReceipt = { transactionId: '4321', raw: callbackParams };
 
     mockedAxios.post.mockResolvedValueOnce({ data: serverResponse });
-
-    const driver = getPaymentDriver('sadad')({
-      merchantId: 'asd',
-      terminalKey: 'NTkwNDQ3M2NhM2RhOTRkMWM5MWFhMjcw',
-      terminalId: 'H3AHMXaS',
-    });
 
     expect((await driver.verify({ amount: 10000 }, callbackParams)).transactionId).toBe(expectedResult.transactionId);
   });

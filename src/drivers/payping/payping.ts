@@ -107,3 +107,5 @@ export const createPaypingDriver = defineDriver({
     };
   },
 });
+
+export type PaypingDriver = ReturnType<typeof createPaypingDriver>;

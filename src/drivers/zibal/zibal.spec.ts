@@ -1,13 +1,21 @@
 import axios from 'axios';
 import { BaseReceipt } from '../../driver';
-import { getPaymentDriver } from '../../drivers';
 import { RequestException } from '../../exceptions';
 import * as API from './api';
+import { createZibalDriver, ZibalDriver } from './zibal';
 
 jest.mock('axios');
 
 const mockedAxios = axios as jest.Mocked<typeof axios>;
 describe('Zibal Driver', () => {
+  let driver: ZibalDriver;
+
+  beforeAll(() => {
+    driver = createZibalDriver({
+      merchantId: '1234',
+    });
+  });
+
   it('returns the correct payment url', async () => {
     const serverResponse: API.RequestPaymentRes = {
       message: 'hello',
@@ -16,8 +24,6 @@ describe('Zibal Driver', () => {
     };
 
     mockedAxios.post.mockResolvedValueOnce({ data: serverResponse });
-
-    const driver = getPaymentDriver('zibal')({ merchantId: '2134' });
 
     expect(typeof (await driver.request({ callbackUrl: 'https://path.to/callback-url', amount: 20000 })).url).toBe(
       'string',
@@ -32,8 +38,6 @@ describe('Zibal Driver', () => {
     };
 
     mockedAxios.post.mockResolvedValueOnce({ data: serverResponse });
-
-    const driver = getPaymentDriver('zibal')({ merchantId: '2134' });
 
     await expect(driver.request({ amount: 2000, callbackUrl: 'asd' })).rejects.toThrow(RequestException);
   });
@@ -53,8 +57,6 @@ describe('Zibal Driver', () => {
     const expectedResult: BaseReceipt = { transactionId: 1234, raw: serverResponse };
 
     mockedAxios.post.mockResolvedValueOnce({ data: serverResponse });
-
-    const driver = getPaymentDriver('zibal')({ merchantId: '2134' });
 
     expect(
       (await driver.verify({ amount: 2000 }, { trackId: '12345', status: '1', success: '1' })).transactionId,

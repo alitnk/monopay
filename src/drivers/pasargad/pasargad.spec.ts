@@ -4,6 +4,7 @@ import { BaseReceipt } from '../../driver';
 import { getPaymentDriver } from '../../drivers';
 import { RequestException, VerificationException } from '../../exceptions';
 import * as API from './api';
+import { createPasargadDriver, PasargadDriver } from './pasargad';
 
 jest.mock('axios');
 jest.mock('fs/promises');
@@ -24,6 +25,16 @@ const mockKey = `<RSAKeyValue>
 mockedFs.readFile.mockResolvedValue(Buffer.from(mockKey));
 
 describe('Pasargad', () => {
+  let driver: PasargadDriver;
+
+  beforeAll(() => {
+    driver = createPasargadDriver({
+      privateKeyXMLFile: './something.xml',
+      merchantId: '123',
+      terminalId: '123',
+    });
+  });
+
   it('returns the correct payment url', async () => {
     const getTokenResponse = {
       IsSuccess: true,
@@ -31,11 +42,7 @@ describe('Pasargad', () => {
       Token: 'PAYMENT_TOKEN',
     };
     mockedAxios.post.mockResolvedValueOnce({ data: getTokenResponse });
-    const driver = getPaymentDriver('pasargad')({
-      privateKeyXMLFile: './something.xml',
-      merchantId: '123',
-      terminalId: '123',
-    });
+
     expect(
       typeof (
         await driver.request({
@@ -55,11 +62,7 @@ describe('Pasargad', () => {
       Message: 'تراکنش ارسالی معتبر نیست',
     };
     mockedAxios.post.mockResolvedValueOnce({ data: getTokenResponse });
-    const driver = getPaymentDriver('pasargad')({
-      privateKeyXMLFile: './something.xml',
-      merchantId: '123',
-      terminalId: '123',
-    });
+
     await expect(
       async () =>
         await driver.request({
@@ -86,12 +89,6 @@ describe('Pasargad', () => {
     };
 
     mockedAxios.post.mockResolvedValueOnce({ data: serverResponse });
-
-    const driver = getPaymentDriver('pasargad')({
-      privateKeyXMLFile: './something.xml',
-      merchantId: '123',
-      terminalId: '123',
-    });
 
     expect(
       await driver.verify({ amount: 2000 }, { iD: new Date().toISOString(), iN: '123', tref: '123456' }),

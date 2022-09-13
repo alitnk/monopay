@@ -115,3 +115,5 @@ export const createVandarDriver = defineDriver({
     };
   },
 });
+
+export type VandarDriver = ReturnType<typeof createVandarDriver>;

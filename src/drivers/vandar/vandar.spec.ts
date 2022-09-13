@@ -1,20 +1,19 @@
 import axios from 'axios';
 import { PaymentException, VerificationException } from '../..';
 import { BaseReceipt } from '../../driver';
-import { getPaymentDriver } from '../../drivers';
 import { RequestException } from '../../exceptions';
 import * as API from './api';
-import { createVandarDriver } from './vandar';
+import { createVandarDriver, VandarDriver } from './vandar';
 
 jest.mock('axios');
 
 const mockedAxios = axios as jest.Mocked<typeof axios>;
 
 describe('Vandar Driver', () => {
-  let driver: ReturnType<typeof createVandarDriver>;
+  let driver: VandarDriver;
 
   beforeAll(() => {
-    driver = getPaymentDriver('vandar')({ api_key: '123' });
+    driver = createVandarDriver({ api_key: '123' });
   });
 
   it('should return the correct payment URL', async () => {

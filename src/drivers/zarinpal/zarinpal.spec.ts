@@ -1,13 +1,21 @@
 import axios from 'axios';
 import { BaseReceipt } from '../../driver';
-import { getPaymentDriver } from '../../drivers';
 import { RequestException } from '../../exceptions';
 import * as API from './api';
+import { createZarinpalDriver, ZarinpalDriver } from './zarinpal';
 
 jest.mock('axios');
 
 const mockedAxios = axios as jest.Mocked<typeof axios>;
 describe('Zarinpal Driver', () => {
+  let driver: ZarinpalDriver;
+
+  beforeAll(() => {
+    driver = createZarinpalDriver({
+      merchantId: '2134',
+    });
+  });
+
   it('returns the correct payment url', async () => {
     const serverResponse: API.RequestPaymentRes = {
       data: { authority: '10', code: 100, fee: 20000, message: 'ok', fee_type: 'Merchant' },
@@ -15,8 +23,6 @@ describe('Zarinpal Driver', () => {
     };
 
     mockedAxios.post.mockResolvedValueOnce({ data: serverResponse });
-
-    const driver = getPaymentDriver('zarinpal')({ merchantId: '2134' });
 
     expect(typeof (await driver.request({ amount: 2000, callbackUrl: 'asd' })).url).toBe('string');
   });
@@ -28,8 +34,6 @@ describe('Zarinpal Driver', () => {
     };
 
     mockedAxios.post.mockResolvedValueOnce({ data: serverResponse });
-
-    const driver = getPaymentDriver('zarinpal')({ merchantId: '2134' });
 
     await expect(driver.request({ amount: 2000, callbackUrl: 'asd' })).rejects.toThrow(RequestException);
   });
@@ -50,8 +54,6 @@ describe('Zarinpal Driver', () => {
     const expectedResult: BaseReceipt = { transactionId: 201, raw: serverResponse.data as any };
 
     mockedAxios.post.mockResolvedValueOnce({ data: serverResponse });
-
-    const driver = getPaymentDriver('zarinpal')({ merchantId: '2134' });
 
     expect((await driver.verify({ amount: 2000 }, { Authority: '2000', Status: 'OK' })).transactionId).toBe(
       expectedResult.transactionId,

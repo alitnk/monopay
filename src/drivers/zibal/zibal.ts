@@ -83,3 +83,5 @@ export const createZibalDriver = defineDriver({
     };
   },
 });
+
+export type ZibalDriver = ReturnType<typeof createZibalDriver>;

@@ -80,3 +80,5 @@ export const createSamanDriver = defineDriver({
     };
   },
 });
+
+export type SamanDriver = ReturnType<typeof createSamanDriver>;

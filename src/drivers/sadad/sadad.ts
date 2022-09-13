@@ -99,3 +99,5 @@ export const createSadadDriver = defineDriver({
     };
   },
 });
+
+export type SadadDriver = ReturnType<typeof createSadadDriver>;

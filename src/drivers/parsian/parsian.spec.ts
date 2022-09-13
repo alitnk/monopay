@@ -1,15 +1,20 @@
 import { BaseReceipt } from '../../driver';
-import { getPaymentDriver } from '../../drivers';
 import { RequestException } from '../../exceptions';
 import * as API from './api';
+import { createParsianDriver, ParsianDriver } from './parsian';
 
 const mockSoapClient: any = {};
 jest.mock('soap', () => ({
   createClientAsync: async () => mockSoapClient,
 }));
 
-// const mockedSoap = soap as jest.Mocked<typeof soap>;
 describe('Parsian Driver', () => {
+  let driver: ParsianDriver;
+
+  beforeAll(() => {
+    driver = createParsianDriver({ merchantId: 'merchant-id' });
+  });
+
   it('returns the correct payment url', async () => {
     const serverResponse: API.RequestPaymentRes = {
       Token: 123,
@@ -17,10 +22,6 @@ describe('Parsian Driver', () => {
     };
 
     mockSoapClient.SalePaymentRequest = () => serverResponse;
-
-    const driver = getPaymentDriver('parsian')({
-      merchantId: 'merchant-id',
-    });
 
     expect(
       typeof (
@@ -38,10 +39,6 @@ describe('Parsian Driver', () => {
     };
 
     mockSoapClient.SalePaymentRequest = () => serverResponse;
-
-    const driver = getPaymentDriver('parsian')({
-      merchantId: 'merchant-id',
-    });
 
     await expect(
       async () =>
@@ -73,10 +70,6 @@ describe('Parsian Driver', () => {
 
     mockSoapClient.ConfirmPayment = () => serverResponse;
     mockSoapClient.ReversalRequest = () => serverResponse;
-
-    const driver = getPaymentDriver('parsian')({
-      merchantId: 'merchant-id',
-    });
 
     expect(await (await driver.verify({ amount: 2000 }, callbackParams)).transactionId).toBe(
       expectedResult.transactionId,

@@ -1,13 +1,21 @@
 import axios from 'axios';
 import { BaseReceipt } from '../../driver';
-import { getPaymentDriver } from '../../drivers';
 import { RequestException } from '../../exceptions';
 import * as API from './api';
+import { createPayirDriver, PayirDriver } from './payir';
 
 jest.mock('axios');
 
 const mockedAxios = axios as jest.Mocked<typeof axios>;
 describe('Payir Driver', () => {
+  let driver: PayirDriver;
+
+  beforeAll(() => {
+    driver = createPayirDriver({
+      apiKey: '2134',
+    });
+  });
+
   it('returns the correct payment url', async () => {
     const serverResponse: API.RequestPaymentRes = {
       status: 1,
@@ -15,8 +23,6 @@ describe('Payir Driver', () => {
     };
 
     mockedAxios.post.mockResolvedValueOnce({ data: serverResponse });
-
-    const driver = getPaymentDriver('payir')({ apiKey: '2134' });
 
     expect(typeof (await driver.request({ callbackUrl: 'https://path.to/callback-url', amount: 20000 })).url).toBe(
       'string',
@@ -31,8 +37,6 @@ describe('Payir Driver', () => {
     };
 
     mockedAxios.post.mockResolvedValueOnce({ data: serverResponse });
-
-    const driver = getPaymentDriver('payir')({ apiKey: '2134' });
 
     await expect(driver.request({ amount: 2000, callbackUrl: 'asd' })).rejects.toThrow(RequestException);
   });
@@ -51,8 +55,6 @@ describe('Payir Driver', () => {
     const expectedResult: BaseReceipt = { transactionId: '1234', raw: serverResponse };
 
     mockedAxios.post.mockResolvedValueOnce({ data: serverResponse });
-
-    const driver = getPaymentDriver('payir')({ apiKey: '2134' });
 
     expect((await driver.verify({ amount: 2000 }, { token: '12345', status: '1' })).transactionId).toEqual(
       expectedResult.transactionId,

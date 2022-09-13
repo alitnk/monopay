@@ -87,3 +87,5 @@ export const createPayirDriver = defineDriver({
     };
   },
 });
+
+export type PayirDriver = ReturnType<typeof createPayirDriver>;

@@ -93,3 +93,5 @@ export const createIdpayDriver = defineDriver({
     };
   },
 });
+
+export type IdpayDriver = ReturnType<typeof createIdpayDriver>;

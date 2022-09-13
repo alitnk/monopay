@@ -130,3 +130,5 @@ export const createBehpardakhtDriver = defineDriver({
     };
   },
 });
+
+export type BehpardakhtDriver = ReturnType<typeof createBehpardakhtDriver>;

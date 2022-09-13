@@ -103,3 +103,5 @@ export const createZarinpalDriver = defineDriver({
     throw new VerificationException();
   },
 });
+
+export type ZarinpalDriver = ReturnType<typeof createZarinpalDriver>;

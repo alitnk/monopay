@@ -1,2 +1,2 @@
 export * as ZibalAPI from './api';
-export { createZibalDriver } from './zibal';
+export * from './zibal';

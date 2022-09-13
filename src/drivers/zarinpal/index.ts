@@ -1,2 +1,2 @@
 export * as ZarinpalAPI from './api';
-export { createZarinpalDriver } from './zarinpal';
+export * from './zarinpal';

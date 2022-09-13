@@ -87,3 +87,5 @@ export const createParsianDriver = defineDriver({
     };
   },
 });
+
+export type ParsianDriver = ReturnType<typeof createParsianDriver>;

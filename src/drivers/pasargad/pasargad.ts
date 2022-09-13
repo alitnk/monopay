@@ -119,3 +119,5 @@ export const createPasargadDriver = defineDriver({
     };
   },
 });
+
+export type PasargadDriver = ReturnType<typeof createPasargadDriver>;

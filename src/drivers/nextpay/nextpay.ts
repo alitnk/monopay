@@ -81,3 +81,5 @@ export const createNextpayDriver = defineDriver({
     };
   },
 });
+
+export type NextpayDriver = ReturnType<typeof createNextpayDriver>;
