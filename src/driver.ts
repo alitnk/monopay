@@ -1,5 +1,5 @@
-import { buildRedirectScript } from './utils/buildRedirectScript';
 import { z, ZodSchema } from 'zod';
+import { buildRedirectScript } from './utils/buildRedirectScript';
 
 interface IPaymentInfo {
   referenceId: string | number;
@@ -26,7 +26,7 @@ export const baseVerifySchema = z.object({
 
 export type BaseVerifyOptions = z.infer<typeof baseVerifySchema>;
 
-export interface BaseReceipt<RawReceipt = any> {
+export interface Receipt<RawReceipt = any> {
   transactionId: string | number;
   cardPan?: string;
   raw: RawReceipt;
@@ -49,7 +49,7 @@ export const defineDriver = <
   schema: { config: DriverConfigSchema; request: DriverRequestSchema; verify: DriverVerifySchema };
   defaultConfig: DefaultConfig;
   request: (arg: { ctx: IConfig; options: IRequest }) => Promise<IPaymentInfo>;
-  verify: (arg: { ctx: IConfig; options: IVerify; params: Record<string, any> }) => Promise<BaseReceipt>;
+  verify: (arg: { ctx: IConfig; options: IVerify; params: Record<string, any> }) => Promise<Receipt>;
 }) => {
   return (config: Omit<IConfig, keyof DefaultConfig> & Partial<DefaultConfig>) => {
     const ctx: IConfig = schema.config.parse({ ...defaultConfig, ...config });

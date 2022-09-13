@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { BaseReceipt } from '../../driver';
+import { Receipt } from '../../driver';
 import { RequestException } from '../../exceptions';
 import * as API from './api';
 import { createIdpayDriver, IdpayDriver } from './idpay';
@@ -57,7 +57,7 @@ describe('IdPay Driver', () => {
         track_id: '1234',
       },
     };
-    const expectedResult: BaseReceipt = { transactionId: 1234, raw: serverResponse };
+    const expectedResult: Receipt = { transactionId: 1234, raw: serverResponse };
 
     mockedAxios.post.mockResolvedValueOnce({ data: serverResponse });
 

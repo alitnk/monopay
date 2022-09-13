@@ -1,4 +1,4 @@
-import { BaseReceipt } from '../../driver';
+import { Receipt } from '../../driver';
 import { RequestException } from '../../exceptions';
 import * as API from './api';
 import { createParsianDriver, ParsianDriver } from './parsian';
@@ -66,7 +66,7 @@ describe('Parsian Driver', () => {
       status: 0,
     };
 
-    const expectedResult: BaseReceipt = { transactionId: 123456789, raw: serverResponse };
+    const expectedResult: Receipt = { transactionId: 123456789, raw: serverResponse };
 
     mockSoapClient.ConfirmPayment = () => serverResponse;
     mockSoapClient.ReversalRequest = () => serverResponse;

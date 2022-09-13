@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { BaseReceipt } from '../../driver';
+import { Receipt } from '../../driver';
 import { RequestException } from '../../exceptions';
 import * as API from './api';
 import { createSadadDriver, SadadDriver } from './sadad';
@@ -74,7 +74,7 @@ describe('Sadad Driver', () => {
       Token: 'token',
       SwitchResCode: '',
     };
-    const expectedResult: BaseReceipt = { transactionId: '4321', raw: callbackParams };
+    const expectedResult: Receipt = { transactionId: '4321', raw: callbackParams };
 
     mockedAxios.post.mockResolvedValueOnce({ data: serverResponse });
 

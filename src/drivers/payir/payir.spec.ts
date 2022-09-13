@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { BaseReceipt } from '../../driver';
+import { Receipt } from '../../driver';
 import { RequestException } from '../../exceptions';
 import * as API from './api';
 import { createPayirDriver, PayirDriver } from './payir';
@@ -52,7 +52,7 @@ describe('Payir Driver', () => {
       cardNumber: 'شماره کارت',
       message: 'OK',
     };
-    const expectedResult: BaseReceipt = { transactionId: '1234', raw: serverResponse };
+    const expectedResult: Receipt = { transactionId: '1234', raw: serverResponse };
 
     mockedAxios.post.mockResolvedValueOnce({ data: serverResponse });
 

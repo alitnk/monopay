@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { BaseReceipt } from '../../driver';
+import { Receipt } from '../../driver';
 import { RequestException } from '../../exceptions';
 import * as API from './api';
 import { createZarinpalDriver, ZarinpalDriver } from './zarinpal';
@@ -51,7 +51,7 @@ describe('Zarinpal Driver', () => {
       },
       errors: [],
     };
-    const expectedResult: BaseReceipt = { transactionId: 201, raw: serverResponse.data as any };
+    const expectedResult: Receipt = { transactionId: 201, raw: serverResponse.data as any };
 
     mockedAxios.post.mockResolvedValueOnce({ data: serverResponse });
 

@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { BaseReceipt } from '../../driver';
+import { Receipt } from '../../driver';
 import { RequestException } from '../../exceptions';
 import * as API from './api';
 import { createNextpayDriver, NextpayDriver } from './nextpay';
@@ -47,7 +47,7 @@ describe('NextPay Driver', () => {
       order_id: '1234',
       custom: {},
     };
-    const expectedResult: BaseReceipt = { transactionId: '123123123', raw: serverResponse };
+    const expectedResult: Receipt = { transactionId: '123123123', raw: serverResponse };
 
     mockedAxios.post.mockResolvedValueOnce({ data: serverResponse });
 

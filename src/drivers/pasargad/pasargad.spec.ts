@@ -1,6 +1,6 @@
 import axios from 'axios';
 import * as fs from 'fs/promises';
-import { BaseReceipt } from '../../driver';
+import { Receipt } from '../../driver';
 import { getPaymentDriver } from '../../drivers';
 import { RequestException, VerificationException } from '../../exceptions';
 import * as API from './api';
@@ -82,7 +82,7 @@ describe('Pasargad', () => {
       Message: 'عملیات با موفقیت انجام شد',
       ShaparakRefNumber: '100200300400500',
     };
-    const expectedResult: BaseReceipt = {
+    const expectedResult: Receipt = {
       transactionId: '123456',
       raw: serverResponse,
       cardPan: serverResponse.MaskedCardNumber,

@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { PaymentException, VerificationException } from '../..';
-import { BaseReceipt } from '../../driver';
+import { Receipt } from '../../driver';
 import { RequestException } from '../../exceptions';
 import * as API from './api';
 import { createVandarDriver, VandarDriver } from './vandar';
@@ -52,7 +52,7 @@ describe('Vandar Driver', () => {
     const token = '123';
     const amount = 2000;
 
-    const expectedResult: BaseReceipt = {
+    const expectedResult: Receipt = {
       transactionId: 201,
       raw: {
         payment_status,

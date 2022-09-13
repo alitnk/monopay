@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { BaseReceipt } from '../../driver';
+import { Receipt } from '../../driver';
 import { RequestException } from '../../exceptions';
 import * as API from './api';
 import { createSamanDriver, SamanDriver } from './saman';
@@ -73,7 +73,7 @@ describe('Saman Driver', () => {
       TerminalId: '1234',
       TraceNo: '111111',
     };
-    const expectedResult: BaseReceipt = { transactionId: 111111, raw: callbackParams };
+    const expectedResult: Receipt = { transactionId: 111111, raw: callbackParams };
 
     mockSoapClient.verifyTransaction = () => serverResponse;
 

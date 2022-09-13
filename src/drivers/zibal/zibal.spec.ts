@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { BaseReceipt } from '../../driver';
+import { Receipt } from '../../driver';
 import { RequestException } from '../../exceptions';
 import * as API from './api';
 import { createZibalDriver, ZibalDriver } from './zibal';
@@ -54,7 +54,7 @@ describe('Zibal Driver', () => {
       orderId: '2211',
       message: 'success',
     };
-    const expectedResult: BaseReceipt = { transactionId: 1234, raw: serverResponse };
+    const expectedResult: Receipt = { transactionId: 1234, raw: serverResponse };
 
     mockedAxios.post.mockResolvedValueOnce({ data: serverResponse });
 
