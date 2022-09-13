@@ -1,16 +1,16 @@
-import { Behpardakht, BehpardakhtAPI } from 'drivers/behpardakht';
-import { IdPay, IdPayAPI } from 'drivers/idpay';
-import { NextPay, NextPayAPI } from 'drivers/nextpay';
-import { Parsian, ParsianAPI } from 'drivers/parsian';
-import { Pasargad, PasargadAPI } from 'drivers/pasargad';
-import { Payir, PayirAPI } from 'drivers/payir';
-import { PayPing, PayPingAPI } from 'drivers/payping';
-import { Sadad, SadadAPI } from 'drivers/sadad';
-import { Saman, SamanAPI } from 'drivers/saman';
-import { Vandar, VandarAPI } from 'drivers/vandar';
-import { Zarinpal, ZarinpalAPI } from 'drivers/zarinpal';
-import { Zibal, ZibalAPI } from 'drivers/zibal';
 import { Driver as BaseDriver } from './driver';
+import { Behpardakht, BehpardakhtAPI } from './drivers/behpardakht';
+import { IdPay, IdPayAPI } from './drivers/idpay';
+import { NextPay, NextPayAPI } from './drivers/nextpay';
+import { Parsian, ParsianAPI } from './drivers/parsian';
+import { Pasargad, PasargadAPI } from './drivers/pasargad';
+import { Payir, PayirAPI } from './drivers/payir';
+import { PayPing, PayPingAPI } from './drivers/payping';
+import { Sadad, SadadAPI } from './drivers/sadad';
+import { Saman, SamanAPI } from './drivers/saman';
+import { Vandar, VandarAPI } from './drivers/vandar';
+import { Zarinpal, ZarinpalAPI } from './drivers/zarinpal';
+import { Zibal, ZibalAPI } from './drivers/zibal';
 
 export { Behpardakht } from './drivers/behpardakht/behpardakht';
 export { IdPay } from './drivers/idpay/idpay';
