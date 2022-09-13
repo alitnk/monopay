@@ -2,7 +2,7 @@ import { ModuleMetadata, Provider, Type } from '@nestjs/common';
 import { drivers } from '../../drivers';
 
 export type MonopayModuleOptions = {
-  [Property in keyof typeof drivers]?: typeof drivers[Property];
+  [Property in keyof typeof drivers]?: Parameters<typeof drivers[Property]>['0'];
 };
 
 export interface MonopayModuleOptionsFactory {
