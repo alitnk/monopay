@@ -4,7 +4,6 @@
     "test": {},
     "test:cov": {},
     "lint": {},
-    "build": {},
-    "release": {}
+    "build": {}
   }
 }
