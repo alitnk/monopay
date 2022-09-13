@@ -1,8 +1,8 @@
 import axios from 'axios';
+import { BaseReceipt } from '../../driver';
 import { getPaymentDriver } from '../../drivers';
 import { RequestException } from '../../exceptions';
 import * as API from './api';
-import { Saman } from './saman';
 
 jest.mock('axios');
 
@@ -22,11 +22,11 @@ describe('Saman Driver', () => {
 
     mockedAxios.post.mockResolvedValueOnce({ data: serverResponse });
 
-    const driver = getPaymentDriver<Saman>('saman', { merchantId: '1234' });
+    const driver = getPaymentDriver('saman')({ merchantId: '1234' });
 
     expect(
       typeof (
-        await driver.requestPayment({
+        await driver.request({
           amount: 20000,
           callbackUrl: 'https://mysite.com/callback',
           mobile: '09120000000',
@@ -43,11 +43,11 @@ describe('Saman Driver', () => {
 
     mockedAxios.post.mockResolvedValueOnce({ data: serverResponse });
 
-    const driver = getPaymentDriver<Saman>('saman', { merchantId: '1234' });
+    const driver = getPaymentDriver('saman')({ merchantId: '1234' });
 
     await expect(
       async () =>
-        await driver.requestPayment({
+        await driver.request({
           amount: 20000,
           callbackUrl: 'https://mysite.com/callback',
           mobile: '09120000000',
@@ -69,13 +69,13 @@ describe('Saman Driver', () => {
       TerminalId: '1234',
       TraceNo: '111111',
     };
-    const expectedResult: API.Receipt = { transactionId: 111111, raw: callbackParams };
+    const expectedResult: BaseReceipt = { transactionId: 111111, raw: callbackParams };
 
     mockSoapClient.verifyTransaction = () => serverResponse;
 
-    const driver = getPaymentDriver<Saman>('saman', { merchantId: '1234' });
+    const driver = getPaymentDriver('saman')({ merchantId: '1234' });
 
-    expect(await (await driver.verifyPayment({ amount: 2000 }, callbackParams)).transactionId).toBe(
+    expect(await (await driver.verify({ amount: 2000 }, callbackParams)).transactionId).toBe(
       expectedResult.transactionId,
     );
   });

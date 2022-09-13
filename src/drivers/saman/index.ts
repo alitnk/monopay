@@ -1,2 +1,2 @@
 export * as SamanAPI from './api';
-export { Saman } from './saman';
+export { createSamanDriver } from './saman';

@@ -1,28 +1,41 @@
 import * as soap from 'soap';
-import { Driver } from '../../driver';
+import { z } from 'zod';
+import { defineDriver } from '../../driver';
 import { PaymentException, RequestException, VerificationException } from '../../exceptions';
+import { generateId } from '../../utils/generateId';
 import * as API from './api';
 
-export class Parsian extends Driver<API.Config> {
-  constructor(config: API.Config) {
-    super(config, API.configSchema);
-  }
-
-  protected links = API.links;
-
-  requestPayment = async (options: API.RequestOptions) => {
-    options = this.getParsedData(options, API.requestSchema);
-
+export const createParsianDriver = defineDriver({
+  schema: {
+    config: z.object({
+      merchantId: z.string(),
+      links: z.object({
+        request: z.string(),
+        verify: z.string(),
+        payment: z.string(),
+      }),
+    }),
+    request: z.object({}),
+    verify: z.object({}),
+  },
+  defaultConfig: {
+    links: {
+      request: 'https://pec.shaparak.ir/NewIPGServices/Sale/SaleService.asmx?wsdl',
+      verify: 'https://pec.shaparak.ir/NewIPGServices/Confirm/ConfirmService.asmx?wsdl',
+      payment: 'https://pec.shaparak.ir/NewIPG/',
+    },
+  },
+  request: async ({ options, ctx }) => {
     const { amount, callbackUrl, description } = options;
-    const { merchantId } = this.config;
-    const client = await soap.createClientAsync(this.getLinks().REQUEST);
+    const { merchantId, links } = ctx;
+    const client = await soap.createClientAsync(links.request);
 
     const requestFields: API.RequestPaymentReq = {
       Amount: amount,
       CallBackUrl: callbackUrl,
       AdditionalData: description || '',
       LoginAccount: merchantId,
-      OrderId: this.generateId(),
+      OrderId: generateId(),
     };
 
     const response: API.RequestPaymentRes = client.SalePaymentRequest(requestFields);
@@ -32,20 +45,22 @@ export class Parsian extends Driver<API.Config> {
       throw new RequestException('خطایی در درخواست پرداخت به‌وجود آمد');
     }
 
-    return this.makeRequestInfo(Token, 'GET', this.getLinks().PAYMENT, {
-      Token,
-    });
-  };
-
-  verifyPayment = async (_options: API.VerifyOptions, params: API.CallbackParams): Promise<API.Receipt> => {
+    return {
+      method: 'GET',
+      referenceId: Token,
+      url: links.payment,
+      params: { Token },
+    };
+  },
+  verify: async ({ ctx, params }) => {
     const { Token, status } = params;
-    const { merchantId } = this.config;
+    const { merchantId, links } = ctx;
 
     if (status.toString() !== '0') {
       throw new PaymentException('تراکنش توسط کاربر لغو شد.');
     }
 
-    const soapClient = await soap.createClientAsync(this.getLinks().VERIFICATION);
+    const soapClient = await soap.createClientAsync(links.verify);
 
     const requestFields: API.VerifyPaymentReq = {
       LoginAccount: merchantId,
@@ -70,25 +85,5 @@ export class Parsian extends Driver<API.Config> {
       cardPan: CardNumberMasked,
       raw: verifyResponse,
     };
-  };
-
-  /**
-   * YYYYMMDD
-   */
-  dateFormat(date = new Date()) {
-    const yyyy = date.getFullYear();
-    const mm = date.getMonth() + 1;
-    const dd = date.getDate();
-    return yyyy.toString() + mm.toString() + dd.toString();
-  }
-
-  /**
-   * HHMMSS
-   */
-  timeFormat(date = new Date()) {
-    const hh = date.getHours();
-    const mm = date.getMonth();
-    const ss = date.getSeconds();
-    return hh.toString() + mm.toString() + ss.toString();
-  }
-}
+  },
+});

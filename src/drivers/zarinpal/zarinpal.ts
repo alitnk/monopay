@@ -1,22 +1,45 @@
 import axios from 'axios';
-import { Driver } from '../../driver';
+import { z } from 'zod';
+import { defineDriver } from '../../driver';
 import { PaymentException, RequestException, VerificationException } from '../../exceptions';
 import * as API from './api';
 
-export class Zarinpal extends Driver<API.Config> {
-  constructor(config: API.Config) {
-    super(config, API.configSchema);
-  }
+const getLinks = (links: { request: string; verify: string; payment: string }, sandbox: boolean) =>
+  sandbox
+    ? {
+        request: 'https://sandbox.zarinpal.com/pg/v4/payment/request.json',
+        verify: 'https://sandbox.zarinpal.com/pg/v4/payment/verify.json',
+        payment: 'https://sandbox.zarinpal.com/pg/StartPay/',
+      }
+    : links;
 
-  protected links = API.links;
-
-  requestPayment = async (options: API.RequestOptions) => {
-    options = this.getParsedData(options, API.requestSchema);
-
+export const createZarinpalDriver = defineDriver({
+  schema: {
+    config: z.object({
+      links: z.object({
+        request: z.string(),
+        verify: z.string(),
+        payment: z.string(),
+      }),
+      sandbox: z.boolean().optional(),
+      merchantId: z.string(),
+    }),
+    request: z.object({ mobile: z.string().optional(), email: z.string().optional() }),
+    verify: z.object({}),
+  },
+  defaultConfig: {
+    links: {
+      request: 'https://api.zarinpal.com/pg/v4/payment/request.json',
+      verify: 'https://api.zarinpal.com/pg/v4/payment/verify.json',
+      payment: 'https://www.zarinpal.com/pg/StartPay/',
+    },
+  },
+  request: async ({ ctx, options }) => {
     const { amount, callbackUrl, mobile, email, ...otherOptions } = options;
-    const { merchantId } = this.config;
+    const { merchantId, sandbox } = ctx;
+    const links = getLinks(ctx.links, sandbox ?? false);
 
-    const response = await axios.post<API.RequestPaymentReq, { data: API.RequestPaymentRes }>(this.getLinks().REQUEST, {
+    const response = await axios.post<API.RequestPaymentReq, { data: API.RequestPaymentRes }>(links.request, {
       merchant_id: merchantId,
       amount: amount,
       callback_url: callbackUrl,
@@ -27,7 +50,11 @@ export class Zarinpal extends Driver<API.Config> {
 
     if (!Array.isArray(data) && !!data) {
       // It was successful (`data` is an object)
-      return this.makeRequestInfo(data.authority, 'GET', this.getLinks().PAYMENT + data.authority);
+      return {
+        method: 'GET',
+        referenceId: data.authority,
+        url: links.payment + data.authority,
+      };
     }
 
     if (!Array.isArray(errors)) {
@@ -36,21 +63,19 @@ export class Zarinpal extends Driver<API.Config> {
       throw new RequestException(API.requestErrors[code.toString()]);
     }
     throw new RequestException();
-  };
-
-  verifyPayment = async (options: API.VerifyOptions, params: API.CallbackParams): Promise<API.Receipt> => {
-    options = this.getParsedData(options, API.verifySchema);
-
+  },
+  verify: async ({ ctx, options, params }) => {
     const { Authority: authority, Status: status } = params;
     const { amount } = options;
-    const { merchantId } = this.config;
+    const { merchantId, sandbox } = ctx;
+    const links = getLinks(ctx.links, sandbox ?? false);
 
     if (status !== 'OK') {
       throw new PaymentException();
     }
 
     const response = await axios.post<API.VerifyPaymentReq, { data: API.VerifyPaymentRes }>(
-      this.getLinks().VERIFICATION,
+      links.verify,
       {
         authority: authority.toString(),
         merchant_id: merchantId,
@@ -76,9 +101,5 @@ export class Zarinpal extends Driver<API.Config> {
     }
 
     throw new VerificationException();
-  };
-
-  protected getLinks() {
-    return this.config.sandbox ? this.links.sandbox : this.links.default;
-  }
-}
+  },
+});

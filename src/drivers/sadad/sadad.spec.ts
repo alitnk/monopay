@@ -1,8 +1,8 @@
 import axios from 'axios';
+import { BaseReceipt } from '../../driver';
 import { getPaymentDriver } from '../../drivers';
 import { RequestException } from '../../exceptions';
 import * as API from './api';
-import { Sadad } from './sadad';
 
 jest.mock('axios');
 
@@ -17,7 +17,7 @@ describe('Sadad Driver', () => {
 
     mockedAxios.post.mockResolvedValueOnce({ data: serverResponse });
 
-    const driver = getPaymentDriver<Sadad>('sadad', {
+    const driver = getPaymentDriver('sadad')({
       merchantId: 'asd',
       terminalKey: 'NTkwNDQ3M2NhM2RhOTRkMWM5MWFhMjcw',
       terminalId: 'H3AHMXaS',
@@ -25,7 +25,7 @@ describe('Sadad Driver', () => {
 
     expect(
       typeof (
-        await driver.requestPayment({
+        await driver.request({
           amount: 20000,
           callbackUrl: 'https://callback.url/',
           mobile: '09120000000',
@@ -43,7 +43,7 @@ describe('Sadad Driver', () => {
 
     mockedAxios.post.mockResolvedValueOnce({ data: serverResponse });
 
-    const driver = getPaymentDriver<Sadad>('sadad', {
+    const driver = getPaymentDriver('sadad')({
       merchantId: 'asd',
       terminalKey: 'NTkwNDQ3M2NhM2RhOTRkMWM5MWFhMjcw',
       terminalId: 'H3AHMXaS',
@@ -51,7 +51,7 @@ describe('Sadad Driver', () => {
 
     await expect(
       async () =>
-        await driver.requestPayment({
+        await driver.request({
           amount: 20000,
           callbackUrl: 'https://callback.url/',
           mobile: '09120000000',
@@ -76,18 +76,16 @@ describe('Sadad Driver', () => {
       Token: 'token',
       SwitchResCode: '',
     };
-    const expectedResult: API.Receipt = { transactionId: '4321', raw: callbackParams };
+    const expectedResult: BaseReceipt = { transactionId: '4321', raw: callbackParams };
 
     mockedAxios.post.mockResolvedValueOnce({ data: serverResponse });
 
-    const driver = getPaymentDriver<Sadad>('sadad', {
+    const driver = getPaymentDriver('sadad')({
       merchantId: 'asd',
       terminalKey: 'NTkwNDQ3M2NhM2RhOTRkMWM5MWFhMjcw',
       terminalId: 'H3AHMXaS',
     });
 
-    expect((await driver.verifyPayment({ amount: 10000 }, callbackParams)).transactionId).toBe(
-      expectedResult.transactionId,
-    );
+    expect((await driver.verify({ amount: 10000 }, callbackParams)).transactionId).toBe(expectedResult.transactionId);
   });
 });

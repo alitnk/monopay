@@ -1,25 +1,7 @@
-import { z } from 'zod';
-import {
-  baseConfigSchema,
-  BaseReceipt,
-  baseRequestSchema,
-  baseVerifySchema,
-  ErrorList,
-  LinksObject,
-} from '../../types';
-
 /*
  * Payir's API
  * Currency: IRR
  */
-
-export const links: LinksObject = {
-  default: {
-    REQUEST: 'https://pay.ir/pg/send',
-    VERIFICATION: 'https://pay.ir/pg/verify',
-    PAYMENT: 'https://pay.ir/pg/',
-  },
-};
 
 export interface RequestPaymentReq {
   /**
@@ -106,7 +88,7 @@ export type VerifyPaymentRes = VerifyPaymentRes_Success | VerifyPaymentRes_Faile
 /**
  * @link https://docs.pay.ir/gateway/#جدول-خطاها
  */
-export const errors: ErrorList = {
+export const errors: Record<string, string> = {
   '0': 'درحال حاضر درگاه بانکی قطع شده و مشکل بزودی برطرف می شود',
   '-1': 'API Key ارسال نمی شود',
   '-2': 'Token ارسال نمی شود',
@@ -135,28 +117,3 @@ export const errors: ErrorList = {
   '-25': 'امکان استفاده از سرویس در کشور مبدا شما وجود نداره',
   '-26': 'امکان انجام تراکنش برای این درگاه وجود ندارد',
 };
-
-/*
- * Package's API
- */
-
-export const configSchema = baseConfigSchema.extend({
-  sandbox: z.boolean().optional(),
-  apiKey: z.string(),
-});
-
-export type Config = z.infer<typeof configSchema>;
-
-export const requestSchema = baseRequestSchema.extend({
-  mobile: z.string().optional(),
-  nationalCode: z.string().optional(),
-  validCardNumber: z.string().optional(),
-});
-
-export type RequestOptions = z.infer<typeof requestSchema>;
-
-export const verifySchema = baseVerifySchema;
-
-export type VerifyOptions = z.infer<typeof verifySchema>;
-
-export type Receipt = BaseReceipt<VerifyPaymentRes>;

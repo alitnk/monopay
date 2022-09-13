@@ -1,2 +1,2 @@
 export * as NextPayAPI from './api';
-export { NextPay } from './nextpay';
+export { createNextpayDriver } from './nextpay';

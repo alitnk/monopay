@@ -1,25 +1,7 @@
-import { z } from 'zod';
-import {
-  baseConfigSchema,
-  BaseReceipt,
-  baseRequestSchema,
-  baseVerifySchema,
-  ErrorList,
-  LinksObject,
-} from '../../types';
-
 /*
  * IDPay's API
  * Currency: IRR
  */
-
-export const links: LinksObject = {
-  default: {
-    REQUEST: 'https://api.idpay.ir/v1.1/payment',
-    VERIFICATION: 'https://api.idpay.ir/v1.1/payment/verify',
-    PAYMENT: '',
-  },
-};
 
 export interface RequestPaymentReq {
   /**
@@ -142,7 +124,7 @@ export interface CallbackParams_GET {
   order_id: string;
 }
 
-export const callbackErrors: ErrorList = {
+export const callbackErrors: Record<string, string> = {
   '1': 'پرداخت انجام نشده است',
   '2': 'پرداخت ناموفق بوده است',
   '3': 'خطا رخ داده است',
@@ -241,7 +223,7 @@ export type VerifyPaymentRes = VerifyPaymentRes_Successful | VerifyPaymentRes_Fa
 /**
  * @link https://idpay.ir/web-service/v1.1/#ad39f18522
  */
-export const errors: ErrorList = {
+export const errors: Record<string, string> = {
   // 402
   '11': 'کاربر مسدود شده است.',
   // 403
@@ -289,28 +271,3 @@ export const errors: ErrorList = {
   // 405
   '54': 'مدت زمان تایید پرداخت سپری شده است.',
 };
-
-/*
- * Package's API
- */
-
-export const configSchema = baseConfigSchema.extend({
-  sandbox: z.boolean().nullish(),
-  apiKey: z.string(),
-});
-
-export type Config = z.infer<typeof configSchema>;
-
-export const requestSchema = baseRequestSchema.extend({
-  mobile: z.string().optional(),
-  email: z.string().optional(),
-  name: z.string().optional(),
-});
-
-export type RequestOptions = z.infer<typeof requestSchema>;
-
-export const verifySchema = baseVerifySchema;
-
-export type VerifyOptions = z.TypeOf<typeof verifySchema>;
-
-export type Receipt = BaseReceipt<Exclude<VerifyPaymentRes, any[]>>;

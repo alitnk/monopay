@@ -1,6 +1,6 @@
-import { getPaymentDriver, ConfigObject, DriverName } from 'monopay';
 import { config } from 'dotenv';
 import express from 'express';
+import { ConfigObject, DriverName, getPaymentDriver } from 'monopay';
 config();
 const app = express();
 const port = 3000;
@@ -42,9 +42,9 @@ const chosenDriver: DriverName = 'nextpay';
  */
 app.get('/purchase', async (req, res) => {
   try {
-    const driver = getPaymentDriver(chosenDriver, monopayConfiguration[chosenDriver]);
+    const driver = getPaymentDriver(chosenDriver)(monopayConfiguration[chosenDriver]);
 
-    const paymentInfo = await driver.requestPayment({
+    const paymentInfo = await driver.request({
       amount: 20000,
       callbackUrl: process.env.APP_URL + '/callback',
     });
@@ -65,13 +65,13 @@ app.get('/purchase', async (req, res) => {
 });
 
 /**
- * The callback URL that was given to `requestPayment`
+ * The callback URL that was given to `request`
  */
 app.all('/callback', async (req, res) => {
   try {
-    const driver = getPaymentDriver(chosenDriver, monopayConfiguration[chosenDriver]);
+    const driver = getPaymentDriver(chosenDriver)(monopayConfiguration[chosenDriver]);
 
-    const receipt = await driver.verifyPayment(
+    const receipt = await driver.verify(
       {
         amount: db.amount, // from database
         referenceId: db.paymentID, // from database

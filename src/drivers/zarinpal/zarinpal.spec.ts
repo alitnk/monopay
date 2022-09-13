@@ -1,8 +1,8 @@
 import axios from 'axios';
+import { BaseReceipt } from '../../driver';
 import { getPaymentDriver } from '../../drivers';
 import { RequestException } from '../../exceptions';
 import * as API from './api';
-import { Zarinpal } from './zarinpal';
 
 jest.mock('axios');
 
@@ -16,9 +16,9 @@ describe('Zarinpal Driver', () => {
 
     mockedAxios.post.mockResolvedValueOnce({ data: serverResponse });
 
-    const driver = getPaymentDriver<Zarinpal>('zarinpal', { merchantId: '2134' });
+    const driver = getPaymentDriver('zarinpal')({ merchantId: '2134' });
 
-    expect(typeof (await driver.requestPayment({ amount: 2000, callbackUrl: 'asd' })).url).toBe('string');
+    expect(typeof (await driver.request({ amount: 2000, callbackUrl: 'asd' })).url).toBe('string');
   });
 
   it('throws payment errors accordingly', async () => {
@@ -29,11 +29,9 @@ describe('Zarinpal Driver', () => {
 
     mockedAxios.post.mockResolvedValueOnce({ data: serverResponse });
 
-    const driver = getPaymentDriver<Zarinpal>('zarinpal', { merchantId: '2134' });
+    const driver = getPaymentDriver('zarinpal')({ merchantId: '2134' });
 
-    await expect(async () => await driver.requestPayment({ amount: 2000, callbackUrl: 'asd' })).rejects.toThrow(
-      RequestException,
-    );
+    await expect(driver.request({ amount: 2000, callbackUrl: 'asd' })).rejects.toThrow(RequestException);
   });
 
   it('verifies the purchase correctly', async () => {
@@ -49,13 +47,13 @@ describe('Zarinpal Driver', () => {
       },
       errors: [],
     };
-    const expectedResult: API.Receipt = { transactionId: 201, raw: serverResponse.data as any };
+    const expectedResult: BaseReceipt = { transactionId: 201, raw: serverResponse.data as any };
 
     mockedAxios.post.mockResolvedValueOnce({ data: serverResponse });
 
-    const driver = getPaymentDriver<Zarinpal>('zarinpal', { merchantId: '2134' });
+    const driver = getPaymentDriver('zarinpal')({ merchantId: '2134' });
 
-    expect((await driver.verifyPayment({ amount: 2000 }, { Authority: '2000', Status: 'OK' })).transactionId).toBe(
+    expect((await driver.verify({ amount: 2000 }, { Authority: '2000', Status: 'OK' })).transactionId).toBe(
       expectedResult.transactionId,
     );
   });

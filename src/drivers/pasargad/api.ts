@@ -1,14 +1,3 @@
-import { z } from 'zod';
-import { baseConfigSchema, BaseReceipt, baseRequestSchema, baseVerifySchema, LinksObject } from '../../types';
-
-export const links: LinksObject = {
-  default: {
-    REQUEST: 'https://pep.shaparak.ir/Api/v1/Payment/GetToken',
-    VERIFICATION: 'https://pep.shaparak.ir/Api/v1/Payment/VerifyPayment',
-    PAYMENT: 'https://pep.shaparak.ir/payment.aspx',
-  },
-};
-
 export interface RequestPaymentReq {
   /**
    * شماره فاکتور که برای هر خرید باید متفاوت باشد
@@ -163,32 +152,3 @@ export interface VerifyPaymentRes {
    */
   ShaparakRefNumber: string;
 }
-
-export const errorMessage = 'عملیات با خطا مواجه شد';
-
-export const requestSchema = baseRequestSchema.extend({
-  invoiceNumber: z.string(),
-  invoiceDate: z.string(),
-  mobile: z.string().optional(),
-  email: z.string().optional(),
-});
-
-export type RequestOptions = z.infer<typeof requestSchema>;
-
-export const configSchema = baseConfigSchema.extend({
-  /**
-   * Your **RSA** Private key file path.
-   * File must be in `XML` format
-   */
-  privateKeyXMLFile: z.string(),
-  merchantId: z.string(),
-  terminalId: z.string(),
-});
-
-export type Config = z.infer<typeof configSchema>;
-
-export const verifySchema = baseVerifySchema;
-
-export type VerifyOptions = z.infer<typeof verifySchema>;
-
-export type Receipt = BaseReceipt<VerifyPaymentRes>;

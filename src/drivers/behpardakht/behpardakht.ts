@@ -1,21 +1,58 @@
 import * as soap from 'soap';
-import { Driver } from '../../driver';
+import { z } from 'zod';
+import { defineDriver } from '../../driver';
 import { PaymentException, RequestException, VerificationException } from '../../exceptions';
+import { generateId } from '../../utils/generateId';
 import * as API from './api';
 
-export class Behpardakht extends Driver<API.Config> {
-  constructor(config: API.Config) {
-    super(config, API.configSchema);
-  }
+/**
+ * YYYYMMDD
+ */
+const dateFormat = (date = new Date()) => {
+  const yyyy = date.getFullYear();
+  const mm = date.getMonth() + 1;
+  const dd = date.getDate();
+  return yyyy.toString() + mm.toString() + dd.toString();
+};
 
-  protected links = API.links;
+/**
+ * HHMMSS
+ */
+const timeFormat = (date = new Date()) => {
+  const hh = date.getHours();
+  const mm = date.getMonth();
+  const ss = date.getSeconds();
+  return hh.toString() + mm.toString() + ss.toString();
+};
 
-  requestPayment = async (options: API.RequestOptions) => {
-    options = this.getParsedData(options, API.requestSchema);
-
+export const createBehpardakhtDriver = defineDriver({
+  schema: {
+    config: z.object({
+      links: z.object({
+        request: z.string(),
+        verify: z.string(),
+        payment: z.string(),
+      }),
+      terminalId: z.number(),
+      username: z.string(),
+      password: z.string(),
+    }),
+    request: z.object({
+      payerId: z.number().optional(),
+    }),
+    verify: z.object({}),
+  },
+  defaultConfig: {
+    links: {
+      request: 'https://bpm.shaparak.ir/pgwchannel/services/pgw?wsdl',
+      verify: 'https://bpm.shaparak.ir/pgwchannel/services/pgw?wsdl',
+      payment: 'https://bpm.shaparak.ir/pgwchannel/startpay.mellat',
+    },
+  },
+  request: async ({ ctx, options }) => {
     const { amount, callbackUrl, description, payerId } = options;
-    const { terminalId, username, password } = this.config;
-    const client = await soap.createClientAsync(this.getLinks().REQUEST);
+    const { terminalId, username, password, links } = ctx;
+    const client = await soap.createClientAsync(links.request);
 
     const requestFields: API.RequestPaymentReq = {
       terminalId,
@@ -23,9 +60,9 @@ export class Behpardakht extends Driver<API.Config> {
       userPassword: password,
       amount,
       callBackUrl: callbackUrl,
-      orderId: this.generateId(),
-      localDate: this.dateFormat(),
-      localTime: this.timeFormat(),
+      orderId: generateId(),
+      localDate: dateFormat(),
+      localTime: timeFormat(),
       payerId: payerId || 0,
       additionalData: description || '',
     };
@@ -39,20 +76,24 @@ export class Behpardakht extends Driver<API.Config> {
       throw new RequestException(API.errors[response[0]]);
     }
 
-    return this.makeRequestInfo(RefId, 'POST', this.getLinks().PAYMENT, {
-      RefId,
-    });
-  };
-
-  verifyPayment = async (_options: API.VerifyOptions, params: API.CallbackParams): Promise<API.Receipt> => {
+    return {
+      method: 'POST',
+      referenceId: RefId,
+      url: links.payment,
+      params: {
+        RefId,
+      },
+    };
+  },
+  verify: async ({ ctx, params }) => {
     const { RefId, ResCode, saleOrderId, SaleReferenceId, CardHolderPan } = params;
-    const { terminalId, username, password } = this.config;
+    const { terminalId, username, password, links } = ctx;
 
     if (ResCode !== '0') {
       throw new PaymentException(API.errors[ResCode]);
     }
 
-    const soapClient = await soap.createClientAsync(this.getLinks().VERIFICATION);
+    const soapClient = await soap.createClientAsync(links.verify);
 
     const requestFields: API.VerifyPaymentReq = {
       terminalId,
@@ -87,25 +128,5 @@ export class Behpardakht extends Driver<API.Config> {
       cardPan: CardHolderPan,
       raw: params,
     };
-  };
-
-  /**
-   * YYYYMMDD
-   */
-  dateFormat(date = new Date()) {
-    const yyyy = date.getFullYear();
-    const mm = date.getMonth() + 1;
-    const dd = date.getDate();
-    return yyyy.toString() + mm.toString() + dd.toString();
-  }
-
-  /**
-   * HHMMSS
-   */
-  timeFormat(date = new Date()) {
-    const hh = date.getHours();
-    const mm = date.getMonth();
-    const ss = date.getSeconds();
-    return hh.toString() + mm.toString() + ss.toString();
-  }
-}
+  },
+});

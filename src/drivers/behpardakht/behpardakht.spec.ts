@@ -1,7 +1,7 @@
+import { BaseReceipt } from '../../driver';
 import { getPaymentDriver } from '../../drivers';
 import { RequestException } from '../../exceptions';
 import * as API from './api';
-import { Behpardakht } from './behpardakht';
 
 const mockSoapClient: any = {};
 jest.mock('soap', () => ({
@@ -15,7 +15,7 @@ describe('Behpardakht Driver', () => {
 
     mockSoapClient.bpPayRequest = () => serverResponse;
 
-    const driver = getPaymentDriver<Behpardakht>('behpardakht', {
+    const driver = getPaymentDriver('behpardakht')({
       terminalId: 1234,
       username: 'username',
       password: 'password',
@@ -23,7 +23,7 @@ describe('Behpardakht Driver', () => {
 
     expect(
       typeof (
-        await driver.requestPayment({
+        await driver.request({
           amount: 20000,
           callbackUrl: 'https://mysite.com/callback',
         })
@@ -36,7 +36,7 @@ describe('Behpardakht Driver', () => {
 
     mockSoapClient.bpPayRequest = () => serverResponse;
 
-    const driver = getPaymentDriver<Behpardakht>('behpardakht', {
+    const driver = getPaymentDriver('behpardakht')({
       terminalId: 1234,
       username: 'username',
       password: 'password',
@@ -44,7 +44,7 @@ describe('Behpardakht Driver', () => {
 
     await expect(
       async () =>
-        await driver.requestPayment({
+        await driver.request({
           amount: 20000,
           callbackUrl: 'https://mysite.com/callback',
         }),
@@ -61,18 +61,18 @@ describe('Behpardakht Driver', () => {
       saleOrderId: 4321,
     };
 
-    const expectedResult: API.Receipt = { transactionId: '111111', raw: callbackParams };
+    const expectedResult: BaseReceipt = { transactionId: '111111', raw: callbackParams };
 
     mockSoapClient.bpVerifyRequest = () => serverResponse;
     mockSoapClient.bpSettleRequest = () => serverResponse;
 
-    const driver = getPaymentDriver<Behpardakht>('behpardakht', {
+    const driver = getPaymentDriver('behpardakht')({
       terminalId: 1234,
       username: 'username',
       password: 'password',
     });
 
-    expect(await (await driver.verifyPayment({ amount: 2000 }, callbackParams)).transactionId).toBe(
+    expect(await (await driver.verify({ amount: 2000 }, callbackParams)).transactionId).toBe(
       expectedResult.transactionId,
     );
   });

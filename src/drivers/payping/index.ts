@@ -1,2 +1,2 @@
 export * as PayPingAPI from './api';
-export { PayPing } from './payping';
+export { createPaypingDriver } from './payping';

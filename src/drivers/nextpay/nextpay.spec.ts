@@ -1,8 +1,8 @@
 import axios from 'axios';
+import { BaseReceipt } from '../../driver';
 import { getPaymentDriver } from '../../drivers';
 import { RequestException } from '../../exceptions';
 import * as API from './api';
-import { NextPay } from './nextpay';
 
 jest.mock('axios');
 
@@ -16,11 +16,11 @@ describe('NextPay Driver', () => {
 
     mockedAxios.post.mockResolvedValueOnce({ data: serverResponse });
 
-    const driver = getPaymentDriver<NextPay>('nextpay', { apiKey: '1234' });
+    const driver = getPaymentDriver('nextpay')({ apiKey: '1234' });
 
-    expect(
-      typeof (await driver.requestPayment({ callbackUrl: 'https://path.to/callback-url', amount: 20000 })).url,
-    ).toBe('string');
+    expect(typeof (await driver.request({ callbackUrl: 'https://path.to/callback-url', amount: 20000 })).url).toBe(
+      'string',
+    );
   });
 
   it('throws payment errors accordingly', async () => {
@@ -31,11 +31,9 @@ describe('NextPay Driver', () => {
 
     mockedAxios.post.mockResolvedValueOnce({ data: serverResponse });
 
-    const driver = getPaymentDriver<NextPay>('nextpay', { apiKey: '1234' });
+    const driver = getPaymentDriver('nextpay')({ apiKey: '1234' });
 
-    await expect(async () => await driver.requestPayment({ amount: 2000, callbackUrl: 'asd' })).rejects.toThrow(
-      RequestException,
-    );
+    await expect(driver.request({ amount: 2000, callbackUrl: 'asd' })).rejects.toThrow(RequestException);
   });
 
   it('verifies the purchase correctly', async () => {
@@ -47,15 +45,14 @@ describe('NextPay Driver', () => {
       order_id: '1234',
       custom: {},
     };
-    const expectedResult: API.Receipt = { transactionId: '123123123', raw: serverResponse };
+    const expectedResult: BaseReceipt = { transactionId: '123123123', raw: serverResponse };
 
     mockedAxios.post.mockResolvedValueOnce({ data: serverResponse });
 
-    const driver = getPaymentDriver<NextPay>('nextpay', { apiKey: '1234' });
+    const driver = getPaymentDriver('nextpay')({ apiKey: '1234' });
 
     expect(
-      (await driver.verifyPayment({ amount: 2000 }, { trans_id: '12345', order_id: '1234', amount: 20000 }))
-        .transactionId,
+      (await driver.verify({ amount: 2000 }, { trans_id: '12345', order_id: '1234', amount: 20000 })).transactionId,
     ).toEqual(expectedResult.transactionId);
   });
 });

@@ -1,23 +1,55 @@
 import axios from 'axios';
-import { Driver } from '../../driver';
+import { z } from 'zod';
+import { defineDriver } from '../../driver';
 import { PaymentException, RequestException, VerificationException } from '../../exceptions';
 import * as API from './api';
 
-export class Vandar extends Driver<API.Config> {
-  constructor(config: API.Config) {
-    super(config, API.tConfig);
-  }
-
-  protected links = API.links;
-
-  requestPayment = async (options: API.RequestOptions) => {
-    options = this.getParsedData(options, API.requestSchema);
-
+export const createVandarDriver = defineDriver({
+  schema: {
+    config: z.object({
+      links: z.object({
+        request: z.string(),
+        verify: z.string(),
+        payment: z.string(),
+      }),
+      api_key: z.string(),
+    }),
+    request: z.object({
+      mobile_number: z.string().optional(),
+      factorNumber: z.string().optional(),
+      description: z.string().optional(),
+      valid_card_number: z.string().optional(),
+      comment: z.string().optional(),
+    }),
+    verify: z.object({
+      status: z.number().optional(),
+      // amount: z.string().optional(),
+      realAmount: z.number().optional(),
+      wage: z.string().optional(),
+      transId: z.number().optional(),
+      factorNumber: z.string().optional(),
+      mobile: z.string().optional(),
+      description: z.string().optional(),
+      cardNumber: z.string().optional(),
+      paymentDate: z.string().optional(),
+      cid: z.string().optional(),
+      message: z.string().optional(),
+      errors: z.array(z.string()).optional(),
+    }),
+  },
+  defaultConfig: {
+    links: {
+      request: 'https://ipg.vandar.io/api/v3/send',
+      verify: 'https://ipg.vandar.io/api/v3/verify',
+      payment: 'https://ipg.vandar.io/v3/',
+    },
+  },
+  request: async ({ ctx, options }) => {
     const { amount, callbackUrl, ...otherOptions } = options;
-    const { api_key } = this.config;
+    const { api_key, links } = ctx;
 
     const response = await axios.post<API.RequestPaymentReq, { data: API.RequestPaymentRes }>(
-      this.getLinks().REQUEST,
+      links.request,
       {
         api_key,
         amount: amount,
@@ -37,21 +69,23 @@ export class Vandar extends Driver<API.Config> {
     // TODO: Throw an approperiate error here
     if (!token) throw Error('No token provided');
 
-    return this.makeRequestInfo(token, 'GET', this.getLinks().PAYMENT + response.data.token);
-  };
-
-  verifyPayment = async (options: API.VerifyOptions, params: API.CallbackParams): Promise<API.Receipt> => {
-    options = this.getParsedData(options, API.verifySchema);
-
+    return {
+      method: 'GET',
+      referenceId: token,
+      url: links.payment + response.data.token,
+    };
+  },
+  verify: async ({ ctx, options, params }) => {
     const { token, payment_status } = params;
-    const { api_key } = this.config;
+    const { api_key, links } = ctx;
 
     if (payment_status !== 'OK') {
       throw new PaymentException();
     }
 
     const response = await axios.post<API.VerifyPaymentReq, { data: API.VerifyPaymentRes }>(
-      this.getLinks().VERIFICATION,
+      links.verify,
+
       {
         api_key,
         token,
@@ -79,9 +113,5 @@ export class Vandar extends Driver<API.Config> {
         payment_status,
       },
     };
-  };
-
-  protected getLinks() {
-    return this.links.default;
-  }
-}
+  },
+});

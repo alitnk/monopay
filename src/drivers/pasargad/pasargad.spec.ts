@@ -1,9 +1,9 @@
 import axios from 'axios';
 import * as fs from 'fs/promises';
+import { BaseReceipt } from '../../driver';
 import { getPaymentDriver } from '../../drivers';
 import { RequestException, VerificationException } from '../../exceptions';
 import * as API from './api';
-import { Pasargad } from './pasargad';
 
 jest.mock('axios');
 jest.mock('fs/promises');
@@ -31,14 +31,14 @@ describe('Pasargad', () => {
       Token: 'PAYMENT_TOKEN',
     };
     mockedAxios.post.mockResolvedValueOnce({ data: getTokenResponse });
-    const driver = getPaymentDriver<Pasargad>('pasargad', {
+    const driver = getPaymentDriver('pasargad')({
       privateKeyXMLFile: './something.xml',
       merchantId: '123',
       terminalId: '123',
     });
     expect(
       typeof (
-        await driver.requestPayment({
+        await driver.request({
           amount: 2000,
           callbackUrl: 'https://test.com/callback',
           invoiceDate: new Date().toISOString(),
@@ -55,14 +55,14 @@ describe('Pasargad', () => {
       Message: 'تراکنش ارسالی معتبر نیست',
     };
     mockedAxios.post.mockResolvedValueOnce({ data: getTokenResponse });
-    const driver = getPaymentDriver<Pasargad>('pasargad', {
+    const driver = getPaymentDriver('pasargad')({
       privateKeyXMLFile: './something.xml',
       merchantId: '123',
       terminalId: '123',
     });
     await expect(
       async () =>
-        await driver.requestPayment({
+        await driver.request({
           amount: 2000,
           callbackUrl: 'https://tets.com',
           invoiceDate: new Date().toISOString(),
@@ -79,7 +79,7 @@ describe('Pasargad', () => {
       Message: 'عملیات با موفقیت انجام شد',
       ShaparakRefNumber: '100200300400500',
     };
-    const expectedResult: API.Receipt = {
+    const expectedResult: BaseReceipt = {
       transactionId: '123456',
       raw: serverResponse,
       cardPan: serverResponse.MaskedCardNumber,
@@ -87,31 +87,30 @@ describe('Pasargad', () => {
 
     mockedAxios.post.mockResolvedValueOnce({ data: serverResponse });
 
-    const driver = getPaymentDriver<Pasargad>('pasargad', {
+    const driver = getPaymentDriver('pasargad')({
       privateKeyXMLFile: './something.xml',
       merchantId: '123',
       terminalId: '123',
     });
 
     expect(
-      await driver.verifyPayment({ amount: 2000 }, { iD: new Date().toISOString(), iN: '123', tref: '123456' }),
+      await driver.verify({ amount: 2000 }, { iD: new Date().toISOString(), iN: '123', tref: '123456' }),
     ).toStrictEqual(expectedResult);
   });
 
   it('throws verification errors accordingly', async () => {
-    const verifyPaymentResponse = {
+    const verifyResponse = {
       IsSuccess: false,
       Message: 'تراکنش ارسالی معتبر نیست',
     };
-    mockedAxios.post.mockResolvedValueOnce({ data: verifyPaymentResponse });
-    const driver = getPaymentDriver<Pasargad>('pasargad', {
+    mockedAxios.post.mockResolvedValueOnce({ data: verifyResponse });
+    const driver = getPaymentDriver('pasargad')({
       privateKeyXMLFile: './something.xml',
       merchantId: '123',
       terminalId: '123',
     });
     await expect(
-      async () =>
-        await driver.verifyPayment({ amount: 2000 }, { iD: new Date().toISOString(), iN: '123', tref: '1234' }),
+      driver.verify({ amount: 2000 }, { iD: new Date().toISOString(), iN: '123', tref: '1234' }),
     ).rejects.toThrow(VerificationException);
   });
 });
