@@ -9,7 +9,7 @@ const config = {
   title: 'Monopay',
   tagline: 'A node.js package for making payment transactions with different Iranian IPGs',
   url: 'https://alitnk.github.io',
-  baseUrl: '/monopay/',
+  baseUrl: '/',
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
   favicon: 'img/favicon.ico',
