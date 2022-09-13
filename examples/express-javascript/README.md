@@ -1,6 +1,6 @@
 # Example using Express
 
-Switch to [persian (فارسی)](/examples/express-example/READMEfa.md)
+Switch to [Persian (فارسی)](/examples/express-example/README-fa.md)
 
 There are two routes in this example:
 
