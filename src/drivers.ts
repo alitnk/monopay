@@ -11,7 +11,7 @@ import { createVandarDriver } from './drivers/vandar';
 import { createZarinpalDriver } from './drivers/zarinpal';
 import { createZibalDriver } from './drivers/zibal';
 
-const drivers = {
+export const drivers = {
   behpardakht: createBehpardakhtDriver,
   idpay: createIdpayDriver,
   nextpay: createNextpayDriver,
