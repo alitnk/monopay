@@ -9,7 +9,10 @@
     "build": "FORCE_COLOR=1 turbo run build",
     "lint": "FORCE_COLOR=1 turbo run lint",
     "test": "FORCE_COLOR=1 turbo run test",
-    "format": "prettier --write \"**/*.{ts,md}\""
+    "format": "prettier --write \"**/*.{ts,md}\"",
+    "changeset": "changeset",
+    "version-packages": "changeset version",
+    "release": "turbo run build --filter=docs^... && changeset publish"
   },
   "devDependencies": {
     "lint-staged": "^12.4.1",
@@ -28,5 +31,8 @@
       "eslint --fix"
     ]
   },
-  "packageManager": "yarn@1.22.18"
+  "packageManager": "yarn@1.22.18",
+  "dependencies": {
+    "@changesets/cli": "^2.24.4"
+  }
 }
