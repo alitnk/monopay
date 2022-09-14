@@ -18,7 +18,7 @@ export class MonopayService {
     });
   }
 
-  getDriver(driverName: keyof Drivers) {
+  getDriver<DriverName extends keyof Drivers>(driverName: DriverName) {
     if (!this.drivers[driverName]) {
       throw new Error(`You haven't provided configurations for the ${driverName} driver and are trying to access it.`);
     }
