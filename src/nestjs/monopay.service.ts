@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { drivers, getPaymentDriver } from '../drivers';
-import { MonopayModuleOptions } from './interfaces/monopay-module.interface';
+import { MonopayModuleOptions } from './interfaces';
 import { MONOPAY_OPTIONS } from './monopay.constants';
 
 type Drivers = {

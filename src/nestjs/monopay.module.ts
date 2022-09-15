@@ -1,9 +1,5 @@
 import { DynamicModule, Module, Provider } from '@nestjs/common';
-import {
-  MonopayModuleAsyncOptions,
-  MonopayModuleOptions,
-  MonopayModuleOptionsFactory,
-} from './interfaces/monopay-module.interface';
+import { MonopayModuleAsyncOptions, MonopayModuleOptions, MonopayModuleOptionsFactory } from './interfaces';
 import { MONOPAY_OPTIONS } from './monopay.constants';
 import { MonopayService } from './monopay.service';
 
