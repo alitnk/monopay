@@ -11,7 +11,8 @@ const getHeaders = (apiKey: string, sandbox: boolean) => ({
 });
 
 const throwOnIPGBadConfigError = (errorCode: string) => {
-  if (API.IPGConfigErrors.includes(errorCode)) throw new BadConfigError(API.errors[errorCode], true);
+  if (API.IPGConfigErrors.includes(errorCode))
+    throw new BadConfigError(API.errors[errorCode] ?? API.callbackErrors[errorCode], true);
 };
 
 export const createIdpayDriver = defineDriver({
