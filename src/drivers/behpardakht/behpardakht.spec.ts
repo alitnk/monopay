@@ -35,8 +35,7 @@ describe('Behpardakht Driver', () => {
   });
 
   it('throws payment errors accordingly', async () => {
-    const serverResponse: API.RequestPaymentRes = '100';
-
+    const serverResponse: API.RequestPaymentRes = '11';
     mockSoapClient.bpPayRequest = () => serverResponse;
 
     await expect(

@@ -73,7 +73,7 @@ export const createBehpardakhtDriver = defineDriver({
     const RefId = splittedResponse[1];
 
     if (ResCode.toString() !== '0') {
-      throw new RequestException(API.errors[response[0]]);
+      throw new RequestException(API.errors[ResCode]);
     }
 
     return {
