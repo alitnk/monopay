@@ -11,7 +11,20 @@ import { createVandarDriver } from './drivers/vandar';
 import { createZarinpalDriver } from './drivers/zarinpal';
 import { createZibalDriver } from './drivers/zibal';
 
-const drivers = {
+export type { BehpardakhtAPI, BehpardakhtDriver } from './drivers/behpardakht';
+export type { IdpayAPI, IdpayDriver } from './drivers/idpay';
+export type { NextpayAPI, NextpayDriver } from './drivers/nextpay';
+export type { ParsianAPI, ParsianDriver } from './drivers/parsian';
+export type { PasargadAPI, PasargadDriver } from './drivers/pasargad';
+export type { PayirAPI, PayirDriver } from './drivers/payir';
+export type { PaypingAPI, PaypingDriver } from './drivers/payping';
+export type { SadadAPI, SadadDriver } from './drivers/sadad';
+export type { SamanAPI, SamanDriver } from './drivers/saman';
+export type { VandarAPI, VandarDriver } from './drivers/vandar';
+export type { ZarinpalAPI, ZarinpalDriver } from './drivers/zarinpal';
+export type { ZibalAPI, ZibalDriver } from './drivers/zibal';
+
+export const drivers = {
   behpardakht: createBehpardakhtDriver,
   idpay: createIdpayDriver,
   nextpay: createNextpayDriver,

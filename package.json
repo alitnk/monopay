@@ -65,5 +65,10 @@
     "rimraf": "^3.0.2",
     "soap": "^0.45.0",
     "zod": "^3.19.0"
+  },
+  "peerDependencies": {
+    "@nestjs/common": "latest",
+    "rxjs": "latest",
+    "reflect-metadata": "latest"
   }
 }

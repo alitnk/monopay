@@ -1,6 +1,6 @@
 # مثال استفاده از Express
 
-دیدن این داکیومنت به [انگلیسی (English)](/examples/express-example/README.md)
+دیدن این داکیومنت به [انگلیسی (English)](/examples/express-typescript/README.md)
 
 دو مسیر زیر در این مثال تعریف شده اند:
 
