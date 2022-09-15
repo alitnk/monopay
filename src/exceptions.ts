@@ -1,3 +1,24 @@
+type MonoPayErrorConfig = {
+  isIPGError: boolean;
+  isSafeToDisplay: boolean;
+  message?: string;
+};
+export abstract class MonopayError extends Error {
+  /**
+   * Determines whether the error was thrown by the IPG or by the application itself
+   */
+  readonly isIPGError: boolean;
+  /**
+   * Determines whether the error exposes sensitive information or not
+   */
+  readonly isSafeToDisplay: boolean;
+  constructor(options: MonoPayErrorConfig) {
+    super(options.message);
+    this.isIPGError = options.isIPGError;
+    this.isSafeToDisplay = options.isSafeToDisplay;
+  }
+}
+
 export class BasePaymentException extends Error {
   constructor(message?: string) {
     super(message);
@@ -40,9 +61,8 @@ export class VerificationException extends BasePaymentException {
 /**
  * Error when the configuration has problems
  */
-export class BadConfigException extends BasePaymentException {
-  constructor(errors: string[]) {
-    super(errors.join(',\n'));
-    Object.setPrototypeOf(this, BadConfigException.prototype);
+export class BadConfigError extends MonopayError {
+  constructor(message: string, isIPGError: boolean) {
+    super({ isIPGError, isSafeToDisplay: false, message });
   }
 }
