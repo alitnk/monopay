@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { z } from 'zod';
 import { defineDriver } from '../../driver';
-import { PaymentException, RequestException, VerificationException } from '../../exceptions';
+import { BadConfigError, PaymentException, RequestException, VerificationException } from '../../exceptions';
 import { generateUuid } from '../../utils/generateUuid';
 import * as API from './api';
 
@@ -9,6 +9,10 @@ const getHeaders = (apiKey: string, sandbox: boolean) => ({
   'X-SANDBOX': sandbox ? '1' : '0',
   'X-API-KEY': apiKey,
 });
+
+const throwOnIPGBadConfigError = (errorCode: string) => {
+  if (API.IPGConfigErrors.includes(errorCode)) throw new BadConfigError(API.errors[errorCode], true);
+};
 
 export const createIdpayDriver = defineDriver({
   schema: {
@@ -55,7 +59,9 @@ export const createIdpayDriver = defineDriver({
 
     if ('error_message' in response.data) {
       const error = response.data as API.RequestPaymentRes_Failed;
-      throw new RequestException(API.errors[error.error_code.toString()]);
+      const errorCode = error.error_code.toString();
+      throwOnIPGBadConfigError(errorCode);
+      throw new RequestException(API.errors[errorCode]);
     }
     return {
       method: 'GET',
@@ -66,9 +72,10 @@ export const createIdpayDriver = defineDriver({
   verify: async ({ ctx, params }) => {
     const { apiKey, links, sandbox } = ctx;
     const { id, order_id, status } = params;
-
-    if (status.toString() !== '200') {
-      throw new PaymentException(API.callbackErrors[status.toString()]);
+    const statusCode = status.toString();
+    if (statusCode !== '200') {
+      throwOnIPGBadConfigError(statusCode);
+      throw new PaymentException(API.callbackErrors[statusCode]);
     }
 
     const response = await axios.post<API.VerifyPaymentReq, { data: API.VerifyPaymentRes }>(
@@ -83,7 +90,9 @@ export const createIdpayDriver = defineDriver({
     );
 
     if ('error_message' in response.data) {
-      throw new VerificationException(API.callbackErrors[response.data.error_code.toString()]);
+      const errorCode = response.data.error_code.toString();
+      throwOnIPGBadConfigError(errorCode);
+      throw new VerificationException(API.callbackErrors[errorCode]);
     }
 
     return {
