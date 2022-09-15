@@ -3,8 +3,12 @@ import { z } from 'zod';
 import { generateUuid } from '../../utils/generateUuid';
 
 import { defineDriver } from '../../driver';
-import { PaymentException, RequestException, VerificationException } from '../../exceptions';
+import { BadConfigError, PaymentException, RequestException, VerificationException } from '../../exceptions';
 import * as API from './api';
+
+const throwOnIPGBadConfigError = (errorCode: string) => {
+  if (API.IPGConfigErrors.includes(errorCode)) throw new BadConfigError(API.errors[errorCode], true);
+};
 
 export const createNextpayDriver = defineDriver({
   schema: {
@@ -44,8 +48,11 @@ export const createNextpayDriver = defineDriver({
 
     const { code, trans_id } = response.data;
 
-    if (code.toString() !== '0') {
-      throw new RequestException(API.errors[code.toString()]);
+    const responseCode = code.toString();
+
+    if (responseCode !== '0') {
+      throwOnIPGBadConfigError(responseCode);
+      throw new RequestException(API.errors[responseCode]);
     }
 
     return {
@@ -70,8 +77,11 @@ export const createNextpayDriver = defineDriver({
 
     const { Shaparak_Ref_Id, code, card_holder } = response.data;
 
-    if (code.toString() !== '0') {
-      throw new VerificationException(API.errors[code.toString()]);
+    const responseCode = code.toString();
+
+    if (responseCode !== '0') {
+      throwOnIPGBadConfigError(responseCode);
+      throw new VerificationException(API.errors[responseCode]);
     }
 
     return {
