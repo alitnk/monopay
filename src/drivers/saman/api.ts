@@ -111,3 +111,26 @@ export const callbackErrors: Record<string, string> = {
 // export interface VerifyPaymentReq {}
 
 export type VerifyPaymentRes = number;
+
+export const IPGConfigErrors = [
+  '-1',
+  '-3',
+  '-4',
+  '-6',
+  '-7',
+  '-8',
+  '-9',
+  '-10',
+  '-11',
+  '-12',
+  '-13',
+  '-14',
+  '-15',
+  '-17',
+  '-18',
+  '5',
+  '8',
+  '10',
+  '11',
+  '12',
+];
