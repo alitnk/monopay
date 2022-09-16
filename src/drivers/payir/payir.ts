@@ -1,10 +1,14 @@
 import axios from 'axios';
 import { z } from 'zod';
 import { defineDriver } from '../../driver';
-import { PaymentException, RequestException, VerificationException } from '../../exceptions';
+import { BadConfigError, PaymentException, RequestException, VerificationException } from '../../exceptions';
 import * as API from './api';
 
 const getApiKey = (apiKey: string, sandbox: boolean) => (sandbox ? 'test' : apiKey);
+
+const throwOnIPGBadConfigError = (errorCode: string) => {
+  if (API.IPGConfigErrors.includes(errorCode)) throw new BadConfigError(API.errors[errorCode], true);
+};
 
 export const createPayirDriver = defineDriver({
   schema: {
@@ -45,10 +49,11 @@ export const createPayirDriver = defineDriver({
       validCardNumber,
     });
 
-    const { status } = response.data;
+    const statusCode = response.data.status.toString();
 
-    if (status.toString() !== '1') {
-      throw new RequestException(API.errors[status.toString()]);
+    if (statusCode !== '1') {
+      throwOnIPGBadConfigError(statusCode);
+      throw new RequestException(API.errors[statusCode]);
     }
 
     response.data = response.data as API.RequestPaymentRes_Success;
@@ -63,8 +68,10 @@ export const createPayirDriver = defineDriver({
     const { status, token } = params;
     const { apiKey, sandbox, links } = ctx;
 
-    if (status.toString() !== '1') {
-      throw new PaymentException(API.errors[status.toString()]);
+    const statusCode = status.toString();
+    if (statusCode !== '1') {
+      throwOnIPGBadConfigError(statusCode);
+      throw new PaymentException(API.errors[statusCode]);
     }
 
     const response = await axios.post<API.VerifyPaymentReq, { data: API.VerifyPaymentRes }>(links.verify, {
@@ -72,10 +79,11 @@ export const createPayirDriver = defineDriver({
       token,
     });
 
-    const verifyStatus = response.data.status;
+    const verifyStatus = response.data.status.toString();
 
-    if (verifyStatus.toString() !== '1') {
-      throw new VerificationException(API.errors[verifyStatus.toString()]);
+    if (verifyStatus !== '1') {
+      throwOnIPGBadConfigError(verifyStatus);
+      throw new VerificationException(API.errors[verifyStatus]);
     }
 
     response.data = response.data as API.VerifyPaymentRes_Success;

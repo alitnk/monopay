@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { Receipt } from '../../driver';
-import { RequestException } from '../../exceptions';
+import { BadConfigError, RequestException } from '../../exceptions';
 import * as API from './api';
 import { createPayirDriver, PayirDriver } from './payir';
 
@@ -39,6 +39,18 @@ describe('Payir Driver', () => {
     mockedAxios.post.mockResolvedValueOnce({ data: serverResponse });
 
     await expect(driver.request({ amount: 2000, callbackUrl: 'asd' })).rejects.toThrow(RequestException);
+  });
+
+  it('throws payment bad config errors accordingly', async () => {
+    const serverResponse: API.RequestPaymentRes = {
+      status: -10,
+      errorMessage: 'some error',
+      token: '1234',
+    };
+
+    mockedAxios.post.mockResolvedValueOnce({ data: serverResponse });
+
+    await expect(driver.request({ amount: 2000, callbackUrl: 'asd' })).rejects.toThrow(BadConfigError);
   });
 
   it('verifies the purchase correctly', async () => {
