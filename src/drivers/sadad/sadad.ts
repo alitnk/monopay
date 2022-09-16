@@ -2,7 +2,7 @@ import axios from 'axios';
 import * as CryptoJS from 'crypto-js';
 import { z } from 'zod';
 import { defineDriver } from '../../driver';
-import { PaymentException, RequestException, VerificationException } from '../../exceptions';
+import { BadConfigError, PaymentException, RequestException, VerificationException } from '../../exceptions';
 import { generateId } from '../../utils/generateId';
 import * as API from './api';
 
@@ -14,6 +14,11 @@ const signData = (message: string, key: string): string => {
   });
 
   return encrypted.toString();
+};
+
+const throwOnIPGBadConfigError = (errorCode: string) => {
+  if (API.IPGConfigErrors.includes(errorCode))
+    throw new BadConfigError(API.requestErrors[errorCode] ?? API.verifyErrors[errorCode], true);
 };
 
 export const createSadadDriver = defineDriver({
@@ -61,7 +66,9 @@ export const createSadadDriver = defineDriver({
     });
 
     if (response.data.ResCode !== 0) {
-      throw new RequestException(API.requestErrors[response.data.ResCode.toString()]);
+      const resCode = response.data.ResCode.toString();
+      throwOnIPGBadConfigError(resCode);
+      throw new RequestException(API.requestErrors[resCode]);
     }
 
     return {
@@ -78,6 +85,7 @@ export const createSadadDriver = defineDriver({
     const { terminalKey, links } = ctx;
 
     if (ResCode !== 0) {
+      throwOnIPGBadConfigError(ResCode.toString());
       throw new PaymentException('تراکنش توسط کاربر لغو شد.');
     }
 
@@ -89,7 +97,9 @@ export const createSadadDriver = defineDriver({
     const { ResCode: verificationResCode, SystemTraceNo } = response.data;
 
     if (verificationResCode !== 0) {
-      throw new VerificationException(API.verifyErrors[verificationResCode.toString()]);
+      const resCode = verificationResCode.toString();
+      throwOnIPGBadConfigError(resCode);
+      throw new VerificationException(API.verifyErrors[resCode]);
     }
 
     return {
