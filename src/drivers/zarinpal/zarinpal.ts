@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { z } from 'zod';
 import { defineDriver } from '../../driver';
-import { PaymentException, RequestException, VerificationException } from '../../exceptions';
+import { BadConfigError, PaymentException, RequestException, VerificationException } from '../../exceptions';
 import * as API from './api';
 
 const getLinks = (links: { request: string; verify: string; payment: string }, sandbox: boolean) =>
@@ -12,6 +12,11 @@ const getLinks = (links: { request: string; verify: string; payment: string }, s
         payment: 'https://sandbox.zarinpal.com/pg/StartPay/',
       }
     : links;
+
+const throwOnIPGBadConfigError = (errorCode: string) => {
+  if (API.IPGConfigErrors.includes(errorCode))
+    throw new BadConfigError(API.requestErrors[errorCode] ?? API.verifyErrors[errorCode], true);
+};
 
 export const createZarinpalDriver = defineDriver({
   schema: {
@@ -59,8 +64,9 @@ export const createZarinpalDriver = defineDriver({
 
     if (!Array.isArray(errors)) {
       // There are errors (`errors` is an object)
-      const { code } = errors;
-      throw new RequestException(API.requestErrors[code.toString()]);
+      const errorCode = errors.code.toString();
+      throwOnIPGBadConfigError(errorCode);
+      throw new RequestException(API.requestErrors[errorCode]);
     }
     throw new RequestException();
   },
@@ -96,8 +102,9 @@ export const createZarinpalDriver = defineDriver({
 
     if (!Array.isArray(errors)) {
       // There are errors (`errors` is an object)
-      const { code } = errors;
-      throw new VerificationException(API.verifyErrors[code.toString()]);
+      const errorCode = errors.code.toString();
+      throwOnIPGBadConfigError(errorCode);
+      throw new VerificationException(API.verifyErrors[errorCode]);
     }
 
     throw new VerificationException();

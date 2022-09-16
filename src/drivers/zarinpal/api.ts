@@ -125,3 +125,5 @@ export const verifyErrors: Record<string, string> = {
   '-54': 'اتوریتی نامعتبر است.',
   '101': 'تراکنش قبلا یک بار تایید شده است.',
 };
+
+export const IPGConfigErrors = ['-9', '-10', '-11', '-12', '-15', '-16', '-50', '-53', '-54', '101'];
