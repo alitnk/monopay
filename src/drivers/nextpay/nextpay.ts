@@ -3,11 +3,12 @@ import { z } from 'zod';
 import { generateUuid } from '../../utils/generateUuid';
 
 import { defineDriver } from '../../driver';
-import { BadConfigError, PaymentException, RequestException, VerificationException } from '../../exceptions';
+import { BadConfigError, PaymentException, RequestException, UserError, VerificationException } from '../../exceptions';
 import * as API from './api';
 
-const throwOnIPGBadConfigError = (errorCode: string) => {
+const throwError = (errorCode: string) => {
   if (API.IPGConfigErrors.includes(errorCode)) throw new BadConfigError(API.errors[errorCode], true);
+  if (API.IPGUserErrors.includes(errorCode)) throw new UserError(API.errors[errorCode]);
 };
 
 export const createNextpayDriver = defineDriver({
@@ -51,7 +52,7 @@ export const createNextpayDriver = defineDriver({
     const responseCode = code.toString();
 
     if (responseCode !== '0') {
-      throwOnIPGBadConfigError(responseCode);
+      throwError(responseCode);
       throw new RequestException(API.errors[responseCode]);
     }
 
@@ -80,7 +81,7 @@ export const createNextpayDriver = defineDriver({
     const responseCode = code.toString();
 
     if (responseCode !== '0') {
-      throwOnIPGBadConfigError(responseCode);
+      throwError(responseCode);
       throw new VerificationException(API.errors[responseCode]);
     }
 
