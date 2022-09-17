@@ -7,13 +7,17 @@ import { generateId } from '../../utils/generateId';
 import * as API from './api';
 
 const signData = (message: string, key: string): string => {
-  const keyHex = CryptoJS.enc.Utf8.parse(key);
-  const encrypted = CryptoJS.DES.encrypt(message, keyHex, {
-    mode: CryptoJS.mode.ECB,
-    padding: CryptoJS.pad.Pkcs7,
-  });
+  try {
+    const keyHex = CryptoJS.enc.Utf8.parse(key);
+    const encrypted = CryptoJS.DES.encrypt(message, keyHex, {
+      mode: CryptoJS.mode.ECB,
+      padding: CryptoJS.pad.Pkcs7,
+    });
 
-  return encrypted.toString();
+    return encrypted.toString();
+  } catch (err) {
+    throw new BadConfigError('The signing process has failed. details: ' + err, false);
+  }
 };
 
 const throwOnIPGBadConfigError = (errorCode: string) => {
