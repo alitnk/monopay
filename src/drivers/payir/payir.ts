@@ -1,13 +1,14 @@
 import axios from 'axios';
 import { z } from 'zod';
 import { defineDriver } from '../../driver';
-import { BadConfigError, PaymentException, RequestException, VerificationException } from '../../exceptions';
+import { BadConfigError, PaymentException, RequestException, UserError, VerificationException } from '../../exceptions';
 import * as API from './api';
 
 const getApiKey = (apiKey: string, sandbox: boolean) => (sandbox ? 'test' : apiKey);
 
-const throwOnIPGBadConfigError = (errorCode: string) => {
+const throwError = (errorCode: string) => {
   if (API.IPGConfigErrors.includes(errorCode)) throw new BadConfigError(API.errors[errorCode], true);
+  if (API.IPGUserErrors.includes(errorCode)) throw new UserError(API.errors[errorCode]);
 };
 
 export const createPayirDriver = defineDriver({
@@ -52,7 +53,7 @@ export const createPayirDriver = defineDriver({
     const statusCode = response.data.status.toString();
 
     if (statusCode !== '1') {
-      throwOnIPGBadConfigError(statusCode);
+      throwError(statusCode);
       throw new RequestException(API.errors[statusCode]);
     }
 
@@ -70,7 +71,7 @@ export const createPayirDriver = defineDriver({
 
     const statusCode = status.toString();
     if (statusCode !== '1') {
-      throwOnIPGBadConfigError(statusCode);
+      throwError(statusCode);
       throw new PaymentException(API.errors[statusCode]);
     }
 
@@ -82,7 +83,7 @@ export const createPayirDriver = defineDriver({
     const verifyStatus = response.data.status.toString();
 
     if (verifyStatus !== '1') {
-      throwOnIPGBadConfigError(verifyStatus);
+      throwError(verifyStatus);
       throw new VerificationException(API.errors[verifyStatus]);
     }
 
