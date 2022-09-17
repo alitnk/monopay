@@ -233,3 +233,4 @@ export const verifyErrors: Record<string, string> = {
 };
 
 export const IPGConfigErrors = ['102', '103', '104', '201', '105', '106', '113', '203'];
+export const IPGUserErrors = ['202', '3', '4', '5', '6', '7', '8', '9', '10', '12'];

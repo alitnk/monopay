@@ -1,14 +1,16 @@
 import axios from 'axios';
 import { z } from 'zod';
 import { defineDriver } from '../../driver';
-import { BadConfigError, PaymentException, RequestException, VerificationException } from '../../exceptions';
+import { BadConfigError, PaymentException, RequestException, UserError, VerificationException } from '../../exceptions';
 import * as API from './api';
 
 const getMerchantId = (merchantId: string, sandbox: boolean) => (sandbox ? 'zibal' : merchantId);
 
-const throwOnIPGBadConfigError = (errorCode: string) => {
+const throwError = (errorCode: string) => {
   if (API.IPGConfigErrors.includes(errorCode))
     throw new BadConfigError(API.purchaseErrors[errorCode] ?? API.callbackErrors[errorCode] ?? API.verifyErrors, true);
+  if (API.IPGUserErrors.includes(errorCode))
+    throw new UserError(API.purchaseErrors[errorCode] ?? API.callbackErrors[errorCode] ?? API.verifyErrors);
 };
 
 export const createZibalDriver = defineDriver({
@@ -54,7 +56,7 @@ export const createZibalDriver = defineDriver({
 
     if (result !== 100) {
       const resCode = result.toString();
-      throwOnIPGBadConfigError(resCode);
+      throwError(resCode);
       throw new RequestException(API.purchaseErrors[resCode]);
     }
 
@@ -70,7 +72,7 @@ export const createZibalDriver = defineDriver({
 
     if (success.toString() === '0') {
       const resCode = status.toString();
-      throwOnIPGBadConfigError(resCode);
+      throwError(resCode);
       throw new PaymentException(API.callbackErrors[resCode]);
     }
 
@@ -83,7 +85,7 @@ export const createZibalDriver = defineDriver({
 
     if (result !== 100) {
       const resCode = result.toString();
-      throwOnIPGBadConfigError(resCode);
+      throwError(resCode);
       throw new VerificationException(API.verifyErrors[resCode]);
     }
 
