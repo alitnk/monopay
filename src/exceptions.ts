@@ -66,3 +66,9 @@ export class BadConfigError extends MonopayError {
     super({ isIPGError, isSafeToDisplay: false, message });
   }
 }
+
+export class UserError extends MonopayError {
+  constructor(message: string) {
+    super({ message, isIPGError: true, isSafeToDisplay: true });
+  }
+}
