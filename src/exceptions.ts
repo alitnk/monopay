@@ -80,7 +80,7 @@ export class UserError extends MonopayError {
  * Denotes an error either caused by a failure from gateway or an unrecognizable reason
  */
 export class GatewayFailureError extends MonopayError {
-  constructor(message: string) {
+  constructor(message?: string) {
     super({ message, isIPGError: true, isSafeToDisplay: false });
   }
 }
