@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { z } from 'zod';
 import { defineDriver } from '../../driver';
-import { BadConfigError, PaymentException, RequestException, VerificationException } from '../../exceptions';
+import { BadConfigError, PaymentException, RequestException, UserError, VerificationException } from '../../exceptions';
 import { generateUuid } from '../../utils/generateUuid';
 import * as API from './api';
 
@@ -10,9 +10,11 @@ const getHeaders = (apiKey: string, sandbox: boolean) => ({
   'X-API-KEY': apiKey,
 });
 
-const throwOnIPGBadConfigError = (errorCode: string) => {
+const throwError = (errorCode: string) => {
   if (API.IPGConfigErrors.includes(errorCode))
     throw new BadConfigError(API.errors[errorCode] ?? API.callbackErrors[errorCode], true);
+  if (API.IPGUserErrors.includes(errorCode))
+    throw new UserError(API.errors[errorCode] ?? API.callbackErrors[errorCode]);
 };
 
 export const createIdpayDriver = defineDriver({
@@ -61,7 +63,7 @@ export const createIdpayDriver = defineDriver({
     if ('error_message' in response.data) {
       const error = response.data as API.RequestPaymentRes_Failed;
       const errorCode = error.error_code.toString();
-      throwOnIPGBadConfigError(errorCode);
+      throwError(errorCode);
       throw new RequestException(API.errors[errorCode]);
     }
     return {
@@ -75,7 +77,7 @@ export const createIdpayDriver = defineDriver({
     const { id, order_id, status } = params;
     const statusCode = status.toString();
     if (statusCode !== '200') {
-      throwOnIPGBadConfigError(statusCode);
+      throwError(statusCode);
       throw new PaymentException(API.callbackErrors[statusCode]);
     }
 
@@ -92,7 +94,7 @@ export const createIdpayDriver = defineDriver({
 
     if ('error_message' in response.data) {
       const errorCode = response.data.error_code.toString();
-      throwOnIPGBadConfigError(errorCode);
+      throwError(errorCode);
       throw new VerificationException(API.callbackErrors[errorCode]);
     }
 
