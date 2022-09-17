@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { Receipt } from '../../driver';
-import { BadConfigError, RequestException } from '../../exceptions';
+import { BadConfigError, RequestException, UserError } from '../../exceptions';
 import * as API from './api';
 import { createSamanDriver, SamanDriver } from './saman';
 
@@ -75,6 +75,24 @@ describe('Saman Driver', () => {
           mobile: '09120000000',
         }),
     ).rejects.toThrow(BadConfigError);
+  });
+
+  it('throws payment user errors accordingly', async () => {
+    const serverResponse: API.RequestPaymentRes = {
+      errorCode: 1,
+      status: -1,
+    };
+
+    mockedAxios.post.mockResolvedValueOnce({ data: serverResponse });
+
+    await expect(
+      async () =>
+        await driver.request({
+          amount: 20000,
+          callbackUrl: 'https://mysite.com/callback',
+          mobile: '09120000000',
+        }),
+    ).rejects.toThrow(UserError);
   });
 
   it('verifies the purchase correctly', async () => {

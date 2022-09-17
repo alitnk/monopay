@@ -134,3 +134,5 @@ export const IPGConfigErrors = [
   '11',
   '12',
 ];
+
+export const IPGUserErrors = ['1', '4'];
