@@ -1,7 +1,7 @@
 import * as soap from 'soap';
 import { z } from 'zod';
 import { defineDriver } from '../../driver';
-import { BadConfigError, PaymentException, RequestException, VerificationException } from '../../exceptions';
+import { BadConfigError, PaymentException, RequestException, UserError, VerificationException } from '../../exceptions';
 import { generateId } from '../../utils/generateId';
 import * as API from './api';
 
@@ -25,8 +25,9 @@ const timeFormat = (date = new Date()) => {
   return hh.toString() + mm.toString() + ss.toString();
 };
 
-const throwOnIPGBadConfigError = (errorCode: string) => {
+const throwError = (errorCode: string) => {
   if (API.IPGConfigErrors.includes(errorCode)) throw new BadConfigError(API.errors[errorCode], true);
+  if (API.IPGUserErrors.includes(errorCode)) throw new UserError(API.errors[errorCode]);
 };
 
 export const createBehpardakhtDriver = defineDriver({
@@ -77,7 +78,7 @@ export const createBehpardakhtDriver = defineDriver({
     const RefId = splittedResponse[1];
 
     if (ResCode.toString() !== '0') {
-      throwOnIPGBadConfigError(ResCode);
+      throwError(ResCode);
       throw new RequestException(API.errors[ResCode]);
     }
 
@@ -95,7 +96,7 @@ export const createBehpardakhtDriver = defineDriver({
     const { terminalId, username, password, links } = ctx;
 
     if (ResCode !== '0') {
-      throwOnIPGBadConfigError(ResCode);
+      throwError(ResCode);
       throw new PaymentException(API.errors[ResCode]);
     }
 
@@ -117,7 +118,7 @@ export const createBehpardakhtDriver = defineDriver({
       if (verifyResponse.toString() !== '43') {
         soapClient.bpReversalRequest(requestFields);
       }
-      throwOnIPGBadConfigError(ResCode);
+      throwError(ResCode);
       throw new VerificationException(API.errors[verifyResponse]);
     }
 
@@ -127,7 +128,7 @@ export const createBehpardakhtDriver = defineDriver({
       if (settleResponse.toString() !== '45' && settleResponse.toString() !== '48') {
         soapClient.bpReversalRequest(requestFields);
       }
-      throwOnIPGBadConfigError(ResCode);
+      throwError(ResCode);
       throw new VerificationException(API.errors[verifyResponse]);
     }
 

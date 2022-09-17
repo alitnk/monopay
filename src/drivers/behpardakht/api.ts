@@ -216,3 +216,7 @@ export const IPGConfigErrors = [
   '54',
   '55',
 ];
+
+export const IPGUserErrors = ['11', '12', '13', '14', '15', '16', '17', '18', '19', '111', '112', '113', '114'];
+
+export const IPGFailureErrors = ['23', '34', '416', '61'];

@@ -1,5 +1,5 @@
 import { Receipt } from '../../driver';
-import { BadConfigError, RequestException } from '../../exceptions';
+import { BadConfigError, RequestException, UserError } from '../../exceptions';
 import * as API from './api';
 import { BehpardakhtDriver, createBehpardakhtDriver } from './behpardakht';
 
@@ -35,7 +35,7 @@ describe('Behpardakht Driver', () => {
   });
 
   it('throws payment errors accordingly', async () => {
-    const serverResponse: API.RequestPaymentRes = '11';
+    const serverResponse: API.RequestPaymentRes = '34';
     mockSoapClient.bpPayRequest = () => serverResponse;
 
     await expect(
@@ -57,6 +57,18 @@ describe('Behpardakht Driver', () => {
           callbackUrl: 'https://mysite.com/callback',
         }),
     ).rejects.toThrow(BadConfigError);
+  });
+
+  it('throws user error for payment accordingly', async () => {
+    const serverResponse: API.RequestPaymentRes = '19';
+    mockSoapClient.bpPayRequest = () => serverResponse;
+    await expect(
+      async () =>
+        await driver.request({
+          amount: 20000,
+          callbackUrl: 'https://mysite.com/callback',
+        }),
+    ).rejects.toThrow(UserError);
   });
 
   it('verifies the purchase correctly', async () => {
