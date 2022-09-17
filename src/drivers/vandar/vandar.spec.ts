@@ -1,7 +1,6 @@
 import axios from 'axios';
-import { PaymentException, VerificationException } from '../..';
 import { Receipt } from '../../driver';
-import { RequestException } from '../../exceptions';
+import { GatewayFailureError } from '../../exceptions';
 import * as API from './api';
 import { createVandarDriver, VandarDriver } from './vandar';
 
@@ -39,7 +38,7 @@ describe('Vandar Driver', () => {
 
     mockedAxios.post.mockResolvedValueOnce({ data: serverResponse });
 
-    expect(driver.request({ amount: 2000, callbackUrl: 'https://example.com' })).rejects.toThrow(RequestException);
+    expect(driver.request({ amount: 2000, callbackUrl: 'https://example.com' })).rejects.toThrow(GatewayFailureError);
   });
 
   it('should verify the purchase', async () => {
@@ -77,7 +76,7 @@ describe('Vandar Driver', () => {
     const payment_status = 'NOK'; // Not documented!
     const amount = 2000;
 
-    expect(driver.verify({ amount }, { token, payment_status })).rejects.toThrow(PaymentException);
+    expect(driver.verify({ amount }, { token, payment_status })).rejects.toThrow(GatewayFailureError);
   });
 
   it('should throw payment error', async () => {
@@ -92,6 +91,6 @@ describe('Vandar Driver', () => {
     const payment_status = 'OK';
     const amount = 2000;
 
-    expect(driver.verify({ amount }, { token, payment_status })).rejects.toThrow(VerificationException);
+    expect(driver.verify({ amount }, { token, payment_status })).rejects.toThrow(GatewayFailureError);
   });
 });

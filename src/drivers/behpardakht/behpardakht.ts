@@ -1,7 +1,7 @@
 import * as soap from 'soap';
 import { z } from 'zod';
 import { defineDriver } from '../../driver';
-import { BadConfigError, PaymentException, RequestException, UserError, VerificationException } from '../../exceptions';
+import { BadConfigError, GatewayFailureError, UserError } from '../../exceptions';
 import { generateId } from '../../utils/generateId';
 import * as API from './api';
 
@@ -28,6 +28,7 @@ const timeFormat = (date = new Date()) => {
 const throwError = (errorCode: string) => {
   if (API.IPGConfigErrors.includes(errorCode)) throw new BadConfigError(API.errors[errorCode], true);
   if (API.IPGUserErrors.includes(errorCode)) throw new UserError(API.errors[errorCode]);
+  throw new GatewayFailureError(API.errors[errorCode]);
 };
 
 export const createBehpardakhtDriver = defineDriver({
@@ -79,7 +80,6 @@ export const createBehpardakhtDriver = defineDriver({
 
     if (ResCode.toString() !== '0') {
       throwError(ResCode);
-      throw new RequestException(API.errors[ResCode]);
     }
 
     return {
@@ -97,7 +97,6 @@ export const createBehpardakhtDriver = defineDriver({
 
     if (ResCode !== '0') {
       throwError(ResCode);
-      throw new PaymentException(API.errors[ResCode]);
     }
 
     const soapClient = await soap.createClientAsync(links.verify);
@@ -119,7 +118,6 @@ export const createBehpardakhtDriver = defineDriver({
         soapClient.bpReversalRequest(requestFields);
       }
       throwError(ResCode);
-      throw new VerificationException(API.errors[verifyResponse]);
     }
 
     // 2. Settle
@@ -129,7 +127,6 @@ export const createBehpardakhtDriver = defineDriver({
         soapClient.bpReversalRequest(requestFields);
       }
       throwError(ResCode);
-      throw new VerificationException(API.errors[verifyResponse]);
     }
 
     return {

@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { Receipt } from '../../driver';
-import { BadConfigError, RequestException, UserError } from '../../exceptions';
+import { BadConfigError, GatewayFailureError, UserError } from '../../exceptions';
 import * as API from './api';
 import { createSamanDriver, SamanDriver } from './saman';
 
@@ -56,7 +56,7 @@ describe('Saman Driver', () => {
           callbackUrl: 'https://mysite.com/callback',
           mobile: '09120000000',
         }),
-    ).rejects.toThrow(RequestException);
+    ).rejects.toThrow(GatewayFailureError);
   });
 
   it('throws payment bad config errors accordingly', async () => {

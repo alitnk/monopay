@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { z } from 'zod';
 import { defineDriver } from '../../driver';
-import { BadConfigError, PaymentException, RequestException, UserError, VerificationException } from '../../exceptions';
+import { BadConfigError, GatewayFailureError, UserError } from '../../exceptions';
 import * as API from './api';
 
 const getLinks = (links: { request: string; verify: string; payment: string }, sandbox: boolean) =>
@@ -18,6 +18,7 @@ const throwError = (errorCode: string) => {
     throw new BadConfigError(API.requestErrors[errorCode] ?? API.verifyErrors[errorCode], true);
   if (API.IPGUserErrors.includes(errorCode))
     throw new UserError(API.requestErrors[errorCode] ?? API.verifyErrors[errorCode]);
+  throw new GatewayFailureError(API.requestErrors[errorCode] ?? API.verifyErrors[errorCode]);
 };
 
 export const createZarinpalDriver = defineDriver({
@@ -66,11 +67,9 @@ export const createZarinpalDriver = defineDriver({
 
     if (!Array.isArray(errors)) {
       // There are errors (`errors` is an object)
-      const errorCode = errors.code.toString();
-      throwError(errorCode);
-      throw new RequestException(API.requestErrors[errorCode]);
+      throwError(errors.code.toString());
     }
-    throw new RequestException();
+    throw new GatewayFailureError();
   },
   verify: async ({ ctx, options, params }) => {
     const { Authority: authority, Status: status } = params;
@@ -78,9 +77,7 @@ export const createZarinpalDriver = defineDriver({
     const { merchantId, sandbox } = ctx;
     const links = getLinks(ctx.links, sandbox ?? false);
 
-    if (status !== 'OK') {
-      throw new PaymentException();
-    }
+    if (status !== 'OK') throw new GatewayFailureError();
 
     const response = await axios.post<API.VerifyPaymentReq, { data: API.VerifyPaymentRes }>(
       links.verify,
@@ -104,12 +101,10 @@ export const createZarinpalDriver = defineDriver({
 
     if (!Array.isArray(errors)) {
       // There are errors (`errors` is an object)
-      const errorCode = errors.code.toString();
-      throwError(errorCode);
-      throw new VerificationException(API.verifyErrors[errorCode]);
+      throwError(errors.code.toString());
     }
 
-    throw new VerificationException();
+    throw new GatewayFailureError();
   },
 });
 

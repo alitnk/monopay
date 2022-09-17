@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { z } from 'zod';
 import { defineDriver } from '../../driver';
-import { PaymentException, RequestException, VerificationException } from '../../exceptions';
+import { GatewayFailureError } from '../../exceptions';
 import * as API from './api';
 
 export const createVandarDriver = defineDriver({
@@ -62,12 +62,9 @@ export const createVandarDriver = defineDriver({
     );
     const { errors, token } = response.data;
 
-    if (errors?.length) {
-      throw new RequestException(errors.join('\n'));
-    }
+    if (errors?.length) throw new GatewayFailureError(errors.join('\n'));
 
-    // TODO: Throw an approperiate error here
-    if (!token) throw Error('No token provided');
+    if (!token) throw new GatewayFailureError('No token was provided by the IPG');
 
     return {
       method: 'GET',
@@ -79,9 +76,7 @@ export const createVandarDriver = defineDriver({
     const { token, payment_status } = params;
     const { api_key, links } = ctx;
 
-    if (payment_status !== 'OK') {
-      throw new PaymentException();
-    }
+    if (payment_status !== 'OK') throw new GatewayFailureError();
 
     const response = await axios.post<API.VerifyPaymentReq, { data: API.VerifyPaymentRes }>(
       links.verify,
@@ -96,14 +91,9 @@ export const createVandarDriver = defineDriver({
     );
     const { errors, transId, cardNumber } = response.data;
 
-    if (errors?.length) {
-      throw new VerificationException(errors.join('\n'));
-    }
+    if (errors?.length) throw new GatewayFailureError(errors.join('\n'));
 
-    // TODO: Throw an approperiate error here
-    if (typeof transId === 'undefined') {
-      throw Error('No transaction ID provided');
-    }
+    if (transId === undefined) throw new GatewayFailureError('No transaction ID was provided by the IPG');
 
     return {
       transactionId: transId,

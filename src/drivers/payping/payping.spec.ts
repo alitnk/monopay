@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { Receipt } from '../../driver';
-import { RequestException } from '../../exceptions';
+import { GatewayFailureError } from '../../exceptions';
 import * as API from './api';
 import { createPaypingDriver, PaypingDriver } from './payping';
 
@@ -31,7 +31,7 @@ describe('PayPing Driver', () => {
     // mockedAxios.post.mockRejectedValueOnce({ response: { status: 401 } });
     mockedAxios.post.mockReturnValueOnce(Promise.reject({ response: { status: 401 } }));
 
-    expect(driver.request({ amount: 2000, callbackUrl: 'asd' })).rejects.toThrow(RequestException);
+    expect(driver.request({ amount: 2000, callbackUrl: 'asd' })).rejects.toThrow(GatewayFailureError);
   });
 
   it('verifies the purchase correctly', async () => {

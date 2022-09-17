@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { Receipt } from '../../driver';
-import { BadConfigError, RequestException, UserError } from '../../exceptions';
+import { BadConfigError, GatewayFailureError, UserError } from '../../exceptions';
 import * as API from './api';
 import { createIdpayDriver, IdpayDriver } from './idpay';
 
@@ -35,7 +35,7 @@ describe('IdPay Driver', () => {
 
     mockedAxios.post.mockResolvedValueOnce({ data: serverResponse });
 
-    await expect(driver.request({ amount: 2000, callbackUrl: 'asd' })).rejects.toThrow(RequestException);
+    await expect(driver.request({ amount: 2000, callbackUrl: 'asd' })).rejects.toThrow(GatewayFailureError);
   });
 
   it('throws payment bad config error accordingly', async () => {

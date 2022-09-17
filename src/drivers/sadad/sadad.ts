@@ -2,7 +2,7 @@ import axios from 'axios';
 import * as CryptoJS from 'crypto-js';
 import { z } from 'zod';
 import { defineDriver } from '../../driver';
-import { BadConfigError, PaymentException, RequestException, VerificationException } from '../../exceptions';
+import { BadConfigError, GatewayFailureError } from '../../exceptions';
 import { generateId } from '../../utils/generateId';
 import * as API from './api';
 
@@ -20,9 +20,10 @@ const signData = (message: string, key: string): string => {
   }
 };
 
-const throwOnIPGBadConfigError = (errorCode: string) => {
+const throwError = (errorCode: string) => {
   if (API.IPGConfigErrors.includes(errorCode))
     throw new BadConfigError(API.requestErrors[errorCode] ?? API.verifyErrors[errorCode], true);
+  throw new GatewayFailureError(API.requestErrors[errorCode] ?? API.verifyErrors[errorCode]);
 };
 
 export const createSadadDriver = defineDriver({
@@ -71,8 +72,7 @@ export const createSadadDriver = defineDriver({
 
     if (response.data.ResCode !== 0) {
       const resCode = response.data.ResCode.toString();
-      throwOnIPGBadConfigError(resCode);
-      throw new RequestException(API.requestErrors[resCode]);
+      throwError(resCode);
     }
 
     return {
@@ -89,8 +89,7 @@ export const createSadadDriver = defineDriver({
     const { terminalKey, links } = ctx;
 
     if (ResCode !== 0) {
-      throwOnIPGBadConfigError(ResCode.toString());
-      throw new PaymentException('تراکنش توسط کاربر لغو شد.');
+      throwError(ResCode.toString());
     }
 
     const response = await axios.post<API.VerifyPaymentReq, { data: API.VerifyPaymentRes }>(links.verify, {
@@ -102,8 +101,7 @@ export const createSadadDriver = defineDriver({
 
     if (verificationResCode !== 0) {
       const resCode = verificationResCode.toString();
-      throwOnIPGBadConfigError(resCode);
-      throw new VerificationException(API.verifyErrors[resCode]);
+      throwError(resCode);
     }
 
     return {

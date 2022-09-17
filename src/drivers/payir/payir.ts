@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { z } from 'zod';
 import { defineDriver } from '../../driver';
-import { BadConfigError, PaymentException, RequestException, UserError, VerificationException } from '../../exceptions';
+import { BadConfigError, GatewayFailureError, UserError } from '../../exceptions';
 import * as API from './api';
 
 const getApiKey = (apiKey: string, sandbox: boolean) => (sandbox ? 'test' : apiKey);
@@ -9,6 +9,7 @@ const getApiKey = (apiKey: string, sandbox: boolean) => (sandbox ? 'test' : apiK
 const throwError = (errorCode: string) => {
   if (API.IPGConfigErrors.includes(errorCode)) throw new BadConfigError(API.errors[errorCode], true);
   if (API.IPGUserErrors.includes(errorCode)) throw new UserError(API.errors[errorCode]);
+  throw new GatewayFailureError(API.errors[errorCode]);
 };
 
 export const createPayirDriver = defineDriver({
@@ -54,7 +55,6 @@ export const createPayirDriver = defineDriver({
 
     if (statusCode !== '1') {
       throwError(statusCode);
-      throw new RequestException(API.errors[statusCode]);
     }
 
     response.data = response.data as API.RequestPaymentRes_Success;
@@ -72,7 +72,6 @@ export const createPayirDriver = defineDriver({
     const statusCode = status.toString();
     if (statusCode !== '1') {
       throwError(statusCode);
-      throw new PaymentException(API.errors[statusCode]);
     }
 
     const response = await axios.post<API.VerifyPaymentReq, { data: API.VerifyPaymentRes }>(links.verify, {
@@ -84,7 +83,6 @@ export const createPayirDriver = defineDriver({
 
     if (verifyStatus !== '1') {
       throwError(verifyStatus);
-      throw new VerificationException(API.errors[verifyStatus]);
     }
 
     response.data = response.data as API.VerifyPaymentRes_Success;

@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { z } from 'zod';
 import { defineDriver } from '../../driver';
-import { BadConfigError, PaymentException, RequestException, UserError, VerificationException } from '../../exceptions';
+import { BadConfigError, GatewayFailureError, UserError } from '../../exceptions';
 import * as API from './api';
 
 const getMerchantId = (merchantId: string, sandbox: boolean) => (sandbox ? 'zibal' : merchantId);
@@ -11,6 +11,7 @@ const throwError = (errorCode: string) => {
     throw new BadConfigError(API.purchaseErrors[errorCode] ?? API.callbackErrors[errorCode] ?? API.verifyErrors, true);
   if (API.IPGUserErrors.includes(errorCode))
     throw new UserError(API.purchaseErrors[errorCode] ?? API.callbackErrors[errorCode] ?? API.verifyErrors);
+  throw new GatewayFailureError(API.purchaseErrors[errorCode] ?? API.callbackErrors[errorCode] ?? API.verifyErrors);
 };
 
 export const createZibalDriver = defineDriver({
@@ -57,7 +58,6 @@ export const createZibalDriver = defineDriver({
     if (result !== 100) {
       const resCode = result.toString();
       throwError(resCode);
-      throw new RequestException(API.purchaseErrors[resCode]);
     }
 
     return {
@@ -73,7 +73,6 @@ export const createZibalDriver = defineDriver({
     if (success.toString() === '0') {
       const resCode = status.toString();
       throwError(resCode);
-      throw new PaymentException(API.callbackErrors[resCode]);
     }
 
     const response = await axios.post<API.VerifyPaymentReq, { data: API.VerifyPaymentRes }>(links.verify, {
@@ -86,7 +85,6 @@ export const createZibalDriver = defineDriver({
     if (result !== 100) {
       const resCode = result.toString();
       throwError(resCode);
-      throw new VerificationException(API.verifyErrors[resCode]);
     }
 
     return {

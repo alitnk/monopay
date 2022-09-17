@@ -1,5 +1,5 @@
 import { Receipt } from '../../driver';
-import { BadConfigError, RequestException, UserError } from '../../exceptions';
+import { BadConfigError, GatewayFailureError, UserError } from '../../exceptions';
 import * as API from './api';
 import { BehpardakhtDriver, createBehpardakhtDriver } from './behpardakht';
 
@@ -34,7 +34,7 @@ describe('Behpardakht Driver', () => {
     ).toBe('string');
   });
 
-  it('throws payment errors accordingly', async () => {
+  it('throws payment failure accordingly', async () => {
     const serverResponse: API.RequestPaymentRes = '34';
     mockSoapClient.bpPayRequest = () => serverResponse;
 
@@ -44,7 +44,7 @@ describe('Behpardakht Driver', () => {
           amount: 20000,
           callbackUrl: 'https://mysite.com/callback',
         }),
-    ).rejects.toThrow(RequestException);
+    ).rejects.toThrow(GatewayFailureError);
   });
 
   it('throws bad config error for payment accordingly', async () => {

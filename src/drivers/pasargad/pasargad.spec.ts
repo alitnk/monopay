@@ -2,7 +2,7 @@ import axios from 'axios';
 import * as fs from 'fs/promises';
 import { Receipt } from '../../driver';
 import { getPaymentDriver } from '../../drivers';
-import { BadConfigError, RequestException, VerificationException } from '../../exceptions';
+import { BadConfigError, GatewayFailureError } from '../../exceptions';
 import * as API from './api';
 import { createPasargadDriver, PasargadDriver } from './pasargad';
 
@@ -71,7 +71,7 @@ describe('Pasargad', () => {
           invoiceDate: new Date().toISOString(),
           invoiceNumber: '12',
         }),
-    ).rejects.toThrow(RequestException);
+    ).rejects.toThrow(GatewayFailureError);
   });
   it('verifies the purchase correctly', async () => {
     const serverResponse: API.VerifyPaymentRes = {
@@ -111,7 +111,7 @@ describe('Pasargad', () => {
     });
     await expect(
       driver.verify({ amount: 2000 }, { iD: new Date().toISOString(), iN: '123', tref: '1234' }),
-    ).rejects.toThrow(VerificationException);
+    ).rejects.toThrow(GatewayFailureError);
   });
   it('throws Bad config error on invalid key', async () => {
     mockedFs.readFile.mockResolvedValueOnce(Buffer.from('--wrong rsa-xml--'));

@@ -3,12 +3,13 @@ import { z } from 'zod';
 import { generateUuid } from '../../utils/generateUuid';
 
 import { defineDriver } from '../../driver';
-import { BadConfigError, PaymentException, RequestException, UserError, VerificationException } from '../../exceptions';
+import { BadConfigError, GatewayFailureError, UserError } from '../../exceptions';
 import * as API from './api';
 
 const throwError = (errorCode: string) => {
   if (API.IPGConfigErrors.includes(errorCode)) throw new BadConfigError(API.errors[errorCode], true);
   if (API.IPGUserErrors.includes(errorCode)) throw new UserError(API.errors[errorCode]);
+  throw new GatewayFailureError(API.errors[errorCode]);
 };
 
 export const createNextpayDriver = defineDriver({
@@ -53,7 +54,6 @@ export const createNextpayDriver = defineDriver({
 
     if (responseCode !== '0') {
       throwError(responseCode);
-      throw new RequestException(API.errors[responseCode]);
     }
 
     return {
@@ -67,7 +67,7 @@ export const createNextpayDriver = defineDriver({
     const { apiKey, links } = ctx;
 
     if (!trans_id) {
-      throw new PaymentException('تراکنش توسط کاربر لغو شد.');
+      throw new UserError('تراکنش توسط کاربر لغو شد.');
     }
 
     const response = await axios.post<API.VerifyPaymentReq, { data: API.VerifyPaymentRes }>(links.verify, {
@@ -82,7 +82,6 @@ export const createNextpayDriver = defineDriver({
 
     if (responseCode !== '0') {
       throwError(responseCode);
-      throw new VerificationException(API.errors[responseCode]);
     }
 
     return {

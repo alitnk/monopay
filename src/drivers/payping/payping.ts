@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { z } from 'zod';
 import { defineDriver } from '../../driver';
-import { RequestException, VerificationException } from '../../exceptions';
+import { GatewayFailureError } from '../../exceptions';
 import * as API from './api';
 
 const statusToMessage = (status = 500) => {
@@ -64,7 +64,7 @@ export const createPaypingDriver = defineDriver({
         },
       );
     } catch (error) {
-      throw new RequestException(statusToMessage((error as any).response.status));
+      throw new GatewayFailureError(statusToMessage((error as any).response.status));
     }
 
     const { code } = response.data;
@@ -95,7 +95,7 @@ export const createPaypingDriver = defineDriver({
         },
       );
     } catch (error) {
-      throw new VerificationException(statusToMessage((error as any).response.status));
+      throw new GatewayFailureError(statusToMessage((error as any).response.status));
     }
 
     const { cardNumber } = response.data;

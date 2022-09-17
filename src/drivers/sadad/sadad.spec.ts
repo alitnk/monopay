@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { Receipt } from '../../driver';
-import { BadConfigError, RequestException } from '../../exceptions';
+import { BadConfigError, GatewayFailureError } from '../../exceptions';
 import * as API from './api';
 import { createSadadDriver, SadadDriver } from './sadad';
 
@@ -54,7 +54,7 @@ describe('Sadad Driver', () => {
           callbackUrl: 'https://callback.url/',
           mobile: '09120000000',
         }),
-    ).rejects.toThrow(RequestException);
+    ).rejects.toThrow(GatewayFailureError);
   });
 
   it('throws payment bad config errors accordingly', async () => {

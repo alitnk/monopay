@@ -4,7 +4,7 @@ import * as crypto from 'crypto';
 import * as fs from 'fs/promises';
 import { z } from 'zod';
 import { defineDriver } from '../../driver';
-import { BadConfigError, RequestException, VerificationException } from '../../exceptions';
+import { BadConfigError, GatewayFailureError } from '../../exceptions';
 import * as API from './api';
 
 const getCurrentTimestamp = (): string => {
@@ -87,7 +87,7 @@ export const createPasargadDriver = defineDriver({
     });
 
     if (!response.data?.IsSuccess) {
-      throw new RequestException(errorMessage);
+      throw new GatewayFailureError(errorMessage);
     }
     return {
       method: 'GET',
@@ -115,7 +115,7 @@ export const createPasargadDriver = defineDriver({
         Sign: await signData(data, privateKeyXMLFile),
       },
     });
-    if (!response.data?.IsSuccess) throw new VerificationException(errorMessage);
+    if (!response.data?.IsSuccess) throw new GatewayFailureError(errorMessage);
     return {
       raw: response.data,
       transactionId: tref,

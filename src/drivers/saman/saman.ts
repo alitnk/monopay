@@ -2,7 +2,7 @@ import axios from 'axios';
 import * as soap from 'soap';
 import { z } from 'zod';
 import { defineDriver } from '../../driver';
-import { BadConfigError, PaymentException, RequestException, UserError, VerificationException } from '../../exceptions';
+import { BadConfigError, GatewayFailureError, UserError } from '../../exceptions';
 import * as API from './api';
 
 const throwError = (errorCode: string) => {
@@ -10,6 +10,7 @@ const throwError = (errorCode: string) => {
     throw new BadConfigError(API.purchaseErrors[errorCode] ?? API.callbackErrors[errorCode], true);
   if (API.IPGUserErrors.includes(errorCode))
     throw new UserError(API.purchaseErrors[errorCode] ?? API.callbackErrors[errorCode]);
+  throw new GatewayFailureError(API.purchaseErrors[errorCode] ?? API.callbackErrors[errorCode]);
 };
 
 export const createSamanDriver = defineDriver({
@@ -50,11 +51,10 @@ export const createSamanDriver = defineDriver({
     if (response.data.status !== 1 && response.data.errorCode !== undefined) {
       const errorCode = response.data.errorCode.toString();
       throwError(errorCode);
-      throw new RequestException(API.purchaseErrors[errorCode]);
     }
 
     if (!response.data.token) {
-      throw new RequestException();
+      throw new GatewayFailureError();
     }
 
     return {
@@ -73,7 +73,6 @@ export const createSamanDriver = defineDriver({
     if (!referenceId) {
       const resCode = status.toString();
       throwError(resCode);
-      throw new PaymentException(API.purchaseErrors[resCode]);
     }
 
     const soapClient = await soap.createClientAsync(links.verify);
@@ -82,7 +81,6 @@ export const createSamanDriver = defineDriver({
 
     if (responseStatus < 0) {
       throwError(responseStatus.toString());
-      throw new VerificationException(API.purchaseErrors[responseStatus]);
     }
 
     return {

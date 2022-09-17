@@ -1,9 +1,10 @@
 import axios from 'axios';
 import { z } from 'zod';
 import { defineDriver } from '../../driver';
-import { BadConfigError, PaymentException, RequestException, UserError, VerificationException } from '../../exceptions';
+import { BadConfigError, GatewayFailureError, UserError } from '../../exceptions';
 import { generateUuid } from '../../utils/generateUuid';
 import * as API from './api';
+import { RequestPaymenRes_Successful, VerifyPaymentRes_Successful } from './api';
 
 const getHeaders = (apiKey: string, sandbox: boolean) => ({
   'X-SANDBOX': sandbox ? '1' : '0',
@@ -15,6 +16,7 @@ const throwError = (errorCode: string) => {
     throw new BadConfigError(API.errors[errorCode] ?? API.callbackErrors[errorCode], true);
   if (API.IPGUserErrors.includes(errorCode))
     throw new UserError(API.errors[errorCode] ?? API.callbackErrors[errorCode]);
+  throw new GatewayFailureError(API.errors[errorCode]);
 };
 
 export const createIdpayDriver = defineDriver({
@@ -64,8 +66,8 @@ export const createIdpayDriver = defineDriver({
       const error = response.data as API.RequestPaymentRes_Failed;
       const errorCode = error.error_code.toString();
       throwError(errorCode);
-      throw new RequestException(API.errors[errorCode]);
     }
+    response.data = response.data as RequestPaymenRes_Successful;
     return {
       method: 'GET',
       referenceId: response.data.id,
@@ -78,7 +80,6 @@ export const createIdpayDriver = defineDriver({
     const statusCode = status.toString();
     if (statusCode !== '200') {
       throwError(statusCode);
-      throw new PaymentException(API.callbackErrors[statusCode]);
     }
 
     const response = await axios.post<API.VerifyPaymentReq, { data: API.VerifyPaymentRes }>(
@@ -95,9 +96,8 @@ export const createIdpayDriver = defineDriver({
     if ('error_message' in response.data) {
       const errorCode = response.data.error_code.toString();
       throwError(errorCode);
-      throw new VerificationException(API.callbackErrors[errorCode]);
     }
-
+    response.data = response.data as VerifyPaymentRes_Successful;
     return {
       transactionId: response.data.track_id,
       cardPan: response.data.payment.card_no,
