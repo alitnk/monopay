@@ -48,7 +48,7 @@ export interface RequestPaymentReq {
   callback: string;
 }
 
-export interface RequestPaymenRes_Successful {
+export interface RequestPaymentRes_Successful {
   /**
    *  کلید منحصر بفرد تراکنش
    */
@@ -65,7 +65,7 @@ export interface RequestPaymentRes_Failed {
   error_message: string;
 }
 
-export type RequestPaymentRes = RequestPaymenRes_Successful | RequestPaymentRes_Failed;
+export type RequestPaymentRes = RequestPaymentRes_Successful | RequestPaymentRes_Failed;
 
 export interface CallbackParams_POST {
   /**

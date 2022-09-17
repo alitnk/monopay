@@ -4,7 +4,7 @@ import { defineDriver } from '../../driver';
 import { BadConfigError, GatewayFailureError, UserError } from '../../exceptions';
 import { generateUuid } from '../../utils/generateUuid';
 import * as API from './api';
-import { RequestPaymenRes_Successful, VerifyPaymentRes_Successful } from './api';
+import { RequestPaymentRes_Successful, VerifyPaymentRes_Successful } from './api';
 
 const getHeaders = (apiKey: string, sandbox: boolean) => ({
   'X-SANDBOX': sandbox ? '1' : '0',
@@ -67,7 +67,7 @@ export const createIdpayDriver = defineDriver({
       const errorCode = error.error_code.toString();
       throwError(errorCode);
     }
-    response.data = response.data as RequestPaymenRes_Successful;
+    response.data = response.data as RequestPaymentRes_Successful;
     return {
       method: 'GET',
       referenceId: response.data.id,
