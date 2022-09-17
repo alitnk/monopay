@@ -26,9 +26,10 @@ const timeFormat = (date = new Date()) => {
 };
 
 const throwError = (errorCode: string) => {
-  if (API.IPGConfigErrors.includes(errorCode)) throw new BadConfigError(API.errors[errorCode], true);
-  if (API.IPGUserErrors.includes(errorCode)) throw new UserError(API.errors[errorCode]);
-  throw new GatewayFailureError(API.errors[errorCode]);
+  const message = API.errors[errorCode];
+  if (API.IPGConfigErrors.includes(errorCode)) throw new BadConfigError(message, true);
+  if (API.IPGUserErrors.includes(errorCode)) throw new UserError(message);
+  throw new GatewayFailureError(message);
 };
 
 export const createBehpardakhtDriver = defineDriver({

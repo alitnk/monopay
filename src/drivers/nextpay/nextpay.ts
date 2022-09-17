@@ -7,9 +7,10 @@ import { BadConfigError, GatewayFailureError, UserError } from '../../exceptions
 import * as API from './api';
 
 const throwError = (errorCode: string) => {
-  if (API.IPGConfigErrors.includes(errorCode)) throw new BadConfigError(API.errors[errorCode], true);
-  if (API.IPGUserErrors.includes(errorCode)) throw new UserError(API.errors[errorCode]);
-  throw new GatewayFailureError(API.errors[errorCode]);
+  const message = API.errors[errorCode];
+  if (API.IPGConfigErrors.includes(errorCode)) throw new BadConfigError(message, true);
+  if (API.IPGUserErrors.includes(errorCode)) throw new UserError(message);
+  throw new GatewayFailureError(message);
 };
 
 export const createNextpayDriver = defineDriver({

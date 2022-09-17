@@ -6,11 +6,10 @@ import { BadConfigError, GatewayFailureError, UserError } from '../../exceptions
 import * as API from './api';
 
 const throwError = (errorCode: string) => {
-  if (API.IPGConfigErrors.includes(errorCode))
-    throw new BadConfigError(API.purchaseErrors[errorCode] ?? API.callbackErrors[errorCode], true);
-  if (API.IPGUserErrors.includes(errorCode))
-    throw new UserError(API.purchaseErrors[errorCode] ?? API.callbackErrors[errorCode]);
-  throw new GatewayFailureError(API.purchaseErrors[errorCode] ?? API.callbackErrors[errorCode]);
+  const message = API.purchaseErrors[errorCode] ?? API.callbackErrors[errorCode];
+  if (API.IPGConfigErrors.includes(errorCode)) throw new BadConfigError(message, true);
+  if (API.IPGUserErrors.includes(errorCode)) throw new UserError(message);
+  throw new GatewayFailureError(message);
 };
 
 export const createSamanDriver = defineDriver({
@@ -49,8 +48,7 @@ export const createSamanDriver = defineDriver({
     });
 
     if (response.data.status !== 1 && response.data.errorCode !== undefined) {
-      const errorCode = response.data.errorCode.toString();
-      throwError(errorCode);
+      throwError(response.data.errorCode.toString());
     }
 
     if (!response.data.token) {
@@ -71,8 +69,7 @@ export const createSamanDriver = defineDriver({
     const { RefNum: referenceId, TraceNo: transactionId, Status: status } = params;
     const { merchantId, links } = ctx;
     if (!referenceId) {
-      const resCode = status.toString();
-      throwError(resCode);
+      throwError(status.toString());
     }
 
     const soapClient = await soap.createClientAsync(links.verify);

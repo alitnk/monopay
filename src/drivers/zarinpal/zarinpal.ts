@@ -14,11 +14,10 @@ const getLinks = (links: { request: string; verify: string; payment: string }, s
     : links;
 
 const throwError = (errorCode: string) => {
-  if (API.IPGConfigErrors.includes(errorCode))
-    throw new BadConfigError(API.requestErrors[errorCode] ?? API.verifyErrors[errorCode], true);
-  if (API.IPGUserErrors.includes(errorCode))
-    throw new UserError(API.requestErrors[errorCode] ?? API.verifyErrors[errorCode]);
-  throw new GatewayFailureError(API.requestErrors[errorCode] ?? API.verifyErrors[errorCode]);
+  const message = API.requestErrors[errorCode] ?? API.verifyErrors[errorCode];
+  if (API.IPGConfigErrors.includes(errorCode)) throw new BadConfigError(message, true);
+  if (API.IPGUserErrors.includes(errorCode)) throw new UserError(message);
+  throw new GatewayFailureError(message);
 };
 
 export const createZarinpalDriver = defineDriver({

@@ -12,11 +12,10 @@ const getHeaders = (apiKey: string, sandbox: boolean) => ({
 });
 
 const throwError = (errorCode: string) => {
-  if (API.IPGConfigErrors.includes(errorCode))
-    throw new BadConfigError(API.errors[errorCode] ?? API.callbackErrors[errorCode], true);
-  if (API.IPGUserErrors.includes(errorCode))
-    throw new UserError(API.errors[errorCode] ?? API.callbackErrors[errorCode]);
-  throw new GatewayFailureError(API.errors[errorCode]);
+  const message = API.errors[errorCode] ?? API.callbackErrors[errorCode];
+  if (API.IPGConfigErrors.includes(errorCode)) throw new BadConfigError(message, true);
+  if (API.IPGUserErrors.includes(errorCode)) throw new UserError(message);
+  throw new GatewayFailureError(message);
 };
 
 export const createIdpayDriver = defineDriver({
@@ -64,8 +63,7 @@ export const createIdpayDriver = defineDriver({
 
     if ('error_message' in response.data) {
       const error = response.data as API.RequestPaymentRes_Failed;
-      const errorCode = error.error_code.toString();
-      throwError(errorCode);
+      throwError(error.error_code.toString());
     }
     response.data = response.data as RequestPaymentRes_Successful;
     return {
@@ -94,8 +92,7 @@ export const createIdpayDriver = defineDriver({
     );
 
     if ('error_message' in response.data) {
-      const errorCode = response.data.error_code.toString();
-      throwError(errorCode);
+      throwError(response.data.error_code.toString());
     }
     response.data = response.data as VerifyPaymentRes_Successful;
     return {

@@ -21,9 +21,9 @@ const signData = (message: string, key: string): string => {
 };
 
 const throwError = (errorCode: string) => {
-  if (API.IPGConfigErrors.includes(errorCode))
-    throw new BadConfigError(API.requestErrors[errorCode] ?? API.verifyErrors[errorCode], true);
-  throw new GatewayFailureError(API.requestErrors[errorCode] ?? API.verifyErrors[errorCode]);
+  const message = API.requestErrors[errorCode] ?? API.verifyErrors[errorCode];
+  if (API.IPGConfigErrors.includes(errorCode)) throw new BadConfigError(message, true);
+  throw new GatewayFailureError(message);
 };
 
 export const createSadadDriver = defineDriver({
@@ -71,8 +71,7 @@ export const createSadadDriver = defineDriver({
     });
 
     if (response.data.ResCode !== 0) {
-      const resCode = response.data.ResCode.toString();
-      throwError(resCode);
+      throwError(response.data.ResCode.toString());
     }
 
     return {
@@ -100,8 +99,7 @@ export const createSadadDriver = defineDriver({
     const { ResCode: verificationResCode, SystemTraceNo } = response.data;
 
     if (verificationResCode !== 0) {
-      const resCode = verificationResCode.toString();
-      throwError(resCode);
+      throwError(verificationResCode.toString());
     }
 
     return {
