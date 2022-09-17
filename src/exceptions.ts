@@ -59,7 +59,7 @@ export class VerificationException extends BasePaymentException {
 }
 
 /**
- * Error when the configuration has problems
+ * Denotes an error caused by developer configuration
  */
 export class BadConfigError extends MonopayError {
   constructor(message: string, isIPGError: boolean) {
@@ -67,8 +67,20 @@ export class BadConfigError extends MonopayError {
   }
 }
 
+/**
+ * Denotes an error caused by end user
+ */
 export class UserError extends MonopayError {
   constructor(message: string) {
     super({ message, isIPGError: true, isSafeToDisplay: true });
+  }
+}
+
+/**
+ * Denotes an error either caused by a failure from gateway or an unrecognizable reason
+ */
+export class GatewayFailureError extends MonopayError {
+  constructor(message: string) {
+    super({ message, isIPGError: true, isSafeToDisplay: false });
   }
 }
