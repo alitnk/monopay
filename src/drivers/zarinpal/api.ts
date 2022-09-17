@@ -127,3 +127,5 @@ export const verifyErrors: Record<string, string> = {
 };
 
 export const IPGConfigErrors = ['-9', '-10', '-11', '-12', '-15', '-16', '-50', '-53', '-54', '101'];
+
+export const IPGUserErrors = ['-51'];

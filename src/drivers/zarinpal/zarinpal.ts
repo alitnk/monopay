@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { z } from 'zod';
 import { defineDriver } from '../../driver';
-import { BadConfigError, PaymentException, RequestException, VerificationException } from '../../exceptions';
+import { BadConfigError, PaymentException, RequestException, UserError, VerificationException } from '../../exceptions';
 import * as API from './api';
 
 const getLinks = (links: { request: string; verify: string; payment: string }, sandbox: boolean) =>
@@ -13,9 +13,11 @@ const getLinks = (links: { request: string; verify: string; payment: string }, s
       }
     : links;
 
-const throwOnIPGBadConfigError = (errorCode: string) => {
+const throwError = (errorCode: string) => {
   if (API.IPGConfigErrors.includes(errorCode))
     throw new BadConfigError(API.requestErrors[errorCode] ?? API.verifyErrors[errorCode], true);
+  if (API.IPGUserErrors.includes(errorCode))
+    throw new UserError(API.requestErrors[errorCode] ?? API.verifyErrors[errorCode]);
 };
 
 export const createZarinpalDriver = defineDriver({
@@ -65,7 +67,7 @@ export const createZarinpalDriver = defineDriver({
     if (!Array.isArray(errors)) {
       // There are errors (`errors` is an object)
       const errorCode = errors.code.toString();
-      throwOnIPGBadConfigError(errorCode);
+      throwError(errorCode);
       throw new RequestException(API.requestErrors[errorCode]);
     }
     throw new RequestException();
@@ -103,7 +105,7 @@ export const createZarinpalDriver = defineDriver({
     if (!Array.isArray(errors)) {
       // There are errors (`errors` is an object)
       const errorCode = errors.code.toString();
-      throwOnIPGBadConfigError(errorCode);
+      throwError(errorCode);
       throw new VerificationException(API.verifyErrors[errorCode]);
     }
 

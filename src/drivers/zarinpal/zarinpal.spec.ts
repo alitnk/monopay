@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { Receipt } from '../../driver';
-import { BadConfigError, RequestException } from '../../exceptions';
+import { BadConfigError, RequestException, UserError } from '../../exceptions';
 import * as API from './api';
 import { createZarinpalDriver, ZarinpalDriver } from './zarinpal';
 
@@ -47,6 +47,17 @@ describe('Zarinpal Driver', () => {
     mockedAxios.post.mockResolvedValueOnce({ data: serverResponse });
 
     await expect(driver.request({ amount: 2000, callbackUrl: 'asd' })).rejects.toThrow(BadConfigError);
+  });
+
+  it('throws payment user errors accordingly', async () => {
+    const serverResponse: API.RequestPaymentRes = {
+      data: [],
+      errors: { code: -51, message: 'Some error happened from zarinpal', validations: [] },
+    };
+
+    mockedAxios.post.mockResolvedValueOnce({ data: serverResponse });
+
+    await expect(driver.request({ amount: 2000, callbackUrl: 'asd' })).rejects.toThrow(UserError);
   });
 
   it('verifies the purchase correctly', async () => {
