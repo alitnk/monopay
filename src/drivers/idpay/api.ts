@@ -48,7 +48,7 @@ export interface RequestPaymentReq {
   callback: string;
 }
 
-export interface RequestPaymenRes_Successful {
+export interface RequestPaymentRes_Successful {
   /**
    *  کلید منحصر بفرد تراکنش
    */
@@ -65,7 +65,7 @@ export interface RequestPaymentRes_Failed {
   error_message: string;
 }
 
-export type RequestPaymentRes = RequestPaymenRes_Successful | RequestPaymentRes_Failed;
+export type RequestPaymentRes = RequestPaymentRes_Successful | RequestPaymentRes_Failed;
 
 export interface CallbackParams_POST {
   /**
@@ -271,3 +271,28 @@ export const errors: Record<string, string> = {
   // 405
   '54': 'مدت زمان تایید پرداخت سپری شده است.',
 };
+
+export const IPGConfigErrors = [
+  '11',
+  '12',
+  '13',
+  '14',
+  '21',
+  '22',
+  '23',
+  '24',
+  '31',
+  '32',
+  '33',
+  '34',
+  '35',
+  '36',
+  '37',
+  '38',
+  '41',
+  '42',
+  '43',
+  '54',
+];
+
+export const IPGUserErrors = ['1', '2', '7'];

@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { Receipt } from '../../driver';
-import { RequestException } from '../../exceptions';
+import { BadConfigError, GatewayFailureError, UserError } from '../../exceptions';
 import * as API from './api';
 import { createIdpayDriver, IdpayDriver } from './idpay';
 
@@ -35,7 +35,29 @@ describe('IdPay Driver', () => {
 
     mockedAxios.post.mockResolvedValueOnce({ data: serverResponse });
 
-    await expect(driver.request({ amount: 2000, callbackUrl: 'asd' })).rejects.toThrow(RequestException);
+    await expect(driver.request({ amount: 2000, callbackUrl: 'asd' })).rejects.toThrow(GatewayFailureError);
+  });
+
+  it('throws payment bad config error accordingly', async () => {
+    const serverResponse: API.RequestPaymentRes = {
+      error_code: 23,
+      error_message: 'Some error happened',
+    };
+
+    mockedAxios.post.mockResolvedValueOnce({ data: serverResponse });
+
+    await expect(driver.request({ amount: 2000, callbackUrl: 'asd' })).rejects.toThrow(BadConfigError);
+  });
+
+  it('throws payment user error accordingly', async () => {
+    const serverResponse: API.RequestPaymentRes = {
+      error_code: 7,
+      error_message: 'Some error happened',
+    };
+
+    mockedAxios.post.mockResolvedValueOnce({ data: serverResponse });
+
+    await expect(driver.request({ amount: 2000, callbackUrl: 'asd' })).rejects.toThrow(UserError);
   });
 
   it('verifies the purchase correctly', async () => {

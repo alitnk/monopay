@@ -1,5 +1,6 @@
 import { z, ZodSchema } from 'zod';
 import { buildRedirectScript } from './utils/buildRedirectScript';
+import { safeParse } from './utils/safeParse';
 
 interface IPaymentInfo {
   referenceId: string | number;
@@ -52,10 +53,9 @@ export const defineDriver = <
   verify: (arg: { ctx: IConfig; options: IVerify; params: Record<string, any> }) => Promise<Receipt>;
 }) => {
   return (config: Omit<IConfig, keyof DefaultConfig> & Partial<DefaultConfig>) => {
-    const ctx: IConfig = schema.config.parse({ ...defaultConfig, ...config });
-
+    const ctx = safeParse(schema.config, { ...defaultConfig, ...config }) as IConfig;
     const requestPayment = async (options: Parameters<typeof request>['0']['options']) => {
-      options = schema.request.parse(options);
+      options = safeParse(schema.request, options) as IRequest;
       const paymentInfo = await request({ ctx, options });
       return {
         ...paymentInfo,
@@ -67,7 +67,7 @@ export const defineDriver = <
       options: Parameters<typeof verify>['0']['options'],
       params: Parameters<typeof verify>['0']['params'],
     ) => {
-      options = schema.verify.parse(options);
+      options = safeParse(schema.verify, options) as IVerify;
       return verify({ ctx, options, params });
     };
 

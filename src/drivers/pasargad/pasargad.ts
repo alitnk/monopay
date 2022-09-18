@@ -4,7 +4,7 @@ import * as crypto from 'crypto';
 import * as fs from 'fs/promises';
 import { z } from 'zod';
 import { defineDriver } from '../../driver';
-import { RequestException, VerificationException } from '../../exceptions';
+import { BadConfigError, GatewayFailureError } from '../../exceptions';
 import * as API from './api';
 
 const getCurrentTimestamp = (): string => {
@@ -13,12 +13,16 @@ const getCurrentTimestamp = (): string => {
 };
 
 const signData = async (data: unknown, privateKeyXMLFile: string): Promise<string> => {
-  const sign = crypto.createSign('SHA1');
-  sign.write(JSON.stringify(data));
-  sign.end();
-  const pemKey = await convertXmlToPemKey(privateKeyXMLFile);
-  const signedData = sign.sign(Buffer.from(pemKey), 'base64');
-  return signedData;
+  try {
+    const sign = crypto.createSign('SHA1');
+    sign.write(JSON.stringify(data));
+    sign.end();
+    const pemKey = await convertXmlToPemKey(privateKeyXMLFile);
+    const signedData = sign.sign(Buffer.from(pemKey), 'base64');
+    return signedData;
+  } catch (err) {
+    throw new BadConfigError({ message: 'The signing process has failed. Error: ' + err, isIPGError: false });
+  }
 };
 
 const convertXmlToPemKey = async (xmlFilePath: string): Promise<string> => {
@@ -83,7 +87,7 @@ export const createPasargadDriver = defineDriver({
     });
 
     if (!response.data?.IsSuccess) {
-      throw new RequestException(errorMessage);
+      throw new GatewayFailureError({ message: errorMessage });
     }
     return {
       method: 'GET',
@@ -111,7 +115,7 @@ export const createPasargadDriver = defineDriver({
         Sign: await signData(data, privateKeyXMLFile),
       },
     });
-    if (!response.data?.IsSuccess) throw new VerificationException(errorMessage);
+    if (!response.data?.IsSuccess) throw new GatewayFailureError({ message: errorMessage });
     return {
       raw: response.data,
       transactionId: tref,

@@ -1,7 +1,7 @@
 import * as soap from 'soap';
 import { z } from 'zod';
 import { defineDriver } from '../../driver';
-import { PaymentException, RequestException, VerificationException } from '../../exceptions';
+import { BadConfigError, GatewayFailureError, UserError } from '../../exceptions';
 import { generateId } from '../../utils/generateId';
 import * as API from './api';
 
@@ -23,6 +23,13 @@ const timeFormat = (date = new Date()) => {
   const mm = date.getMonth();
   const ss = date.getSeconds();
   return hh.toString() + mm.toString() + ss.toString();
+};
+
+const throwError = (errorCode: string) => {
+  const message = API.errors[errorCode];
+  if (API.IPGConfigErrors.includes(errorCode)) throw new BadConfigError({ message, isIPGError: true, code: errorCode });
+  if (API.IPGUserErrors.includes(errorCode)) throw new UserError({ message, code: errorCode });
+  throw new GatewayFailureError({ message, code: errorCode });
 };
 
 export const createBehpardakhtDriver = defineDriver({
@@ -73,7 +80,7 @@ export const createBehpardakhtDriver = defineDriver({
     const RefId = splittedResponse[1];
 
     if (ResCode.toString() !== '0') {
-      throw new RequestException(API.errors[response[0]]);
+      throwError(ResCode);
     }
 
     return {
@@ -90,7 +97,7 @@ export const createBehpardakhtDriver = defineDriver({
     const { terminalId, username, password, links } = ctx;
 
     if (ResCode !== '0') {
-      throw new PaymentException(API.errors[ResCode]);
+      throwError(ResCode);
     }
 
     const soapClient = await soap.createClientAsync(links.verify);
@@ -111,7 +118,7 @@ export const createBehpardakhtDriver = defineDriver({
       if (verifyResponse.toString() !== '43') {
         soapClient.bpReversalRequest(requestFields);
       }
-      throw new VerificationException(API.errors[verifyResponse]);
+      throwError(ResCode);
     }
 
     // 2. Settle
@@ -120,7 +127,7 @@ export const createBehpardakhtDriver = defineDriver({
       if (settleResponse.toString() !== '45' && settleResponse.toString() !== '48') {
         soapClient.bpReversalRequest(requestFields);
       }
-      throw new VerificationException(API.errors[verifyResponse]);
+      throwError(ResCode);
     }
 
     return {

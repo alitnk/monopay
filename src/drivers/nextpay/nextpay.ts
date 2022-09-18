@@ -3,8 +3,15 @@ import { z } from 'zod';
 import { generateUuid } from '../../utils/generateUuid';
 
 import { defineDriver } from '../../driver';
-import { PaymentException, RequestException, VerificationException } from '../../exceptions';
+import { BadConfigError, GatewayFailureError, UserError } from '../../exceptions';
 import * as API from './api';
+
+const throwError = (errorCode: string) => {
+  const message = API.errors[errorCode];
+  if (API.IPGConfigErrors.includes(errorCode)) throw new BadConfigError({ message, isIPGError: true, code: errorCode });
+  if (API.IPGUserErrors.includes(errorCode)) throw new UserError({ message, code: errorCode });
+  throw new GatewayFailureError({ message, code: errorCode });
+};
 
 export const createNextpayDriver = defineDriver({
   schema: {
@@ -44,8 +51,10 @@ export const createNextpayDriver = defineDriver({
 
     const { code, trans_id } = response.data;
 
-    if (code.toString() !== '0') {
-      throw new RequestException(API.errors[code.toString()]);
+    const responseCode = code.toString();
+
+    if (responseCode !== '0') {
+      throwError(responseCode);
     }
 
     return {
@@ -59,7 +68,7 @@ export const createNextpayDriver = defineDriver({
     const { apiKey, links } = ctx;
 
     if (!trans_id) {
-      throw new PaymentException('تراکنش توسط کاربر لغو شد.');
+      throw new UserError({ message: 'تراکنش توسط کاربر لغو شد.' });
     }
 
     const response = await axios.post<API.VerifyPaymentReq, { data: API.VerifyPaymentRes }>(links.verify, {
@@ -70,8 +79,10 @@ export const createNextpayDriver = defineDriver({
 
     const { Shaparak_Ref_Id, code, card_holder } = response.data;
 
-    if (code.toString() !== '0') {
-      throw new VerificationException(API.errors[code.toString()]);
+    const responseCode = code.toString();
+
+    if (responseCode !== '0') {
+      throwError(responseCode);
     }
 
     return {

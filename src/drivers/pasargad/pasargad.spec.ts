@@ -2,7 +2,7 @@ import axios from 'axios';
 import * as fs from 'fs/promises';
 import { Receipt } from '../../driver';
 import { getPaymentDriver } from '../../drivers';
-import { RequestException, VerificationException } from '../../exceptions';
+import { BadConfigError, GatewayFailureError } from '../../exceptions';
 import * as API from './api';
 import { createPasargadDriver, PasargadDriver } from './pasargad';
 
@@ -22,8 +22,6 @@ const mockKey = `<RSAKeyValue>
 <D>io7Xyef97NzU5qg0ULDKzBEo+BolEotN0799aNtfRZTzZ08kPGTMF7X0ZSmvcNqfTu4+7wKNRNH/fq47pj0ESNsWVt1FkQu/upp6uTzdiFF2xjcouA8NCLhdV1/VJjtINJq3M8AUT8Qa5VvDTbzL5bxyvWfIqxZVWU0k7XGEVak=</D>
 </RSAKeyValue>`;
 
-mockedFs.readFile.mockResolvedValue(Buffer.from(mockKey));
-
 describe('Pasargad', () => {
   let driver: PasargadDriver;
 
@@ -42,6 +40,7 @@ describe('Pasargad', () => {
       Token: 'PAYMENT_TOKEN',
     };
     mockedAxios.post.mockResolvedValueOnce({ data: getTokenResponse });
+    mockedFs.readFile.mockResolvedValueOnce(Buffer.from(mockKey));
 
     expect(
       typeof (
@@ -62,6 +61,7 @@ describe('Pasargad', () => {
       Message: 'تراکنش ارسالی معتبر نیست',
     };
     mockedAxios.post.mockResolvedValueOnce({ data: getTokenResponse });
+    mockedFs.readFile.mockResolvedValueOnce(Buffer.from(mockKey));
 
     await expect(
       async () =>
@@ -71,7 +71,7 @@ describe('Pasargad', () => {
           invoiceDate: new Date().toISOString(),
           invoiceNumber: '12',
         }),
-    ).rejects.toThrow(RequestException);
+    ).rejects.toThrow(GatewayFailureError);
   });
   it('verifies the purchase correctly', async () => {
     const serverResponse: API.VerifyPaymentRes = {
@@ -89,6 +89,7 @@ describe('Pasargad', () => {
     };
 
     mockedAxios.post.mockResolvedValueOnce({ data: serverResponse });
+    mockedFs.readFile.mockResolvedValueOnce(Buffer.from(mockKey));
 
     expect(
       await driver.verify({ amount: 2000 }, { iD: new Date().toISOString(), iN: '123', tref: '123456' }),
@@ -101,6 +102,8 @@ describe('Pasargad', () => {
       Message: 'تراکنش ارسالی معتبر نیست',
     };
     mockedAxios.post.mockResolvedValueOnce({ data: verifyResponse });
+    mockedFs.readFile.mockResolvedValueOnce(Buffer.from(mockKey));
+
     const driver = getPaymentDriver('pasargad')({
       privateKeyXMLFile: './something.xml',
       merchantId: '123',
@@ -108,6 +111,17 @@ describe('Pasargad', () => {
     });
     await expect(
       driver.verify({ amount: 2000 }, { iD: new Date().toISOString(), iN: '123', tref: '1234' }),
-    ).rejects.toThrow(VerificationException);
+    ).rejects.toThrow(GatewayFailureError);
+  });
+  it('throws Bad config error on invalid key', async () => {
+    mockedFs.readFile.mockResolvedValueOnce(Buffer.from('--wrong rsa-xml--'));
+    const driver = getPaymentDriver('pasargad')({
+      privateKeyXMLFile: './something.xml',
+      merchantId: '123',
+      terminalId: '123',
+    });
+    await expect(
+      driver.verify({ amount: 2000 }, { iD: new Date().toISOString(), iN: '123', tref: '1234' }),
+    ).rejects.toThrow(BadConfigError);
   });
 });

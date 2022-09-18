@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { Receipt } from '../../driver';
-import { RequestException } from '../../exceptions';
+import { BadConfigError, GatewayFailureError } from '../../exceptions';
 import * as API from './api';
 import { createSadadDriver, SadadDriver } from './sadad';
 
@@ -41,7 +41,7 @@ describe('Sadad Driver', () => {
   it('throws payment errors accordingly', async () => {
     const serverResponse: API.RequestPaymentRes = {
       Token: 'some-token',
-      ResCode: 3,
+      ResCode: 1068,
       Description: 'description',
     };
 
@@ -54,7 +54,26 @@ describe('Sadad Driver', () => {
           callbackUrl: 'https://callback.url/',
           mobile: '09120000000',
         }),
-    ).rejects.toThrow(RequestException);
+    ).rejects.toThrow(GatewayFailureError);
+  });
+
+  it('throws payment bad config errors accordingly', async () => {
+    const serverResponse: API.RequestPaymentRes = {
+      Token: 'some-token',
+      ResCode: 1026,
+      Description: 'description',
+    };
+
+    mockedAxios.post.mockResolvedValueOnce({ data: serverResponse });
+
+    await expect(
+      async () =>
+        await driver.request({
+          amount: 20000,
+          callbackUrl: 'https://callback.url/',
+          mobile: '09120000000',
+        }),
+    ).rejects.toThrow(BadConfigError);
   });
 
   it('verifies the purchase correctly', async () => {

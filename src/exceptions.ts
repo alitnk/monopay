@@ -1,48 +1,57 @@
-export class BasePaymentException extends Error {
-  constructor(message?: string) {
-    super(message);
-    Object.setPrototypeOf(this, BasePaymentException.prototype);
+type MonoPayErrorConfig = {
+  isIPGError: boolean;
+  isSafeToDisplay: boolean;
+  message?: string;
+  code?: string;
+};
+
+export abstract class MonopayError extends Error {
+  /**
+   * Determines whether the error was thrown by the IPG or by the application itself
+   */
+  readonly isIPGError: boolean;
+  /**
+   * Determines whether the error exposes sensitive information or not
+   */
+  readonly isSafeToDisplay: boolean;
+  /**
+   * Contains the IPG error code (if IPG provides any)
+   */
+  readonly code?: string;
+  constructor(options: MonoPayErrorConfig) {
+    super(options.message);
+    this.isIPGError = options.isIPGError;
+    this.isSafeToDisplay = options.isSafeToDisplay;
+    this.code = options.code;
   }
 }
 
 /**
- * Error in the requesting stage
+ * Denotes an error caused by developer configuration
  */
-export class RequestException extends BasePaymentException {
-  constructor(message?: string) {
-    super(message);
-    Object.setPrototypeOf(this, RequestException.prototype);
+export class BadConfigError extends MonopayError {
+  constructor(details: { message: string; code?: string; isIPGError: boolean }) {
+    const { message, code, isIPGError } = details;
+    super({ message, code, isIPGError, isSafeToDisplay: false });
   }
 }
 
 /**
- * Error in the paying stage
- *
- * You can show this error message to your end user
+ * Denotes an error caused by end user
  */
-export class PaymentException extends BasePaymentException {
-  constructor(message?: string) {
-    super(message);
-    Object.setPrototypeOf(this, PaymentException.prototype);
+export class UserError extends MonopayError {
+  constructor(details?: { message?: string; code?: string }) {
+    const { message, code } = details ?? {};
+    super({ message, code, isIPGError: true, isSafeToDisplay: true });
   }
 }
 
 /**
- * Error in the verification stage
+ * Denotes an error either caused by a failure from gateway or an unrecognizable reason
  */
-export class VerificationException extends BasePaymentException {
-  constructor(message?: string) {
-    super(message);
-    Object.setPrototypeOf(this, VerificationException.prototype);
-  }
-}
-
-/**
- * Error when the configuration has problems
- */
-export class BadConfigException extends BasePaymentException {
-  constructor(errors: string[]) {
-    super(errors.join(',\n'));
-    Object.setPrototypeOf(this, BadConfigException.prototype);
+export class GatewayFailureError extends MonopayError {
+  constructor(details?: { message?: string; code?: string }) {
+    const { message, code } = details ?? {};
+    super({ message, code, isIPGError: true, isSafeToDisplay: false });
   }
 }
