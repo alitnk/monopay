@@ -2,6 +2,7 @@ type MonoPayErrorConfig = {
   isIPGError: boolean;
   isSafeToDisplay: boolean;
   message?: string;
+  code?: string;
 };
 
 export abstract class MonopayError extends Error {
@@ -13,10 +14,15 @@ export abstract class MonopayError extends Error {
    * Determines whether the error exposes sensitive information or not
    */
   readonly isSafeToDisplay: boolean;
+  /**
+   * Contains the IPG error code (if IPG provides any)
+   */
+  readonly code?: string;
   constructor(options: MonoPayErrorConfig) {
     super(options.message);
     this.isIPGError = options.isIPGError;
     this.isSafeToDisplay = options.isSafeToDisplay;
+    this.code = options.code;
   }
 }
 
@@ -24,8 +30,9 @@ export abstract class MonopayError extends Error {
  * Denotes an error caused by developer configuration
  */
 export class BadConfigError extends MonopayError {
-  constructor(message: string, isIPGError: boolean) {
-    super({ isIPGError, isSafeToDisplay: false, message });
+  constructor(details: { message: string; code?: string; isIPGError: boolean }) {
+    const { message, code, isIPGError } = details;
+    super({ message, code, isIPGError, isSafeToDisplay: false });
   }
 }
 
@@ -33,8 +40,9 @@ export class BadConfigError extends MonopayError {
  * Denotes an error caused by end user
  */
 export class UserError extends MonopayError {
-  constructor(message: string) {
-    super({ message, isIPGError: true, isSafeToDisplay: true });
+  constructor(details?: { message?: string; code?: string }) {
+    const { message, code } = details ?? {};
+    super({ message, code, isIPGError: true, isSafeToDisplay: true });
   }
 }
 
@@ -42,7 +50,8 @@ export class UserError extends MonopayError {
  * Denotes an error either caused by a failure from gateway or an unrecognizable reason
  */
 export class GatewayFailureError extends MonopayError {
-  constructor(message?: string) {
-    super({ message, isIPGError: true, isSafeToDisplay: false });
+  constructor(details?: { message?: string; code?: string }) {
+    const { message, code } = details ?? {};
+    super({ message, code, isIPGError: true, isSafeToDisplay: false });
   }
 }

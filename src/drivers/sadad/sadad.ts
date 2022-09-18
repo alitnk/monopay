@@ -16,14 +16,14 @@ const signData = (message: string, key: string): string => {
 
     return encrypted.toString();
   } catch (err) {
-    throw new BadConfigError('The signing process has failed. details: ' + err, false);
+    throw new BadConfigError({ message: 'The signing process has failed. Error: ' + err, isIPGError: false });
   }
 };
 
 const throwError = (errorCode: string) => {
   const message = API.requestErrors[errorCode] ?? API.verifyErrors[errorCode];
-  if (API.IPGConfigErrors.includes(errorCode)) throw new BadConfigError(message, true);
-  throw new GatewayFailureError(message);
+  if (API.IPGConfigErrors.includes(errorCode)) throw new BadConfigError({ message, isIPGError: true, code: errorCode });
+  throw new GatewayFailureError({ message, code: errorCode });
 };
 
 export const createSadadDriver = defineDriver({

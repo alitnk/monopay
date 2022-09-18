@@ -64,7 +64,7 @@ export const createPaypingDriver = defineDriver({
         },
       );
     } catch (error) {
-      throw new GatewayFailureError(statusToMessage((error as any).response.status));
+      throw new GatewayFailureError({ message: statusToMessage((error as any).response.status) });
     }
 
     const { code } = response.data;
@@ -95,7 +95,7 @@ export const createPaypingDriver = defineDriver({
         },
       );
     } catch (error) {
-      throw new GatewayFailureError(statusToMessage((error as any).response.status));
+      throw new GatewayFailureError({ message: statusToMessage((error as any).response.status) });
     }
 
     const { cardNumber } = response.data;

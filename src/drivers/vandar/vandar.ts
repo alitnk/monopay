@@ -62,9 +62,9 @@ export const createVandarDriver = defineDriver({
     );
     const { errors, token } = response.data;
 
-    if (errors?.length) throw new GatewayFailureError(errors.join('\n'));
+    if (errors?.length) throw new GatewayFailureError({ message: errors.join('\n') });
 
-    if (!token) throw new GatewayFailureError('No token was provided by the IPG');
+    if (!token) throw new GatewayFailureError({ message: 'No token was provided by the IPG' });
 
     return {
       method: 'GET',
@@ -91,9 +91,9 @@ export const createVandarDriver = defineDriver({
     );
     const { errors, transId, cardNumber } = response.data;
 
-    if (errors?.length) throw new GatewayFailureError(errors.join('\n'));
+    if (errors?.length) throw new GatewayFailureError({ message: errors.join('\n') });
 
-    if (transId === undefined) throw new GatewayFailureError('No transaction ID was provided by the IPG');
+    if (transId === undefined) throw new GatewayFailureError({ message: 'No transaction ID was provided by the IPG' });
 
     return {
       transactionId: transId,

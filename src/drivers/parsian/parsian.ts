@@ -42,7 +42,7 @@ export const createParsianDriver = defineDriver({
 
     const { Status, Token } = response;
     if (Status.toString() !== '0' || typeof Token === 'undefined') {
-      throw new GatewayFailureError('خطایی در درخواست پرداخت به‌وجود آمد');
+      throw new GatewayFailureError({ message: 'خطایی در درخواست پرداخت به‌وجود آمد' });
     }
 
     return {
@@ -57,7 +57,7 @@ export const createParsianDriver = defineDriver({
     const { merchantId, links } = ctx;
 
     if (status.toString() !== '0') {
-      throw new UserError('تراکنش توسط کاربر لغو شد.');
+      throw new UserError({ message: 'تراکنش توسط کاربر لغو شد.' });
     }
 
     const soapClient = await soap.createClientAsync(links.verify);
@@ -75,9 +75,9 @@ export const createParsianDriver = defineDriver({
       const reversalRequestFields: API.ReversalPaymentReq = requestFields;
       const reversalResponse: API.ReversalPaymentRes = soapClient.ReversalRequest(reversalRequestFields);
       if (reversalResponse.Status !== '0') {
-        throw new GatewayFailureError('خطایی در تایید پرداخت به‌وجود آمد و مبلغ بازگشته نشد.');
+        throw new GatewayFailureError({ message: 'خطایی در تایید پرداخت به‌وجود آمد و مبلغ بازگشته نشد.' });
       }
-      throw new GatewayFailureError('خطایی در تایید پرداخت به‌وجود آمد');
+      throw new GatewayFailureError({ message: 'خطایی در تایید پرداخت به‌وجود آمد' });
     }
 
     return {

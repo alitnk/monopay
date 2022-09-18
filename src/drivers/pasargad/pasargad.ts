@@ -21,7 +21,7 @@ const signData = async (data: unknown, privateKeyXMLFile: string): Promise<strin
     const signedData = sign.sign(Buffer.from(pemKey), 'base64');
     return signedData;
   } catch (err) {
-    throw new BadConfigError('The signing process has failed. details: ' + err, false);
+    throw new BadConfigError({ message: 'The signing process has failed. Error: ' + err, isIPGError: false });
   }
 };
 
@@ -87,7 +87,7 @@ export const createPasargadDriver = defineDriver({
     });
 
     if (!response.data?.IsSuccess) {
-      throw new GatewayFailureError(errorMessage);
+      throw new GatewayFailureError({ message: errorMessage });
     }
     return {
       method: 'GET',
@@ -115,7 +115,7 @@ export const createPasargadDriver = defineDriver({
         Sign: await signData(data, privateKeyXMLFile),
       },
     });
-    if (!response.data?.IsSuccess) throw new GatewayFailureError(errorMessage);
+    if (!response.data?.IsSuccess) throw new GatewayFailureError({ message: errorMessage });
     return {
       raw: response.data,
       transactionId: tref,
