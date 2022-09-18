@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import { BadConfigError } from './exceptions';
 import { z } from 'zod';
 import { defineDriver } from './driver';
