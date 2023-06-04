@@ -17,7 +17,7 @@ export class Parsian extends Driver<API.Config> {
     const { merchantId } = this.config;
     const client = await soap.createClientAsync(this.getLinks().REQUEST);
 
-    const requestFields: API.RequestPaymentReq = {
+    const requestData: API.RequestPaymentReq = {
       Amount: amount,
       CallBackUrl: callbackUrl,
       AdditionalData: description || '',
@@ -25,11 +25,11 @@ export class Parsian extends Driver<API.Config> {
       OrderId: this.generateId(),
     };
 
-    const response: API.RequestPaymentRes = client.SalePaymentRequest(requestFields);
+    const [response]: [API.RequestPaymentRes] = await client.SalePaymentRequestAsync({ requestData });
 
-    const { Status, Token } = response;
+    const { Status, Token, Message } = response.SalePaymentRequestResult;
     if (Status.toString() !== '0' || typeof Token === 'undefined') {
-      throw new RequestException('خطایی در درخواست پرداخت به‌وجود آمد');
+      throw new RequestException(Message);
     }
 
     return this.makeRequestInfo(Token, 'GET', this.getLinks().PAYMENT, {
@@ -47,21 +47,15 @@ export class Parsian extends Driver<API.Config> {
 
     const soapClient = await soap.createClientAsync(this.getLinks().VERIFICATION);
 
-    const requestFields: API.VerifyPaymentReq = {
+    const requestData: API.VerifyPaymentReq = {
       LoginAccount: merchantId,
-      Token: +Token,
+      Token: Number(Token),
     };
 
-    // 1. Verify
-    const verifyResponse: API.VerifyPaymentRes = soapClient.ConfirmPayment(requestFields);
+    const [verifyResponse]: [API.VerifyPaymentRes] = await soapClient.ConfirmPaymentAsync({ requestData });
 
-    const { CardNumberMasked, RRN, Status } = verifyResponse;
+    const { CardNumberMasked, RRN, Status } = verifyResponse.ConfirmPaymentResult;
     if (!(Status.toString() === '0' && RRN > 0)) {
-      const reversalRequestFields: API.ReversalPaymentReq = requestFields;
-      const reversalResponse: API.ReversalPaymentRes = soapClient.ReversalRequest(reversalRequestFields);
-      if (reversalResponse.Status !== '0') {
-        throw new VerificationException('خطایی در تایید پرداخت به‌وجود آمد و مبلغ بازگشته نشد.');
-      }
       throw new VerificationException('خطایی در تایید پرداخت به‌وجود آمد');
     }
 
