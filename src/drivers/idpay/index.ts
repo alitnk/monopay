@@ -45,7 +45,7 @@ export class IdPay extends Driver<API.Config> {
   ): Promise<API.Receipt> => {
     const { id, order_id, status } = params;
 
-    if (status.toString() !== '200') {
+    if (status.toString() !== '10') {
       throw new PaymentException(API.callbackErrors[status.toString()]);
     }
 
