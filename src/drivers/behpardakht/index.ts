@@ -104,7 +104,7 @@ export class Behpardakht extends Driver<API.Config> {
    */
   timeFormat(date = new Date()) {
     const hh = date.getHours();
-    const mm = date.getMonth();
+    const mm = date.getMinutes();
     const ss = date.getSeconds();
     return hh.toString() + mm.toString() + ss.toString();
   }
