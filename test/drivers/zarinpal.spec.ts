@@ -18,7 +18,9 @@ describe('Zarinpal Driver', () => {
 
     const driver = getPaymentDriver<Zarinpal>('zarinpal', { merchantId: '2134' });
 
-    expect(typeof (await driver.requestPayment({ amount: 2000, callbackUrl: 'asd' })).url).toBe('string');
+    expect(typeof (await driver.requestPayment({ amount: 2000, callbackUrl: 'asd', description: 'test' })).url).toBe(
+      'string',
+    );
   });
 
   it('throws payment errors accordingly', async () => {
@@ -31,9 +33,9 @@ describe('Zarinpal Driver', () => {
 
     const driver = getPaymentDriver<Zarinpal>('zarinpal', { merchantId: '2134' });
 
-    await expect(async () => await driver.requestPayment({ amount: 2000, callbackUrl: 'asd' })).rejects.toThrow(
-      RequestException,
-    );
+    await expect(
+      async () => await driver.requestPayment({ amount: 2000, callbackUrl: 'asd', description: 'test' }),
+    ).rejects.toThrow(RequestException);
   });
 
   it('verifies the purchase correctly', async () => {

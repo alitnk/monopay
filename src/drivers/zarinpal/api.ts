@@ -33,7 +33,7 @@ export interface RequestPaymentReq {
   /**
    * 		توضیحات مربوط به تراکنش
    */
-  description?: string;
+  description: string;
 
   /**
    * 		صفحه بازگشت مشتري، پس از انجام عمل پرداخت
@@ -157,7 +157,11 @@ export const tConfig = t.intersection([
 
 export type Config = t.TypeOf<typeof tConfig>;
 
-export const tRequestOptions = t.intersection([t.partial({ mobile: t.string, email: t.string }), tBaseRequestOptions]);
+export const tRequestOptions = t.intersection([
+  t.partial({ mobile: t.string, email: t.string }),
+  t.type({ description: t.string }),
+  tBaseRequestOptions,
+]);
 
 export type RequestOptions = t.TypeOf<typeof tRequestOptions>;
 
