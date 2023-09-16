@@ -1,85 +1,4 @@
-/* Vazir */
-
-@font-face {
-  font-family: Vazir;
-  src: url("Vazir-Regular.eot");
-  src: url("Vazir-Regular.eot?#iefix") format("embedded-opentype"),
-    url("Vazir-Regular.woff2") format("woff2"),
-    url("Vazir-Regular.woff") format("woff"),
-    url("Vazir-Regular.ttf") format("truetype");
-  font-weight: normal;
-  font-style: normal;
-}
-@font-face {
-  font-family: Vazir;
-  src: url("Vazir-Bold.eot");
-  src: url("Vazir-Bold.eot?#iefix") format("embedded-opentype"),
-    url("Vazir-Bold.woff2") format("woff2"),
-    url("Vazir-Bold.woff") format("woff"),
-    url("Vazir-Bold.ttf") format("truetype");
-  font-weight: bold;
-  font-style: normal;
-}
-@font-face {
-  font-family: Vazir;
-  src: url("Vazir-Black.eot");
-  src: url("Vazir-Black.eot?#iefix") format("embedded-opentype"),
-    url("Vazir-Black.woff2") format("woff2"),
-    url("Vazir-Black.woff") format("woff"),
-    url("Vazir-Black.ttf") format("truetype");
-  font-weight: 900;
-  font-style: normal;
-}
-@font-face {
-  font-family: Vazir;
-  src: url("Vazir-Medium.eot");
-  src: url("Vazir-Medium.eot?#iefix") format("embedded-opentype"),
-    url("Vazir-Medium.woff2") format("woff2"),
-    url("Vazir-Medium.woff") format("woff"),
-    url("Vazir-Medium.ttf") format("truetype");
-  font-weight: 500;
-  font-style: normal;
-}
-@font-face {
-  font-family: Vazir;
-  src: url("Vazir-Light.eot");
-  src: url("Vazir-Light.eot?#iefix") format("embedded-opentype"),
-    url("Vazir-Light.woff2") format("woff2"),
-    url("Vazir-Light.woff") format("woff"),
-    url("Vazir-Light.ttf") format("truetype");
-  font-weight: 300;
-  font-style: normal;
-}
-@font-face {
-  font-family: Vazir;
-  src: url("Vazir-Thin.eot");
-  src: url("Vazir-Thin.eot?#iefix") format("embedded-opentype"),
-    url("Vazir-Thin.woff2") format("woff2"),
-    url("Vazir-Thin.woff") format("woff"),
-    url("Vazir-Thin.ttf") format("truetype");
-  font-weight: 100;
-  font-style: normal;
-}
-
-/* Vazir Code */
-
-@font-face {
-  font-family: Vazir Code;
-  src: url("Vazir-Code.eot");
-  src: url("Vazir-Code.eot?#iefix") format("embedded-opentype"),
-    url("Vazir-Code.woff") format("woff"),
-    url("Vazir-Code.ttf") format("truetype");
-  font-weight: normal;
-}
-
-@font-face {
-  font-family: Vazir Code Hack;
-  src: url("Vazir-Code-Hack.eot");
-  src: url("Vazir-Code-Hack.eot?#iefix") format("embedded-opentype"),
-    url("Vazir-Code-Hack.woff") format("woff"),
-    url("Vazir-Code-Hack.ttf") format("truetype");
-  font-weight: normal;
-}
+@import url("https://fonts.googleapis.com/css2?family=Vazirmatn:wght@100;200;300;400;500;600;700;800;900&display=swap");
 
 /* Styles */
 :root {
@@ -90,10 +9,10 @@
   --ifm-color-primary-light: #4e89e8;
   --ifm-color-primary-lighter: #5a91ea;
   --ifm-color-primary-lightest: #80aaef;
-  --ifm-heading-font-family: "Vazir";
-  --ifm-font-family-monospace: "Vazir Code";
+  --ifm-heading-font-family: "Vazirmatn";
+  --ifm-font-family-monospace: "Vazirmatn";
 }
 
 html {
-  font-family: "Vazir";
+  font-family: "Vazirmatn";
 }
