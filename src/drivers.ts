@@ -23,6 +23,8 @@ import { Zarinpal } from './drivers/zarinpal';
 import * as ZarinpalAPI from './drivers/zarinpal/api';
 import { Zibal } from './drivers/zibal';
 import * as ZibalAPI from './drivers/zibal/api';
+import { Payfa } from './drivers/payfa';
+import * as PayfaAPI from './drivers/payfa/api';
 
 export { Behpardakht } from './drivers/behpardakht';
 export { IdPay } from './drivers/idpay';
@@ -36,6 +38,7 @@ export { Saman } from './drivers/saman';
 export { Vandar } from './drivers/vandar';
 export { Zarinpal } from './drivers/zarinpal';
 export { Zibal } from './drivers/zibal';
+export { Payfa } from './drivers/payfa';
 interface ConfigMap {
   behpardakht: BehpardakhtAPI.Config;
   idpay: IdPayAPI.Config;
@@ -49,6 +52,7 @@ interface ConfigMap {
   vandar: VandarAPI.Config;
   zarinpal: ZarinpalAPI.Config;
   zibal: ZibalAPI.Config;
+  payfa: PayfaAPI.Config;
 }
 
 export type ConfigObject = Partial<ConfigMap>;
@@ -68,6 +72,7 @@ const drivers = {
   vandar: Vandar,
   zarinpal: Zarinpal,
   zibal: Zibal,
+  payfa: Payfa,
 };
 
 export const getPaymentDriver = <Driver extends BaseDriver>(
