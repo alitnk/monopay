@@ -1,0 +1,35 @@
+---
+title: Send user to the IPG
+description: Step 2 out of the 3 steps of payment
+---
+
+import { Code } from 'astro:components'
+
+In this step you should send the user to the payment page using the data you got back from the `requestPayment` method.
+
+As mentioned in the previous page, the returned value contains the following:
+
+- `url`: The url that you should send the user to.
+- `method`: The method with which you should send the user with. Can be `GET` or `POST` depending on the driver.
+- `params`: The data that you should send the user with.
+
+To send the user, create a form on the client-side and...
+
+1. set its `action` attribute to the url.
+2. set its `method` attribute to the method.
+3. add the params data as `input` elements.
+
+:::tip
+If you serve your pages from backend (not using a SPA), you can use the `getScript` method on `paymentInfo` and automate the mentioned process. Like so:
+
+```js
+res.send(
+  `<html>
+    <body>
+        <h1> We're redirecting you to the payment gateway... </h1>
+        <script>${paymentInfo.getScript()}</script>
+    </body>
+  </html>`
+);
+```
+:::
