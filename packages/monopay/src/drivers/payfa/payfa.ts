@@ -1,7 +1,7 @@
 import axios, { AxiosError } from 'axios';
 import { z } from 'zod';
 import { defineDriver } from '../../driver';
-import { RequestException, VerificationException } from '../../exceptions';
+import { GatewayFailureError, UserError } from '../../exceptions';
 import * as API from './api';
 
 const getHeaders = (apiKey: string) => {
@@ -21,9 +21,9 @@ export const createPayfaDriver = defineDriver({
       }),
     }),
     request: z.object({
-      mobileNumber: z.string(),
-      invoiceId: z.string(),
-      cardNumber: z.string(),
+      mobileNumber: z.string().optional(),
+      invoiceId: z.string().optional(),
+      cardNumber: z.string().optional(),
     }),
     verify: z.object({}),
   },
@@ -56,15 +56,17 @@ export const createPayfaDriver = defineDriver({
       );
     } catch (error) {
       if (error instanceof AxiosError) {
-        throw new RequestException(error.response?.data.message);
+        throw new GatewayFailureError({
+          message: error.response?.data.message,
+        });
       }
     }
 
     if (!response?.data) {
-      throw new RequestException();
+      throw new GatewayFailureError();
     }
     if ('errorCode' in response.data) {
-      throw new RequestException(response.data.message || '');
+      throw new GatewayFailureError({ message: response.data.message || undefined });
     }
 
     const { paymentId } = response.data;
@@ -76,7 +78,7 @@ export const createPayfaDriver = defineDriver({
       params: {},
     };
   },
-  verify: async ({ options, ctx, params }) => {
+  verify: async ({ ctx, params }) => {
     const { paymentId, isSucceed } = params;
 
     let response;
@@ -88,16 +90,16 @@ export const createPayfaDriver = defineDriver({
       );
     } catch (error) {
       if (error instanceof AxiosError) {
-        throw new VerificationException(error.response?.data.message);
+        throw new UserError(error.response?.data.message);
       }
     }
 
     if (!response?.data) {
-      throw new VerificationException();
+      throw new UserError();
     }
 
     if ('errorCode' in response.data) {
-      throw new VerificationException(response.data.message || '');
+      throw new UserError({ message: response.data.message || undefined });
     }
 
     const { transactionId, cardNo } = response.data;

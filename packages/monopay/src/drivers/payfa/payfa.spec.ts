@@ -1,8 +1,8 @@
 import axios from 'axios';
-import { getPaymentDriver } from '../../src/drivers';
-import { Payfa } from '../../src/drivers/payfa';
-import * as API from '../../src/drivers/payfa/api';
-import { RequestException } from '../../src/exceptions';
+import { GatewayFailureError } from '../../exceptions';
+import * as API from './api';
+import { createPayfaDriver } from './payfa';
+import { Receipt } from '../../driver';
 
 jest.mock('axios');
 
@@ -20,20 +20,22 @@ describe('Payfa Driver', () => {
 
     mockedAxios.post.mockResolvedValueOnce({ data: serverResponse });
 
-    const driver = getPaymentDriver<Payfa>('payfa', { apiKey: '2134' });
+    const driver = createPayfaDriver({ apiKey: '2134' });
 
-    expect(
-      typeof (await driver.requestPayment({ callbackUrl: 'https://path.to/callback-url', amount: 20000 })).url,
-    ).toBe('string');
+    expect(typeof (await driver.request({ callbackUrl: 'https://path.to/callback-url', amount: 20000 })).url).toBe(
+      'string',
+    );
   });
 
   it('throws payment errors accordingly', async () => {
-    mockedAxios.post.mockReturnValueOnce(Promise.reject({ response: { status: 401, data: { message: "apiKey نادرست است" } } }));
+    mockedAxios.post.mockReturnValueOnce(
+      Promise.reject({ response: { status: 401, data: { message: 'apiKey نادرست است' } } }),
+    );
 
-    const driver = getPaymentDriver<Payfa>('payfa', { apiKey: '2134' });
+    const driver = createPayfaDriver({ apiKey: '2134' });
 
-    await expect(async () => await driver.requestPayment({ amount: 2000, callbackUrl: 'asd' })).rejects.toThrow(
-      RequestException,
+    await expect(async () => await driver.request({ amount: 2000, callbackUrl: 'asd' })).rejects.toThrow(
+      GatewayFailureError,
     );
   });
 
@@ -46,11 +48,11 @@ describe('Payfa Driver', () => {
       message: 'موفق',
       statusCode: 200,
     };
-    const expectedResult: API.Receipt = { transactionId: '1234', raw: serverResponse };
+    const expectedResult: Receipt = { transactionId: '1234', raw: serverResponse };
 
     mockedAxios.post.mockResolvedValueOnce({ data: serverResponse });
 
-    const driver = getPaymentDriver<Payfa>('payfa', { apiKey: '2134' });
+    const driver = createPayfaDriver({ apiKey: '2134' });
 
     expect((await driver.verifyPayment({ amount: 2000 }, { paymentId: 1234, isSucceed: true })).transactionId).toEqual(
       expectedResult.transactionId,
