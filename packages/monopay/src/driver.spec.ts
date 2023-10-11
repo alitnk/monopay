@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/ban-ts-comment */
 import { BadConfigError } from './exceptions';
 import { z } from 'zod';
 import { defineDriver } from './driver';
@@ -41,18 +40,17 @@ describe('Driver', () => {
     expect(paymentInfo.getScript()).toContain('.submit()');
   });
   it('Throws badConfigError when wrong config is passed', () => {
-    // @ts-ignore
-    expect(() => createTestDriver({})).toThrow(BadConfigError);
+    expect(() => createTestDriver({ test: '' })).toThrow(BadConfigError);
   });
   it('Throws badConfigError when wrong request params are passed', async () => {
     const driver = createTestDriver({ test: 'test' });
     await expect(
       async () =>
-        // @ts-ignore
         await driver.request({
           amount: 1000,
           callbackUrl: 'https://callback.url/',
           description: 'testin',
+          test: '',
         }),
     ).rejects.toThrow(BadConfigError);
   });
@@ -60,12 +58,13 @@ describe('Driver', () => {
     const driver = createTestDriver({ test: 'test' });
     await expect(
       async () =>
-        // @ts-ignore
-        await driver.verify({
-          amount: 1000,
-          callbackUrl: 'https://callback.url/',
-          description: 'testin',
-        }),
+        await driver.verify(
+          {
+            amount: 1000,
+            test: '',
+          },
+          {},
+        ),
     ).rejects.toThrow(BadConfigError);
   });
 });

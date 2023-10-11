@@ -79,7 +79,7 @@ export const createPayfaDriver = defineDriver({
     };
   },
   verify: async ({ ctx, params }) => {
-    const { paymentId, isSucceed } = params;
+    const { paymentId } = params;
 
     let response;
     try {

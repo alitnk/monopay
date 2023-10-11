@@ -40,7 +40,7 @@ export const createParsianDriver = defineDriver({
 
     const [response]: [API.RequestPaymentRes] = await client.SalePaymentRequestAsync({ requestData });
 
-    const { Status, Token, Message } = response.SalePaymentRequestResult;
+    const { Status, Token } = response.SalePaymentRequestResult;
     if (Status.toString() !== '0' || typeof Token === 'undefined') {
       throw new GatewayFailureError({ message: 'خطایی در درخواست پرداخت به‌وجود آمد' });
     }
