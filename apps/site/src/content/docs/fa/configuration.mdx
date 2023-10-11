@@ -1,0 +1,21 @@
+---
+title: کانفیگ
+description: کانفیگ
+---
+
+import { Tabs, TabItem } from '@astrojs/starlight/components'
+import { Code } from 'astro:components'
+import { configSnippets } from '../../../snippets/config.ts'
+
+اگر از چند درایور استفاده می‌کنید، می توانید یک فایل جدا بسازید و همه ی پیکربندی‌ها را در آن نگه دارید.
+
+<Tabs>
+  <TabItem value="javascript" label="JavaScript">
+    <Code code={configSnippets.js} lang="js" />
+  </TabItem>
+  <TabItem value="typescript" label="TypeScript" default>
+    <Code code={configSnippets.ts} lang="ts" />
+  </TabItem>
+</Tabs>
+
+و سپس در فایل هایی که به پیکربندی نیاز دارید، آن را ایمپورت کنید.

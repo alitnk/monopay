@@ -1,0 +1,28 @@
+---
+title: Request Payment
+description: Step 1 out of the 3 steps of payment
+---
+
+import { Tabs, TabItem } from "@astrojs/starlight/components"
+import { requestSnippets } from "../../../../snippets/request.ts"
+import { Code } from 'astro:components'
+
+Get the driver using `getPaymentDriver` and use the `requestPayment` method. This method accepts an object with `callbackUrl`, `amount`, and driver-specific fields. 
+
+<Code code={requestSnippets.ts} lang="ts" />
+
+:::note
+the `requestPayment` function might throw `RequestPaymentException`
+:::
+
+The returned value of `requestPayment`, is a class containing the following:
+
+1. Details about the payment
+
+   - `referenceId`: The ID that references the ongoing payment, you probably want to store it in your database.
+
+2. Details about how to send the user
+
+   - `url`: The url that you should send the user to
+   - `method`: The method with which you should send the user with. Can be `GET` or `POST` depending on the driver
+   - `params`: The data that you should send the user with

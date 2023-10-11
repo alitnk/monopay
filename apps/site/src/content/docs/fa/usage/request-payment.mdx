@@ -1,0 +1,28 @@
+---
+title: درخواست پرداخت
+description: مرحله ۱ از ۳ مرحله پرداخت
+---
+
+import { Tabs, TabItem } from "@astrojs/starlight/components"
+import { requestSnippets } from "../../../../snippets/request.ts"
+import { Code } from 'astro:components'
+
+درایور مورد نظر خود را با `getPaymentDriver` بسازید و از متد `requestPayment` استفاده کنید. این متد یک ورودی به صورت آبجکت دریافت می‌کند که شامل فیلد های `callbackUrl`، `amount` و سایر فیلد های مخصوص به درایور مورد استفاده است.
+
+<Code code={requestSnippets.ts} lang="ts" />
+
+:::note
+متد `requestPayment` ممکن است استثنای `RequestPaymentException` را بیندازد.
+:::
+
+مقدار برگشتی متد `requestPayment`, یک کلاس است که موارد زیر را شامل می‌شود:
+
+1. اطلاعات در‌مورد پرداخت
+
+   - `referenceId`: شمارنده‌ای یکتا که به پرداخت فعلی ارجاع دارد، این شمارنده را در جایی ذخیره کنید.
+
+2. اطلاعات در‌مورد نحوه انتقال کاربر
+
+   - `url`: لینکی که باید کاربر را به آن بفرستید
+   - `method`: روشی که باید به آن کاربر را بفرستید. با‌توجه به درایور مورد استفاده می تواند `GET` یا `POST` باشد
+   - `params`: اطلاعاتی که باید همراه با کاربر ارسال شوند

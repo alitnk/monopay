@@ -1,0 +1,22 @@
+---
+title: تایید پرداخت
+description: مرحله ۳ از ۳ مرحله پرداخت
+---
+
+import { Tabs, TabItem } from "@astrojs/starlight/components"
+import { verifySnippets } from "../../../../snippets/verify.ts"
+import { Code } from 'astro:components'
+
+متد `verifyPayment` دو ورودی قبول می‌کند:
+
+1. یک آبجکت که `amount` و `referenceId` را در بر دارد.‌
+2. پارامتر های دریافت شده در صفحه بازگشت کاربر
+
+<Code code={verifySnippets.ts} lang="ts" />
+
+این متد یک رسید (`receipt`) باز می گرداند که شامل کد رهگیری (`transactionId`) و کارت استفاده شده به صورت هش شده (`panCard`) و اطلاعات دیگر مربوط به پرداخت است.
+در صورت تایید پرداخت شما می‌توانید سرویس/محصول خود را به همراه کد رهگیری به کاربر ارائه دهید.
+
+:::note
+متد `verifyPayment` ممکن است استثنای `VerificationException` را بیندازد.
+:::

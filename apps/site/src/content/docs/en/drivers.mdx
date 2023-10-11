@@ -1,0 +1,29 @@
+---
+title: Drivers
+description: The list of the supported payment drivers
+---
+
+import { drivers } from '../../../data/drivers.ts'
+
+You get access to all of these drivers after installing the package. Note that you will have to sign up for the driver you want to use from their website or bank and get the required credentials.
+
+<table>
+  <thead>
+    <tr>
+      <th>Driver</th>
+      <th>Implemented</th>
+      <th>Unit Tests</th>
+      <th>Stable (Tested on production)</th>
+    </tr>
+  </thead>
+  <tbody>
+    {drivers.map(item => (
+      <tr key={item.name}>
+        <td>{item.name}</td>
+        <td>{item.implemented ? "✅": "✖"}</td>
+        <td>{item.implemented ? "✅": "✖"}</td>
+        <td>{item.implemented ? "✅": "✖"}</td>
+      </tr>
+    ))}
+  </tbody>
+</table>

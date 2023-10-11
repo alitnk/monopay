@@ -1,18 +1,7 @@
-import * as t from 'io-ts';
-import { BaseReceipt, LinksObject, tBaseRequestOptions, tBaseVerifyOptions } from '../../types';
-
 /*
  * Payfa's API
  * Currency: IRR
  */
-
-export const links: LinksObject = {
-  default: {
-    REQUEST: 'https://payment.payfa.com/v2/api/Transaction/Request',
-    VERIFICATION: 'https://payment.payfa.com/v2/api/Transaction/Verify/',
-    PAYMENT: 'https://payment.payfa.ir/v2/api/Transaction/Pay/',
-  },
-};
 
 export interface RequestPaymentReq {
   /**
@@ -89,33 +78,3 @@ export interface VerifyPaymentRes_Failed {
 }
 
 export type VerifyPaymentRes = VerifyPaymentRes_Success | VerifyPaymentRes_Failed;
-
-/*
- * Package's API
- */
-
-export const tConfig = t.intersection([
-  t.partial({}),
-  t.interface({
-    apiKey: t.string,
-  }),
-]);
-
-export type Config = t.TypeOf<typeof tConfig>;
-
-export const tRequestOptions = t.intersection([
-  t.partial({
-    mobileNumber: t.string,
-    invoiceId: t.string,
-    cardNumber: t.string,
-  }),
-  tBaseRequestOptions,
-]);
-
-export type RequestOptions = t.TypeOf<typeof tRequestOptions>;
-
-export const tVerifyOptions = t.intersection([t.partial({}), tBaseVerifyOptions]);
-
-export type VerifyOptions = t.TypeOf<typeof tVerifyOptions>;
-
-export type Receipt = BaseReceipt<VerifyPaymentRes>;
