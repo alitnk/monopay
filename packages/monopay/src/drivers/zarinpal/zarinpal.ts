@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { z } from 'zod';
 import { defineDriver } from '../../driver';
-import { PaymentException, RequestException, VerificationException } from '../../exceptions';
+import { BadConfigError, GatewayFailureError, UserError } from '../../exceptions';
 import * as API from './api';
 
 const getLinks = (links: { request: string; verify: string; payment: string }, sandbox: boolean) =>
@@ -12,6 +12,13 @@ const getLinks = (links: { request: string; verify: string; payment: string }, s
         payment: 'https://sandbox.zarinpal.com/pg/StartPay/',
       }
     : links;
+
+const throwError = (errorCode: string) => {
+  const message = API.requestErrors[errorCode] ?? API.verifyErrors[errorCode];
+  if (API.IPGConfigErrors.includes(errorCode)) throw new BadConfigError({ message, isIPGError: true, code: errorCode });
+  if (API.IPGUserErrors.includes(errorCode)) throw new UserError({ message, code: errorCode });
+  throw new GatewayFailureError({ message, code: errorCode });
+};
 
 export const createZarinpalDriver = defineDriver({
   schema: {
@@ -59,10 +66,9 @@ export const createZarinpalDriver = defineDriver({
 
     if (!Array.isArray(errors)) {
       // There are errors (`errors` is an object)
-      const { code } = errors;
-      throw new RequestException(API.requestErrors[code.toString()]);
+      throwError(errors.code.toString());
     }
-    throw new RequestException();
+    throw new GatewayFailureError();
   },
   verify: async ({ ctx, options, params }) => {
     const { Authority: authority, Status: status } = params;
@@ -70,9 +76,7 @@ export const createZarinpalDriver = defineDriver({
     const { merchantId, sandbox } = ctx;
     const links = getLinks(ctx.links, sandbox ?? false);
 
-    if (status !== 'OK') {
-      throw new PaymentException();
-    }
+    if (status !== 'OK') throw new GatewayFailureError();
 
     const response = await axios.post<API.VerifyPaymentReq, { data: API.VerifyPaymentRes }>(
       links.verify,
@@ -96,11 +100,10 @@ export const createZarinpalDriver = defineDriver({
 
     if (!Array.isArray(errors)) {
       // There are errors (`errors` is an object)
-      const { code } = errors;
-      throw new VerificationException(API.verifyErrors[code.toString()]);
+      throwError(errors.code.toString());
     }
 
-    throw new VerificationException();
+    throw new GatewayFailureError();
   },
 });
 

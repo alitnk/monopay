@@ -1,11 +1,13 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+import { BadConfigError } from './exceptions';
 import { z } from 'zod';
 import { defineDriver } from './driver';
 
 const createTestDriver = defineDriver({
   schema: {
-    config: z.object({}),
-    request: z.object({}),
-    verify: z.object({}),
+    config: z.object({ test: z.string() }),
+    request: z.object({ test: z.string() }),
+    verify: z.object({ test: z.string() }),
   },
   defaultConfig: {},
   request: async () => {
@@ -27,8 +29,9 @@ const createTestDriver = defineDriver({
 
 describe('Driver', () => {
   it('creates javascript raw script for form submission on request()', async () => {
-    const driver = createTestDriver({});
+    const driver = createTestDriver({ test: 'test' });
     const paymentInfo = await driver.request({
+      test: 'test',
       amount: 1000,
       callbackUrl: 'https://callback.url/',
       description: 'testin',
@@ -36,5 +39,33 @@ describe('Driver', () => {
 
     expect(typeof paymentInfo.getScript()).toBe('string');
     expect(paymentInfo.getScript()).toContain('.submit()');
+  });
+  it('Throws badConfigError when wrong config is passed', () => {
+    // @ts-ignore
+    expect(() => createTestDriver({})).toThrow(BadConfigError);
+  });
+  it('Throws badConfigError when wrong request params are passed', async () => {
+    const driver = createTestDriver({ test: 'test' });
+    await expect(
+      async () =>
+        // @ts-ignore
+        await driver.request({
+          amount: 1000,
+          callbackUrl: 'https://callback.url/',
+          description: 'testin',
+        }),
+    ).rejects.toThrow(BadConfigError);
+  });
+  it('Throws badConfigError when wrong verify params are passed', async () => {
+    const driver = createTestDriver({ test: 'test' });
+    await expect(
+      async () =>
+        // @ts-ignore
+        await driver.verify({
+          amount: 1000,
+          callbackUrl: 'https://callback.url/',
+          description: 'testin',
+        }),
+    ).rejects.toThrow(BadConfigError);
   });
 });

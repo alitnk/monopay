@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { Receipt } from '../../driver';
-import { RequestException } from '../../exceptions';
+import { BadConfigError, GatewayFailureError, UserError } from '../../exceptions';
 import * as API from './api';
 import { createNextpayDriver, NextpayDriver } from './nextpay';
 
@@ -35,7 +35,29 @@ describe('NextPay Driver', () => {
 
     mockedAxios.post.mockResolvedValueOnce({ data: serverResponse });
 
-    await expect(driver.request({ amount: 2000, callbackUrl: 'asd' })).rejects.toThrow(RequestException);
+    await expect(driver.request({ amount: 2000, callbackUrl: 'asd' })).rejects.toThrow(GatewayFailureError);
+  });
+
+  it('throws payment bad config errors accordingly', async () => {
+    const serverResponse: API.RequestPaymentRes = {
+      trans_id: '1234',
+      code: -61,
+    };
+
+    mockedAxios.post.mockResolvedValueOnce({ data: serverResponse });
+
+    await expect(driver.request({ amount: 2000, callbackUrl: 'asd' })).rejects.toThrow(BadConfigError);
+  });
+
+  it('throws payment user errors accordingly', async () => {
+    const serverResponse: API.RequestPaymentRes = {
+      trans_id: '1234',
+      code: -4,
+    };
+
+    mockedAxios.post.mockResolvedValueOnce({ data: serverResponse });
+
+    await expect(driver.request({ amount: 2000, callbackUrl: 'asd' })).rejects.toThrow(UserError);
   });
 
   it('verifies the purchase correctly', async () => {

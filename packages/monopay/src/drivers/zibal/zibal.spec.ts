@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { Receipt } from '../../driver';
-import { RequestException } from '../../exceptions';
+import { BadConfigError, GatewayFailureError, UserError } from '../../exceptions';
 import * as API from './api';
 import { createZibalDriver, ZibalDriver } from './zibal';
 
@@ -32,6 +32,18 @@ describe('Zibal Driver', () => {
 
   it('throws payment errors accordingly', async () => {
     const serverResponse: API.RequestPaymentRes = {
+      result: 1000,
+      message: 'some error',
+      trackId: 1234,
+    };
+
+    mockedAxios.post.mockResolvedValueOnce({ data: serverResponse });
+
+    await expect(driver.request({ amount: 2000, callbackUrl: 'asd' })).rejects.toThrow(GatewayFailureError);
+  });
+
+  it('throws payment bad config errors accordingly', async () => {
+    const serverResponse: API.RequestPaymentRes = {
       result: 102,
       message: 'some error',
       trackId: 1234,
@@ -39,7 +51,19 @@ describe('Zibal Driver', () => {
 
     mockedAxios.post.mockResolvedValueOnce({ data: serverResponse });
 
-    await expect(driver.request({ amount: 2000, callbackUrl: 'asd' })).rejects.toThrow(RequestException);
+    await expect(driver.request({ amount: 2000, callbackUrl: 'asd' })).rejects.toThrow(BadConfigError);
+  });
+
+  it('throws payment user errors accordingly', async () => {
+    const serverResponse: API.RequestPaymentRes = {
+      result: 6,
+      message: 'some error',
+      trackId: 1234,
+    };
+
+    mockedAxios.post.mockResolvedValueOnce({ data: serverResponse });
+
+    await expect(driver.request({ amount: 2000, callbackUrl: 'asd' })).rejects.toThrow(UserError);
   });
 
   it('verifies the purchase correctly', async () => {

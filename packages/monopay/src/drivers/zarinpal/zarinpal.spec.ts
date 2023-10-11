@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { Receipt } from '../../driver';
-import { RequestException } from '../../exceptions';
+import { BadConfigError, GatewayFailureError, UserError } from '../../exceptions';
 import * as API from './api';
 import { createZarinpalDriver, ZarinpalDriver } from './zarinpal';
 
@@ -30,12 +30,34 @@ describe('Zarinpal Driver', () => {
   it('throws payment errors accordingly', async () => {
     const serverResponse: API.RequestPaymentRes = {
       data: [],
-      errors: { code: -11, message: 'Some error happened from zarinpal', validations: [] },
+      errors: { code: -111, message: 'Some error happened from zarinpal', validations: [] },
     };
 
     mockedAxios.post.mockResolvedValueOnce({ data: serverResponse });
 
-    await expect(driver.request({ amount: 2000, callbackUrl: 'asd' })).rejects.toThrow(RequestException);
+    await expect(driver.request({ amount: 2000, callbackUrl: 'asd' })).rejects.toThrow(GatewayFailureError);
+  });
+
+  it('throws payment bad config errors accordingly', async () => {
+    const serverResponse: API.RequestPaymentRes = {
+      data: [],
+      errors: { code: -16, message: 'Some error happened from zarinpal', validations: [] },
+    };
+
+    mockedAxios.post.mockResolvedValueOnce({ data: serverResponse });
+
+    await expect(driver.request({ amount: 2000, callbackUrl: 'asd' })).rejects.toThrow(BadConfigError);
+  });
+
+  it('throws payment user errors accordingly', async () => {
+    const serverResponse: API.RequestPaymentRes = {
+      data: [],
+      errors: { code: -51, message: 'Some error happened from zarinpal', validations: [] },
+    };
+
+    mockedAxios.post.mockResolvedValueOnce({ data: serverResponse });
+
+    await expect(driver.request({ amount: 2000, callbackUrl: 'asd' })).rejects.toThrow(UserError);
   });
 
   it('verifies the purchase correctly', async () => {

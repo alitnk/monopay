@@ -1,2 +1,2 @@
-export * as IdPayAPI from './api';
+export * as IdpayAPI from './api';
 export * from './idpay';

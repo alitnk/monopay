@@ -1,2 +1,2 @@
-export * as PayPingAPI from './api';
+export * as PaypingAPI from './api';
 export * from './payping';

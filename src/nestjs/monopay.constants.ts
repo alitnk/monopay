@@ -1,0 +1,1 @@
+export const MONOPAY_OPTIONS = 'MONOPAY_OPTIONS';

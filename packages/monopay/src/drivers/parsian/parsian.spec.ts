@@ -1,5 +1,5 @@
 import { Receipt } from '../../driver';
-import { RequestException } from '../../exceptions';
+import { GatewayFailureError } from '../../exceptions';
 import * as API from './api';
 import { createParsianDriver, ParsianDriver } from './parsian';
 
@@ -52,7 +52,7 @@ describe('Parsian Driver', () => {
           amount: 20000,
           callbackUrl: 'https://mysite.com/callback',
         }),
-    ).rejects.toThrow(RequestException);
+    ).rejects.toThrow(GatewayFailureError);
   });
 
   it('verifies the purchase correctly', async () => {

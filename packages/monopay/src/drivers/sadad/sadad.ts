@@ -2,18 +2,28 @@ import axios from 'axios';
 import * as CryptoJS from 'crypto-js';
 import { z } from 'zod';
 import { defineDriver } from '../../driver';
-import { PaymentException, RequestException, VerificationException } from '../../exceptions';
+import { BadConfigError, GatewayFailureError } from '../../exceptions';
 import { generateId } from '../../utils/generateId';
 import * as API from './api';
 
 const signData = (message: string, key: string): string => {
-  const keyHex = CryptoJS.enc.Utf8.parse(key);
-  const encrypted = CryptoJS.DES.encrypt(message, keyHex, {
-    mode: CryptoJS.mode.ECB,
-    padding: CryptoJS.pad.Pkcs7,
-  });
+  try {
+    const keyHex = CryptoJS.enc.Utf8.parse(key);
+    const encrypted = CryptoJS.DES.encrypt(message, keyHex, {
+      mode: CryptoJS.mode.ECB,
+      padding: CryptoJS.pad.Pkcs7,
+    });
 
-  return encrypted.toString();
+    return encrypted.toString();
+  } catch (err) {
+    throw new BadConfigError({ message: 'The signing process has failed. Error: ' + err, isIPGError: false });
+  }
+};
+
+const throwError = (errorCode: string) => {
+  const message = API.requestErrors[errorCode] ?? API.verifyErrors[errorCode];
+  if (API.IPGConfigErrors.includes(errorCode)) throw new BadConfigError({ message, isIPGError: true, code: errorCode });
+  throw new GatewayFailureError({ message, code: errorCode });
 };
 
 export const createSadadDriver = defineDriver({
@@ -61,7 +71,7 @@ export const createSadadDriver = defineDriver({
     });
 
     if (response.data.ResCode !== 0) {
-      throw new RequestException(API.requestErrors[response.data.ResCode.toString()]);
+      throwError(response.data.ResCode.toString());
     }
 
     return {
@@ -78,7 +88,7 @@ export const createSadadDriver = defineDriver({
     const { terminalKey, links } = ctx;
 
     if (ResCode !== 0) {
-      throw new PaymentException('تراکنش توسط کاربر لغو شد.');
+      throwError(ResCode.toString());
     }
 
     const response = await axios.post<API.VerifyPaymentReq, { data: API.VerifyPaymentRes }>(links.verify, {
@@ -89,7 +99,7 @@ export const createSadadDriver = defineDriver({
     const { ResCode: verificationResCode, SystemTraceNo } = response.data;
 
     if (verificationResCode !== 0) {
-      throw new VerificationException(API.verifyErrors[verificationResCode.toString()]);
+      throwError(verificationResCode.toString());
     }
 
     return {

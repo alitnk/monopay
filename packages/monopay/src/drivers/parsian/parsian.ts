@@ -1,7 +1,7 @@
 import * as soap from 'soap';
 import { z } from 'zod';
 import { defineDriver } from '../../driver';
-import { PaymentException, RequestException, VerificationException } from '../../exceptions';
+import { GatewayFailureError, UserError } from '../../exceptions';
 import { generateId } from '../../utils/generateId';
 import * as API from './api';
 
@@ -42,7 +42,7 @@ export const createParsianDriver = defineDriver({
 
     const { Status, Token, Message } = response.SalePaymentRequestResult;
     if (Status.toString() !== '0' || typeof Token === 'undefined') {
-      throw new RequestException(Message);
+      throw new GatewayFailureError({ message: 'خطایی در درخواست پرداخت به‌وجود آمد' });
     }
 
     return {
@@ -57,7 +57,7 @@ export const createParsianDriver = defineDriver({
     const { merchantId, links } = ctx;
 
     if (status.toString() !== '0') {
-      throw new PaymentException('تراکنش توسط کاربر لغو شد.');
+      throw new UserError({ message: 'تراکنش توسط کاربر لغو شد.' });
     }
 
     const soapClient = await soap.createClientAsync(links.verify);
@@ -71,7 +71,12 @@ export const createParsianDriver = defineDriver({
 
     const { CardNumberMasked, RRN, Status } = verifyResponse.ConfirmPaymentResult;
     if (!(Status.toString() === '0' && RRN > 0)) {
-      throw new VerificationException('خطایی در تایید پرداخت به‌وجود آمد');
+      const reversalRequestFields: API.ReversalPaymentReq = requestData;
+      const reversalResponse: API.ReversalPaymentRes = soapClient.ReversalRequest(reversalRequestFields);
+      if (reversalResponse.Status !== '0') {
+        throw new GatewayFailureError({ message: 'خطایی در تایید پرداخت به‌وجود آمد و مبلغ بازگشته نشد.' });
+      }
+      throw new GatewayFailureError({ message: 'خطایی در تایید پرداخت به‌وجود آمد' });
     }
 
     return {
