@@ -17,7 +17,7 @@ export interface RequestPaymentReq {
   /**
    * 		توضیحات مربوط به تراکنش
    */
-  description?: string;
+  description: string;
 
   /**
    * 		صفحه بازگشت مشتري، پس از انجام عمل پرداخت

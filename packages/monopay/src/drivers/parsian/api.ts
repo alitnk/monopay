@@ -39,15 +39,22 @@ export interface RequestPaymentReq {
  * Response of `SalePaymentRequest`
  */
 export interface RequestPaymentRes {
-  /**
-   * شماره درخواست در دروازه پرداخت که یک شماره تصادفی و یکتا برای تمامی عملیات تراکنش می باشد و فروشگاه ملزم به ثبت و نگهداری این کد است
-   */
-  Token?: number | string;
+  SalePaymentRequestResult: {
+    /**
+     * شماره درخواست در دروازه پرداخت که یک شماره تصادفی و یکتا برای تمامی عملیات تراکنش می باشد و فروشگاه ملزم به ثبت و نگهداری این کد است
+     */
+    Token?: number | string;
 
-  /**
-   * کد وضعیت در عملیات موفق صفر است
-   */
-  Status: number;
+    /**
+     * کد وضعیت در عملیات موفق صفر است
+     */
+    Status: number;
+
+    /**
+     * شرح کد وضعیت عملیات
+     */
+    Message: string;
+  }
 }
 
 /**
@@ -82,25 +89,27 @@ export interface VerifyPaymentReq {
  * Response of `ConfirmPayment`
  */
 export interface VerifyPaymentRes {
-  /**
-   * کد وضعیت عملیات که در صورت موفقیت صفر است
-   */
-  Status: number | string;
+  ConfirmPaymentResult: {
+    /**
+     * کد وضعیت عملیات که در صورت موفقیت صفر است
+     */
+    Status: number | string;
 
-  /**
-   * شماره مکرجع
-   */
-  RRN: number;
+    /**
+     * شماره مرجع
+     */
+    RRN: number;
 
-  /**
-   * شماره کارت کاربر به صورت ماسک شده
-   */
-  CardNumberMasked: string;
+    /**
+     * شماره کارت کاربر به صورت ماسک شده
+     */
+    CardNumberMasked: string;
 
-  /**
-   * شماره درخواست تراکنش دروازه پرداخت پارسیان
-   */
-  Token: number | string;
+    /**
+     * شماره درخواست تراکنش دروازه پرداخت پارسیان
+     */
+    Token: number | string;
+  }
 }
 
 /**

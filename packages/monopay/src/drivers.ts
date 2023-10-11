@@ -3,6 +3,7 @@ import { createIdpayDriver } from './drivers/idpay';
 import { createNextpayDriver } from './drivers/nextpay';
 import { createParsianDriver } from './drivers/parsian';
 import { createPasargadDriver } from './drivers/pasargad';
+import { createPayfaDriver } from './drivers/payfa/payfa';
 import { createPayirDriver } from './drivers/payir';
 import { createPaypingDriver } from './drivers/payping';
 import { createSadadDriver } from './drivers/sadad';
@@ -17,6 +18,7 @@ const drivers = {
   nextpay: createNextpayDriver,
   parsian: createParsianDriver,
   pasargad: createPasargadDriver,
+  payfa: createPayfaDriver,
   payir: createPayirDriver,
   payping: createPaypingDriver,
   sadad: createSadadDriver,

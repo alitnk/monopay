@@ -17,11 +17,14 @@ describe('Parsian Driver', () => {
 
   it('returns the correct payment url', async () => {
     const serverResponse: API.RequestPaymentRes = {
-      Token: 123,
-      Status: 0,
+      SalePaymentRequestResult: {
+        Token: 123,
+        Status: 0,
+        Message: 'ok',
+      },
     };
 
-    mockSoapClient.SalePaymentRequest = () => serverResponse;
+    mockSoapClient.SalePaymentRequestAsync = async () => [serverResponse];
 
     expect(
       typeof (
@@ -35,10 +38,13 @@ describe('Parsian Driver', () => {
 
   it('throws payment errors accordingly', async () => {
     const serverResponse: API.RequestPaymentRes = {
-      Status: 1,
+      SalePaymentRequestResult: {
+        Status: 1,
+        Message: 'nok',
+      },
     };
 
-    mockSoapClient.SalePaymentRequest = () => serverResponse;
+    mockSoapClient.SalePaymentRequestAsync = async () => [serverResponse];
 
     await expect(
       async () =>
@@ -51,10 +57,12 @@ describe('Parsian Driver', () => {
 
   it('verifies the purchase correctly', async () => {
     const serverResponse: API.VerifyPaymentRes = {
-      RRN: 123456789,
-      CardNumberMasked: '1234-****-****-1234',
-      Status: 0,
-      Token: 12345,
+      ConfirmPaymentResult: {
+        RRN: 123456789,
+        CardNumberMasked: '1234-****-****-1234',
+        Status: 0,
+        Token: 12345,
+      },
     };
     const callbackParams: API.CallbackParams = {
       Amount: 20000,
@@ -68,8 +76,7 @@ describe('Parsian Driver', () => {
 
     const expectedResult: Receipt = { transactionId: 123456789, raw: serverResponse };
 
-    mockSoapClient.ConfirmPayment = () => serverResponse;
-    mockSoapClient.ReversalRequest = () => serverResponse;
+    mockSoapClient.ConfirmPaymentAsync = async () => [serverResponse];
 
     expect(await (await driver.verify({ amount: 2000 }, callbackParams)).transactionId).toBe(
       expectedResult.transactionId,
