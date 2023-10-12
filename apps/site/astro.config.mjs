@@ -3,8 +3,6 @@ import starlight from '@astrojs/starlight';
 
 // https://astro.build/config
 export default defineConfig({
-	// for Astro CI action to pick up
-	outDir: '../../dist',
 	site: 'https://monopay.js.org',
 	base: '/',
 	vite: {
