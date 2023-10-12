@@ -78,30 +78,36 @@ export default defineConfig({
 					translations: {
 						fa: "نحوه استفاده",
 					},
-					autogenerate: { directory: "usage" },
-					// items: [
-					// 	{
-					// 		label: "Request Payment",
-					// 		link: "/usage/request-payment",
-					// 		translations: {
-					// 			fa: "درخواست پرداخت",
-					// 		},
-					// 	},
-					// 	{
-					// 		label: "Send User to the IPG",
-					// 		link: "/usage/send-user-to-ipg",
-					// 		translations: {
-					// 			fa: "انتقال کاربر به درگاه",
-					// 		},
-					// 	},
-					// 	{
-					// 		label: "Verify Payment",
-					// 		link: "/usage/verify-payment",
-					// 		translations: {
-					// 			fa: "تایید پرداخت",
-					// 		},
-					// 	}
-					// ]
+					items: [
+						{
+							label: "Request Payment",
+							link: "/usage/request-payment",
+							translations: {
+								fa: "درخواست پرداخت",
+							},
+						},
+						{
+							label: "Send User to the IPG",
+							link: "/usage/send-user-to-ipg",
+							translations: {
+								fa: "انتقال کاربر به درگاه",
+							},
+						},
+						{
+							label: "Verify Payment",
+							link: "/usage/exceptions",
+							translations: {
+								fa: "تایید پرداخت",
+							},
+						},
+						{
+							label: "Catching Exceptions",
+							link: "/usage/exceptions",
+							translations: {
+								fa: "کرفتن خطا‌ها",
+							},
+						}
+					]
 				},
 				{
 					label: "Advanced",
