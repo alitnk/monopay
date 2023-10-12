@@ -6,10 +6,10 @@
     "packages/*"
   ],
   "scripts": {
-    "build": "FORCE_COLOR=1 turbo run build",
-    "lint": "FORCE_COLOR=1 turbo run lint",
-    "test": "FORCE_COLOR=1 turbo run test",
-    "test:cov": "FORCE_COLOR=1 turbo run test:cov",
+    "build": "turbo run build",
+    "lint": "turbo run lint",
+    "test": "turbo run test",
+    "test:cov": "turbo run test:cov",
     "format": "prettier --write \"**/*.{ts,md}\"",
     "changeset": "changeset",
     "version-packages": "changeset version",

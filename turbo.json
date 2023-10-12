@@ -4,6 +4,8 @@
     "test": {},
     "test:cov": {},
     "lint": {},
-    "build": {}
+    "build": {
+      "cache": false
+    }
   }
 }
