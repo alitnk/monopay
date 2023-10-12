@@ -1,6 +1,6 @@
 {
   "name": "monopay",
-  "version": "1.3.0",
+  "version": "2.0.0",
   "description": "A package for making payment transactions with different Iranian IPGs using JS/TS",
   "license": "MIT",
   "main": "dist/index.js",
