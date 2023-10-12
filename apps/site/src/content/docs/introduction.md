@@ -8,24 +8,24 @@ Monopay abstracts away all the different payment gateways' API's and gives you o
 ## Payment Procedure
 
 If you don't know how payment gateways work, read this page:
-[Payment Procedure](/en/payment-procedure)
+[Payment Procedure](/payment-procedure)
 
 ## Supported Drivers
 
 You can see the supported payment service drivers here:
-[Supported Drivers](/en/drivers)
+[Supported Drivers](/drivers)
 
 ## Installation
 
 Learn how to intall the package here:
-[Installation](/en/installation)
+[Installation](/installation)
 
 ## Usage
 
 Learn how to use the package in your Node.js applications:
-[Usage](/en/usage/request-payment)
+[Usage](/usage/request-payment)
 
 ## Examples
 
 Learn how to use the package with examples:
-[Examples](/en/examples)
+[Examples](/examples)

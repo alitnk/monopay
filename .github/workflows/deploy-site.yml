@@ -20,8 +20,21 @@ jobs:
     steps:
       - name: Checkout your repository using git
         uses: actions/checkout@v3
-      - name: Install, build, and upload your site
-        uses: withastro/action@v1
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      - name: Install
+        shell: "bash"
+        run: yarn install
+      - name: Build
+        shell: "bash"
+        run: |
+          cd ./apps/site
+          yarn build
+      # not using astro's action since it doesn't work well with monorepos
+      # - name: Install, build, and upload your site
+      #   uses: withastro/action@v1
         # with:
           # path: . # The root location of your Astro project inside the repository. (optional)
           # node-version: 18 # The specific version of Node that should be used to build your site. Defaults to 18. (optional)
@@ -34,6 +47,11 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
+      - name: Upload Pages Artifact
+        uses: actions/upload-pages-artifact@v1
+        with:
+          path: "./apps/site/dist/"
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v1
+      

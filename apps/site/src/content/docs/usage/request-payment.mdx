@@ -4,7 +4,7 @@ description: Step 1 out of the 3 steps of payment
 ---
 
 import { Tabs, TabItem } from "@astrojs/starlight/components"
-import { requestSnippets } from "../../../../snippets/request.ts"
+import { requestSnippets } from "../../../snippets/request.ts"
 import { Code } from 'astro:components'
 
 Get the driver using `getPaymentDriver` and use the `requestPayment` method. This method accepts an object with `callbackUrl`, `amount`, and driver-specific fields. 

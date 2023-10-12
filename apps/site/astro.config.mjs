@@ -7,9 +7,6 @@ export default defineConfig({
 	outDir: '../../dist',
 	site: 'https://monopay.js.org',
 	base: '/',
-	redirects: {
-		'/': '/en'
-	},
 	vite: {
 		ssr: {
 			noExternal: ['execa', 'is-stream', 'npm-run-path'],
@@ -18,11 +15,12 @@ export default defineConfig({
 	integrations: [
 		starlight({
 			title: 'Monopay',
-			defaultLocale: 'en',
+			defaultLocale: 'root',
 			locales: {
-				en: {
+				root: {
 					label: "English",
 					dir: 'ltr',
+					lang: 'en',
 				},
 				fa: {
 					label: "فارسی",
