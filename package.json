@@ -1,70 +1,39 @@
 {
-  "version": "1.3.0",
-  "license": "MIT",
-  "main": "dist/index.js",
-  "typings": "dist/index.d.ts",
-  "files": [
-    "dist"
+  "name": "monopay-monorepo",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
   ],
-  "engines": {
-    "node": ">=14.0.0"
-  },
   "scripts": {
-    "prebuild": "rimraf dist",
-    "build": "tsc --build ./tsconfig.build.json",
-    "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
-    "lint": "eslint \"{src,test}/**/*.ts\" --fix",
-    "test": "jest --runInBand",
-    "test:cov": "jest --coverage --runInBand"
-  },
-  "homepage": "https://alitnk.github.io/monopay",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/alitnk/monopay.git"
-  },
-  "bugs": {
-    "url": "https://github.com/alitnk/monopay/issues"
-  },
-  "name": "monopay",
-  "description": "A node.js package for making payment transactions with different Iranian IPGs",
-  "keywords": [
-    "payment",
-    "iran",
-    "iranian",
-    "iranian bank",
-    "ipg",
-    "persian bank",
-    "iranian payment gateway",
-    "payment gateway"
-  ],
-  "author": {
-    "name": "Ali",
-    "email": "alirezazamani2922@gmail.com"
+    "build": "FORCE_COLOR=1 turbo run build",
+    "lint": "FORCE_COLOR=1 turbo run lint",
+    "test": "FORCE_COLOR=1 turbo run test",
+    "test:cov": "FORCE_COLOR=1 turbo run test:cov",
+    "format": "prettier --write \"**/*.{ts,md}\"",
+    "changeset": "changeset",
+    "version-packages": "changeset version",
+    "release": "turbo run build --filter=docs^... && changeset publish"
   },
   "devDependencies": {
-    "@types/crypto-js": "^4.1.1",
-    "@types/jest": "^27.4.1",
-    "@types/node": "^17.0.23",
-    "@typescript-eslint/eslint-plugin": "^5.17.0",
-    "@typescript-eslint/parser": "^5.17.0",
-    "eslint": "^8.12.0",
-    "eslint-config-prettier": "^8.5.0",
-    "eslint-plugin-prettier": "^4.0.0",
-    "jest": "^27.5.1",
-    "prettier": "^2.6.1",
-    "ts-jest": "^27.1.4",
-    "ts-node": "^10.7.0",
-    "typescript": "^4.6.3"
+    "lint-staged": "^12.4.1",
+    "prettier": "latest",
+    "turbo": "latest"
   },
+  "engines": {
+    "npm": ">=7.0.0",
+    "node": ">=14.0.0"
+  },
+  "lint-staged": {
+    "apps/**/*.{js,jsx,ts,tsx}": [
+      "eslint --fix"
+    ],
+    "packages/ui/*.{js,jsx,ts,tsx}": [
+      "eslint --fix"
+    ]
+  },
+  "packageManager": "yarn@1.22.18",
   "dependencies": {
-    "axios": "^0.26.1",
-    "crc-32": "^1.2.1",
-    "crypto-js": "^4.1.1",
-    "fp-ts": "^2.11.9",
-    "global": "^4.4.0",
-    "io-ts": "^2.2.16",
-    "io-ts-reporters": "^2.0.1",
-    "rimraf": "^3.0.2",
-    "soap": "^0.43.0"
+    "@changesets/cli": "^2.24.4"
   }
 }

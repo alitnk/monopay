@@ -1,0 +1,29 @@
+---
+title: درایور‌ها
+description: لیست درایور‌‌های پشتیبانی‌شده
+---
+
+import { drivers } from '../../../data/drivers.ts'
+
+پس از نصب کتابخانه به همه این درایورها دسترسی خواهید داشت. توجه داشته باشید که باید برای درایوری که می خواهید استفاده کنید از وب سایت یا بانک آنها ثبت نام کنید و اطلاعات و رمز‌های مورد نیاز را دریافت کنید.
+
+<table>
+  <thead>
+    <tr>
+      <th>درایور</th>
+      <th>پیاده شده</th>
+      <th>دارای تست</th>
+      <th>پایدار (تست شده در Production)</th>
+    </tr>
+  </thead>
+  <tbody>
+    {drivers.map(item => (
+      <tr key={item.name}>
+        <td>{item.name}</td>
+        <td>{item.implemented ? "✅": "✖"}</td>
+        <td>{item.implemented ? "✅": "✖"}</td>
+        <td>{item.implemented ? "✅": "✖"}</td>
+      </tr>
+    ))}
+  </tbody>
+</table>

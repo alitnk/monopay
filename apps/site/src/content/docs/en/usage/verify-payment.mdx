@@ -1,0 +1,22 @@
+---
+title: Verify Payment
+description: Step 3 out of the 3 steps of payment
+---
+
+import { Tabs, TabItem } from "@astrojs/starlight/components"
+import { verifySnippets } from "../../../../snippets/verify.ts"
+import { Code } from 'astro:components'
+
+The `verifyPayment` method accepts 2 arguments:
+
+1. an object, containing `amount` and `referenceId` of transaction.
+2. request parameters in the callback route
+
+<Code code={verifySnippets.ts} lang="ts" />
+
+This method returns you a `receipt` that will contain a `transactionId` and a `cardPan` and some other info about the payment.
+At this point the payment process is finished and you can provide your service/product to the user.
+
+:::note
+the `verifyPayment` function might throw `VerificationException`
+:::

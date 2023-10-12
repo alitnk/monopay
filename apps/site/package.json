@@ -1,0 +1,18 @@
+{
+  "name": "monopay-site",
+  "license": "MIT",
+  "version": "0.0.1",
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "@astrojs/starlight": "^0.11.0",
+    "@fontsource/vazirmatn": "^5.0.15",
+    "astro": "^3.2.3",
+    "sharp": "^0.32.6"
+  }
+}
