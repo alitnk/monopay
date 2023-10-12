@@ -12,6 +12,7 @@ export default defineConfig({
 	},
 	integrations: [
 		starlight({
+			favicon: "public/favicon.ico",
 			title: 'Monopay',
 			defaultLocale: 'root',
 			locales: {
