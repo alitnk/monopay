@@ -32,6 +32,10 @@ jobs:
         run: |
           cd ./apps/site
           yarn build
+      - name: Upload Pages Artifact
+        uses: actions/upload-pages-artifact@v1
+        with:
+          path: "./apps/site/dist/"
       # not using astro's action since it doesn't work well with monorepos
       # - name: Install, build, and upload your site
       #   uses: withastro/action@v1
@@ -47,10 +51,6 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - name: Upload Pages Artifact
-        uses: actions/upload-pages-artifact@v1
-        with:
-          path: "./apps/site/dist/"
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v1
