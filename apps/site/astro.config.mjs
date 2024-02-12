@@ -95,7 +95,7 @@ export default defineConfig({
 						},
 						{
 							label: "Verify Payment",
-							link: "/usage/exceptions",
+							link: "/usage/verify-payment",
 							translations: {
 								fa: "تایید پرداخت",
 							},
