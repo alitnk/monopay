@@ -119,7 +119,7 @@ export default defineConfig({
 							label: "Configuration",
 							link: "/configuration",
 							translations: {
-								fa: "تنظیمات",
+								fa: "کانفیگ",
 							},
 						},
 					]
