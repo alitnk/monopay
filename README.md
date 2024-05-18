@@ -15,7 +15,7 @@ A node.js package for making payment transactions with different Iranian IPGs wi
 
 در صورتی که از پکیج خوشتون اومده، بهش استار بدید تا بیشتر دیده بشه و مشکلاتش زودتر برطرف بشن. 🙏
 
-> لطفا قبل از استفاده در پروداکشن،‌ از پایدار بودن درایور مطمئن شوید. - [جدول پشتیبانی درایور ها](https://alitnk.github.io/monopay/fa/docs/supported-drivers)
+> لطفا قبل از استفاده در پروداکشن،‌ از پایدار بودن درایور مطمئن شوید. - [جدول پشتیبانی درایور ها](https://monopay.js.org/fa/drivers)
 
 ## 📖 Documentation
 
@@ -39,8 +39,8 @@ yarn add monopay
 
 ## 🚀 Usage
 
-- [Usage Guide](https://alitnk.github.io/monopay/docs/usage/request-payment)
-- [نحوه استفاده به فارسی](https://alitnk.github.io/monopay/fa/docs/usage/request-payment)
+- [Usage Guide](https://monopay.js.org/payment-procedure/)
+- [نحوه استفاده به فارسی](https://monopay.js.org/fa/payment-procedure/)
 
 ## ⚒ Examples
 
@@ -82,7 +82,7 @@ app.all('/callback', async (req, res) => {
 });
 ```
 
-A full example with express can be found [here](examples/express-example)
+A full example with express can be found [here](examples/express-javascript)
 
 ## 📜 TODO List
 
@@ -97,4 +97,4 @@ Please read [Contribution](CONTRIBUTING.md) and [Code Of Conduct](CODE_OF_CONDUC
 
 ## 📝 License
 
-MIT License - Please see [License File](License) for more information.
+MIT License - Please see [License File](LICENSE) for more information.
