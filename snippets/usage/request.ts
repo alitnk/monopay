@@ -1,10 +1,10 @@
-import { getPaymentDriver, Zarinpal } from "monopay";
+import { getPaymentDriver } from "monopay";
 
-const driver = getPaymentDriver<Zarinpal>("zarinpal", {
+const driver = getPaymentDriver<"zarinpal">("zarinpal")({
   merchantId: "zarinpal-merchant",
 });
 
-const paymentInfo = await driver.requestPayment({
+const paymentInfo = await driver.request({
   amount: 50000,
   callbackUrl: "https://my-site.com/callback",
   description: "Description about the transaction",
