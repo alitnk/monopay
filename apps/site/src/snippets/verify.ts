@@ -1,6 +1,6 @@
 const verifyTs = `import { getPaymentDriver } from "monopay";
 
-const driver = getPaymentDriver("zarinpal", {
+const driver = getPaymentDriver("zarinpal")({
   merchantId: "zarinpal-merchant",
 });
 
@@ -14,7 +14,7 @@ const receipt = await driver.verifyPayment(
 
 const verifyJs = `import { getPaymentDriver } from "monopay";
 
-const driver = getPaymentDriver("zarinpal", {
+const driver = getPaymentDriver("zarinpal")({
   merchantId: "zarinpal-merchant",
 });
 
